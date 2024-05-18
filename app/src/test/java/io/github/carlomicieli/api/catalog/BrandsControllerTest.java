@@ -23,8 +23,14 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.carlomicieli.catalog.Brand;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import java.util.List;
@@ -51,10 +57,24 @@ class BrandsControllerTest {
                         new Brand("5", "Brand 5"));
     }
 
+    @Test
+    void it_should_create_new_brands(final BrandsClient client) {
+        Brand newBrand = new Brand("6", "Brand 6");
+        HttpResponse<?> response = client.postBrand(newBrand);
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.CREATED.getCode());
+        assertThat(response.getHeaders().get("Location")).contains("/api/brands/6");
+    }
+
     @Client("/api/brands")
     interface BrandsClient {
         @Get
-        @Consumes("application/json")
+        @Consumes(MediaType.APPLICATION_JSON)
         List<Brand> getBrands();
+
+        @Post
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        HttpResponse<?> postBrand(@Body Brand brand);
     }
 }

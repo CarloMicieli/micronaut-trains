@@ -22,8 +22,13 @@ package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.catalog.Brand;
 import io.github.carlomicieli.catalog.BrandBuilder;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
@@ -33,8 +38,8 @@ import org.slf4j.LoggerFactory;
 public class BrandsController {
     private final Logger LOG = LoggerFactory.getLogger(BrandsController.class);
 
-    @Get
-    public List<Brand> getAllBrands() {
+    @Get(produces = MediaType.APPLICATION_JSON)
+    List<Brand> getAllBrands() {
         LOG.info("GET /api/brands");
         return IntStream.range(1, 6)
                 .boxed()
@@ -43,5 +48,11 @@ public class BrandsController {
                         .name("Brand " + id)
                         .build())
                 .toList();
+    }
+
+    @Post(produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    HttpResponse<?> createBrand(@Body Brand brand) {
+        LOG.info("POST /api/brands {}", brand);
+        return HttpResponse.created(URI.create("/api/brands/" + brand.id()));
     }
 }
