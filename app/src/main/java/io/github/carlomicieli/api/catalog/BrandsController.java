@@ -31,6 +31,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -63,7 +64,7 @@ public class BrandsController {
     @Post()
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    HttpResponse<?> createBrand(@Body final BrandRequest brandRequest) {
+    HttpResponse<?> createBrand(@Valid @Body final BrandRequest brandRequest) {
         LOG.info("POST /api/brands {}", brandRequest);
 
         Brand brand = BrandBuilder.builder().id("7").name(brandRequest.name()).build();

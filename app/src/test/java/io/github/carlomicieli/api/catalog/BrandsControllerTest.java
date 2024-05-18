@@ -21,6 +21,7 @@
 package io.github.carlomicieli.api.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -31,6 +32,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.client.annotation.Client;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -79,6 +81,22 @@ class BrandsControllerTest {
         assertThat(response).isNotNull();
         assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.CREATED.getCode());
         assertThat(response.getHeaders().get("Location")).contains("/api/brands/7");
+    }
+
+    @Test
+    void it_should_reject_to_create_invalid_brands(final BrandsClient client) {
+        final String expected = "{\"type\":\"https://zalando.github.io/problem/constraint-violation\","
+                + "\"title\":\"Constraint Violation\","
+                + "\"status\":400,\"violations\":[{\"field\":\"createBrand.brandRequest.name\",\"message\":\"must not be blank\"}]}";
+        BrandRequest newBrand = new BrandRequest("");
+
+        assertThatThrownBy(() -> client.postBrand(newBrand))
+                .isInstanceOf(HttpClientResponseException.class)
+                .satisfies(e -> {
+                    HttpClientResponseException ex = (HttpClientResponseException) e;
+                    assertThat(ex.getStatus().getCode()).isEqualTo(HttpStatus.BAD_REQUEST.getCode());
+                    assertThat(ex.getMessage()).isEqualTo(expected);
+                });
     }
 
     @Client("/api/brands")
