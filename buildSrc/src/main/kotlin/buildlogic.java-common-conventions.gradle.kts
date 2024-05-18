@@ -31,8 +31,11 @@ repositories {
     mavenCentral()
 }
 
+val micronautVersion: String by project
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    implementation(platform("io.micronaut.platform:micronaut-platform:${micronautVersion}"))
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

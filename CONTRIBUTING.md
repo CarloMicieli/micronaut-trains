@@ -24,6 +24,14 @@ Nothing fancy here, just:
 1. Commit you code
 1. Submit a pull request. It will be reviewed by maintainers and they'll give you proper feedback so you can iterate over it.
 
+### Update the dependency lock state
+
+```bash
+  ./gradlew :libs:common:dependencies --write-locks
+  ./gradlew :libs:catalog:dependencies --write-locks
+  ./gradlew app:dependencies --write-locks
+```
+
 #### Considerations
 - Make sure existing tests pass
 - Make sure your new code is properly tested and fully-covered
