@@ -7,6 +7,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 
 plugins {
     java
+    id("com.diffplug.spotless")
 }
 
 configurations {
@@ -71,5 +72,33 @@ tasks {
             showStackTraces = true
             exceptionFormat = FULL
         }
+    }
+}
+
+spotless {
+    java {
+        // optional: you can specify import groups directly
+        // note: you can use an empty string for all the imports you didn't specify explicitly,
+        // '|' to join group without blank line, and '\\#` prefix for static imports
+        importOrder("java|javax", "io.github.carlomicieli", "", "\\#io.github.carlomicieli", "\\#")
+        removeUnusedImports()
+
+        palantirJavaFormat("2.46.0")
+
+        formatAnnotations()  // fixes formatting of type annotations
+
+        licenseHeaderFile("${project.rootDir}/.spotless/HEADER.txt")
+
+        toggleOffOn("fmt:off", "fmt:on")
+        indentWithSpaces()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    kotlinGradle {
+        endWithNewline()
+        ktfmt("0.49")
+        indentWithSpaces()
+        trimTrailingWhitespace()
     }
 }

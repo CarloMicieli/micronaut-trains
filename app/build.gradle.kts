@@ -1,11 +1,5 @@
-plugins {
-    id("buildlogic.java-application-conventions")
-}
+plugins { id("buildlogic.java-application-conventions") }
 
-dependencies {
-    implementation(project(":libs:common"))
-}
+dependencies { implementation(project(":libs:common")) }
 
-application {
-    mainClass = "io.github.carlomicieli.App"
-}
+application { mainClass = "io.github.carlomicieli.App" }

@@ -1,5 +1,5 @@
 /*
- *   Copyright (c) 2024 (C) Carlo Micieli
+ *   Copyright (c) $YEAR (C) Carlo Micieli
  *
  *    Licensed to the Apache Software Foundation (ASF) under one
  *    or more contributor license agreements.  See the NOTICE file
@@ -18,17 +18,3 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-
-class MyTest {
-    @Test
-    void itRuns() {
-        var one = 1;
-        var oneAgain = 1;
-        assertEquals(one, oneAgain);
-    }
-}

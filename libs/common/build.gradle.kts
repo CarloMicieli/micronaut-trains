@@ -1,3 +1,1 @@
-plugins {
-    id("buildlogic.java-library-conventions")
-}
+plugins { id("buildlogic.java-library-conventions") }
