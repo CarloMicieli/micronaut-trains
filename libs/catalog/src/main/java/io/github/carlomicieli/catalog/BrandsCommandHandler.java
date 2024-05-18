@@ -22,11 +22,30 @@ package io.github.carlomicieli.catalog;
 
 import static java.util.Objects.requireNonNull;
 
-import io.soabase.recordbuilder.core.RecordBuilder;
+import jakarta.inject.Singleton;
 
-@RecordBuilder
-public record Brand(String id, String name) {
-  public Brand {
-    requireNonNull(id, "Brand id cannot be null");
+@Singleton
+public class BrandsCommandHandler {
+  private final BrandRepository brandRepository;
+
+  public BrandsCommandHandler(BrandRepository brandRepository) {
+    this.brandRepository = requireNonNull(brandRepository, "brandRepository must not be null");
+  }
+
+  @SuppressWarnings("unchecked")
+  public <R> R handle(final BrandCommand<R> command) {
+    switch (command) {
+      case BrandCommand.CreateBrand createBrand -> {
+        Brand brand = BrandBuilder.builder().id("7").name(createBrand.name()).build();
+        return (R) brandRepository.save(brand);
+      }
+      case BrandCommand.FindBrandById findBrandById -> {
+        return (R) brandRepository.findById(findBrandById.brandId());
+      }
+      case BrandCommand.FindAllBrands ignored -> {
+        return (R) brandRepository.findAll();
+      }
+      case null, default -> throw new IllegalArgumentException("Unknown command: " + command);
+    }
   }
 }

@@ -21,26 +21,40 @@
 package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("Brands")
+@DisplayName("Brands Command Handler")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class BrandTest {
+class BrandsCommandHandlerTest {
+
+  private final BrandRepository brandRepository = new BrandRepository();
+  private final BrandsCommandHandler commandHandler = new BrandsCommandHandler(brandRepository);
+
   @Test
   void it_should_create_a_new_brand() {
-    Brand brand = new Brand("1", "Brand 1");
-    assertThat(brand).isNotNull();
+    BrandCommand.CreateBrand createBrand = new BrandCommand.CreateBrand("New Brand");
+    String brandId = commandHandler.handle(createBrand);
+    assertThat(brandId).isNotEmpty().isEqualTo("7");
   }
 
   @Test
-  void it_must_have_an_id() {
-    assertThatThrownBy(() -> new Brand(null, "Brand 1"))
-        .isInstanceOf(NullPointerException.class)
-        .hasMessage("Brand id cannot be null");
+  void it_should_find_a_brand_by_id() {
+    Brand expected = BrandBuilder.builder().id("1").name("Brand 1").build();
+    BrandCommand.FindBrandById findBrandById = new BrandCommand.FindBrandById("1");
+    Optional<Brand> brand = commandHandler.handle(findBrandById);
+    assertThat(brand).isNotEmpty().contains(expected);
+  }
+
+  @Test
+  void it_should_find_all_brands() {
+    BrandCommand.FindAllBrands findAllBrands = new BrandCommand.FindAllBrands();
+    List<Brand> brands = commandHandler.handle(findAllBrands);
+    assertThat(brands).isNotNull().hasSize(5);
   }
 }

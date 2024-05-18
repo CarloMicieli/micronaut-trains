@@ -94,7 +94,7 @@ spotless {
         importOrder("java|javax", "io.github.carlomicieli", "", "\\#io.github.carlomicieli", "\\#")
         removeUnusedImports()
 
-        palantirJavaFormat("2.46.0")
+        googleJavaFormat()
 
         formatAnnotations()  // fixes formatting of type annotations
 

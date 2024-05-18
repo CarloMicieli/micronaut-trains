@@ -18,22 +18,32 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.catalog;
 
-import static java.util.Objects.requireNonNull;
+import jakarta.inject.Singleton;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-import io.github.carlomicieli.catalog.Brand;
-import io.micronaut.serde.annotation.Serdeable;
-import io.soabase.recordbuilder.core.RecordBuilder;
+@Singleton
+public class BrandRepository {
 
-@RecordBuilder
-@Serdeable
-public record BrandView(String id, String name) {
-  public BrandView {
-    requireNonNull(id, "The brand id cannot be null");
+  public List<Brand> findAll() {
+    return brands().toList();
   }
 
-  public static BrandView fromBrand(final Brand brand) {
-    return BrandViewBuilder.builder().id(brand.id()).name(brand.name()).build();
+  public Optional<Brand> findById(final String brandId) {
+    return brands().filter(brand -> brand.id().equals(brandId)).findAny();
+  }
+
+  public String save(final Brand brand) {
+    return brand.id();
+  }
+
+  private Stream<Brand> brands() {
+    return IntStream.range(1, 6)
+        .boxed()
+        .map(id -> BrandBuilder.builder().id(String.valueOf(id)).name("Brand " + id).build());
   }
 }

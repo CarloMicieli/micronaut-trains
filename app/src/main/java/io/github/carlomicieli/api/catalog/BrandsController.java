@@ -20,8 +20,8 @@
  */
 package io.github.carlomicieli.api.catalog;
 
-import io.github.carlomicieli.catalog.Brand;
-import io.github.carlomicieli.catalog.BrandBuilder;
+import io.github.carlomicieli.catalog.BrandCommand;
+import io.github.carlomicieli.catalog.BrandsCommandHandler;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -34,48 +34,46 @@ import io.micronaut.http.annotation.Produces;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Controller("/api/brands")
 public class BrandsController {
-    private final Logger LOG = LoggerFactory.getLogger(BrandsController.class);
+  private final Logger LOG = LoggerFactory.getLogger(BrandsController.class);
+  private final BrandsCommandHandler commandHandler;
 
-    @Get()
-    @Produces(MediaType.APPLICATION_JSON)
-    List<BrandView> getAllBrands() {
-        LOG.info("GET /api/brands");
-        return brands().map(BrandView::fromBrand).toList();
-    }
+  public BrandsController(final BrandsCommandHandler commandHandler) {
+    this.commandHandler = Objects.requireNonNull(commandHandler, "commandHandler must not be null");
+  }
 
-    @Get("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    HttpResponse<BrandView> getBrandById(@PathVariable("id") final String brandId) {
-        LOG.info("GET /api/brands/{}", brandId);
-        return brands().map(BrandView::fromBrand)
-                .filter(brand -> brand.id().equals(brandId))
-                .findAny()
-                .map(HttpResponse::ok)
-                .orElseGet(HttpResponse::notFound);
-    }
+  @Get()
+  @Produces(MediaType.APPLICATION_JSON)
+  List<BrandView> getAllBrands() {
+    LOG.info("GET /api/brands");
+    return commandHandler.handle(new BrandCommand.FindAllBrands()).stream()
+        .map(BrandView::fromBrand)
+        .toList();
+  }
 
-    @Post()
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    HttpResponse<?> createBrand(@Valid @Body final BrandRequest brandRequest) {
-        LOG.info("POST /api/brands {}", brandRequest);
+  @Get("/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  HttpResponse<BrandView> getBrandById(@PathVariable("id") final String brandId) {
+    LOG.info("GET /api/brands/{}", brandId);
+    return commandHandler
+        .handle(new BrandCommand.FindBrandById(brandId))
+        .map(BrandView::fromBrand)
+        .map(HttpResponse::ok)
+        .orElseGet(HttpResponse::notFound);
+  }
 
-        Brand brand = BrandBuilder.builder().id("7").name(brandRequest.name()).build();
+  @Post()
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  HttpResponse<?> createBrand(@Valid @Body final BrandRequest brandRequest) {
+    LOG.info("POST /api/brands {}", brandRequest);
+    String brandId = commandHandler.handle(new BrandCommand.CreateBrand(brandRequest.name()));
 
-        return HttpResponse.created(URI.create("/api/brands/" + brand.id()));
-    }
-
-    private Stream<Brand> brands() {
-        return IntStream.range(1, 6).boxed().map(id -> BrandBuilder.builder()
-                .id(String.valueOf(id))
-                .name("Brand " + id)
-                .build());
-    }
+    return HttpResponse.created(URI.create("/api/brands/" + brandId));
+  }
 }

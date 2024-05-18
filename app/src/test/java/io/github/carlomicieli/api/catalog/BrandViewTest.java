@@ -32,18 +32,18 @@ import org.junit.jupiter.api.Test;
 @DisplayName("BrandView")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class BrandViewTest {
-    @Test
-    void it_should_require_a_non_null_id() {
-        assertThatThrownBy(() -> new BrandView(null, "Brand 1"))
-                .isInstanceOf(NullPointerException.class)
-                .hasMessage("The brand id cannot be null");
-    }
+  @Test
+  void it_should_require_a_non_null_id() {
+    assertThatThrownBy(() -> new BrandView(null, "Brand 1"))
+        .isInstanceOf(NullPointerException.class)
+        .hasMessage("The brand id cannot be null");
+  }
 
-    @Test
-    void it_should_convert_brands_to_brand_views() {
-        Brand brand = new Brand("1", "Brand 1");
-        BrandView brandView = BrandView.fromBrand(brand);
-        assertThat(brandView.id()).isEqualTo("1");
-        assertThat(brandView.name()).isEqualTo("Brand 1");
-    }
+  @Test
+  void it_should_convert_brands_to_brand_views() {
+    Brand brand = new Brand("1", "Brand 1");
+    BrandView brandView = BrandView.fromBrand(brand);
+    assertThat(brandView.id()).isEqualTo("1");
+    assertThat(brandView.name()).isEqualTo("Brand 1");
+  }
 }
