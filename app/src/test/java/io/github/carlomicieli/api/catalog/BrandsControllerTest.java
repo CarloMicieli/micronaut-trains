@@ -58,6 +58,22 @@ class BrandsControllerTest {
     }
 
     @Test
+    void it_should_find_brands_by_id(final BrandsClient client) {
+        Brand brand = client.getBrandById("1").body();
+        assertThat(brand).isNotNull();
+        assertThat(brand.id()).isEqualTo("1");
+        assertThat(brand.name()).isEqualTo("Brand 1");
+    }
+
+    @Test
+    void it_should_return_NOT_FOUND_when_no_brand_with_the_given_id_is_found(final BrandsClient client) {
+        HttpResponse<Brand> response = client.getBrandById("not-found");
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.NOT_FOUND.getCode());
+        assertThat(response.body()).isNull();
+    }
+
+    @Test
     void it_should_create_new_brands(final BrandsClient client) {
         Brand newBrand = new Brand("6", "Brand 6");
         HttpResponse<?> response = client.postBrand(newBrand);
@@ -75,6 +91,10 @@ class BrandsControllerTest {
         @Post
         @Consumes(MediaType.APPLICATION_JSON)
         @Produces(MediaType.APPLICATION_JSON)
-        HttpResponse<?> postBrand(@Body Brand brand);
+        HttpResponse<?> postBrand(@Body final Brand brand);
+
+        @Get("/{id}")
+        @Produces(MediaType.APPLICATION_JSON)
+        HttpResponse<Brand> getBrandById(final String id);
     }
 }

@@ -25,11 +25,15 @@ import io.github.carlomicieli.catalog.BrandBuilder;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Produces;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +42,8 @@ import org.slf4j.LoggerFactory;
 public class BrandsController {
     private final Logger LOG = LoggerFactory.getLogger(BrandsController.class);
 
-    @Get(produces = MediaType.APPLICATION_JSON)
+    @Get()
+    @Produces(MediaType.APPLICATION_JSON)
     List<Brand> getAllBrands() {
         LOG.info("GET /api/brands");
         return IntStream.range(1, 6)
@@ -50,7 +55,25 @@ public class BrandsController {
                 .toList();
     }
 
-    @Post(produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+    @Get("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    HttpResponse<Brand> getBrandById(@PathVariable("id") final String brandId) {
+        LOG.info("GET /api/brands/{}", brandId);
+        Optional<Brand> result = IntStream.range(1, 6)
+                .boxed()
+                .map(id -> BrandBuilder.builder()
+                        .id(String.valueOf(id))
+                        .name("Brand " + id)
+                        .build())
+                .filter(brand -> brand.id().equals(brandId))
+                .findAny();
+
+        return result.map(HttpResponse::ok).orElseGet(HttpResponse::notFound);
+    }
+
+    @Post()
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     HttpResponse<?> createBrand(@Body Brand brand) {
         LOG.info("POST /api/brands {}", brand);
         return HttpResponse.created(URI.create("/api/brands/" + brand.id()));
