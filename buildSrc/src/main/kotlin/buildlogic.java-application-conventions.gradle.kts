@@ -32,13 +32,14 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
 }
 
 dependencies {
-    annotationProcessor("io.micronaut:micronaut-http-validation")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    compileOnly("io.micronaut:micronaut-http-client")
     implementation("io.micronaut.problem:micronaut-problem-json")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.validation:micronaut-validation")
+    implementation("io.micronaut:micronaut-management")
     implementation("jakarta.validation:jakarta.validation-api")
-    compileOnly("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.yaml:snakeyaml")
 }

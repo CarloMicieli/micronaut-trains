@@ -96,6 +96,7 @@ io.micronaut:micronaut-http:4.4.8=compileClasspath
 io.micronaut:micronaut-inject:4.4.8=compileClasspath
 io.micronaut:micronaut-jackson-core:4.4.8=compileClasspath
 io.micronaut:micronaut-json-core:4.4.8=compileClasspath
+io.micronaut:micronaut-management:4.4.8=compileClasspath
 io.micronaut:micronaut-router:4.4.8=compileClasspath
 io.micronaut:micronaut-websocket:4.4.8=compileClasspath
 io.netty:netty-bom:4.1.108.Final=compileClasspath
