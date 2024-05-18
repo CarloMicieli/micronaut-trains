@@ -31,8 +31,16 @@ repositories {
     mavenCentral()
 }
 
+val versionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 val micronautVersion: String by project
 dependencies {
+    versionCatalog.findLibrary("record-builder-processor").ifPresent {
+        annotationProcessor(it)
+    }
+    versionCatalog.findLibrary("record-builder").ifPresent {
+        compileOnly(it)
+    }
+
     implementation(platform("io.micronaut.platform:micronaut-platform:${micronautVersion}"))
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.junit.jupiter:junit-jupiter")

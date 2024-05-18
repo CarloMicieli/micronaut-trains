@@ -21,6 +21,7 @@
 package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.catalog.Brand;
+import io.github.carlomicieli.catalog.BrandBuilder;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import java.util.List;
@@ -37,7 +38,10 @@ public class BrandsController {
         LOG.info("GET /api/brands");
         return IntStream.range(1, 6)
                 .boxed()
-                .map(i -> new Brand(String.valueOf(i), "Brand " + i))
+                .map(id -> BrandBuilder.builder()
+                        .id(String.valueOf(id))
+                        .name("Brand " + id)
+                        .build())
                 .toList();
     }
 }

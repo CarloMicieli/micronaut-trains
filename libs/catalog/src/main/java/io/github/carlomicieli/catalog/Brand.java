@@ -23,7 +23,9 @@ package io.github.carlomicieli.catalog;
 import static java.util.Objects.requireNonNull;
 
 import io.micronaut.serde.annotation.Serdeable;
+import io.soabase.recordbuilder.core.RecordBuilder;
 
+@RecordBuilder
 @Serdeable
 public record Brand(String id, String name) {
     public Brand {

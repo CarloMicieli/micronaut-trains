@@ -94,6 +94,7 @@ io.opentelemetry:opentelemetry-bom-alpha:1.36.0-alpha=compileClasspath
 io.opentelemetry:opentelemetry-bom:1.36.0=compileClasspath
 io.projectreactor:reactor-bom:2023.0.4=compileClasspath
 io.rest-assured:rest-assured-bom:5.4.0=compileClasspath
+io.soabase.record-builder:record-builder-core:41=compileClasspath
 io.zipkin.brave:brave-bom:6.0.2=compileClasspath
 io.zipkin.reporter2:zipkin-reporter-bom:3.3.0=compileClasspath
 jakarta.annotation:jakarta.annotation-api:2.1.1=compileClasspath
