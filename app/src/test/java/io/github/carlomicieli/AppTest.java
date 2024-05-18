@@ -20,15 +20,20 @@
  */
 package io.github.carlomicieli;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.micronaut.runtime.EmbeddedApplication;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
-class MyTest {
+@MicronautTest
+class AppTest {
+    @Inject
+    EmbeddedApplication<?> application;
+
     @Test
-    void itRuns() {
-        var one = 1;
-        var oneAgain = 1;
-        assertEquals(one, oneAgain);
+    void testItWorks() {
+        assertTrue(application.isRunning());
     }
 }

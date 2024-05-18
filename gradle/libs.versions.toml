@@ -3,3 +3,6 @@
 
 [libraries]
 spotless-plugin = "com.diffplug.spotless:spotless-plugin-gradle:6.25.0"
+shadow-plugin = "com.github.johnrengelman:shadow:8.1.1"
+micronaut-plugin = "io.micronaut.gradle:micronaut-gradle-plugin:4.4.0"
+micronaut-aot-plugin = "io.micronaut.gradle:micronaut-aot-plugin:4.4.0"
