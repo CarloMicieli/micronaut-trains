@@ -20,8 +20,11 @@
  */
 package io.github.carlomicieli;
 
+import io.github.carlomicieli.slug.Slug;
 import io.micronaut.runtime.Micronaut;
+import io.micronaut.serde.annotation.SerdeImport;
 
+@SerdeImport(Slug.class)
 public class App {
   public static void main(String[] args) {
     Micronaut.run(App.class, args);

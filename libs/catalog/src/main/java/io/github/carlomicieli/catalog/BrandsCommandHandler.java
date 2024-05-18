@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 
 @Singleton
@@ -36,7 +37,12 @@ public class BrandsCommandHandler {
   public <R> R handle(final BrandCommand<R> command) {
     switch (command) {
       case BrandCommand.CreateBrand createBrand -> {
-        Brand brand = BrandBuilder.builder().id("7").name(createBrand.name()).build();
+        Brand brand =
+            BrandBuilder.builder()
+                .id("7")
+                .name(createBrand.name())
+                .slug(Slug.of(createBrand.name()))
+                .build();
         return (R) brandRepository.save(brand);
       }
       case BrandCommand.FindBrandById findBrandById -> {

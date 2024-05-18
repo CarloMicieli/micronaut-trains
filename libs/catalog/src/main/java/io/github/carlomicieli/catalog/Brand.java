@@ -22,11 +22,13 @@ package io.github.carlomicieli.catalog;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 
 @RecordBuilder
-public record Brand(String id, String name) {
+public record Brand(String id, String name, Slug slug) {
   public Brand {
     requireNonNull(id, "Brand id cannot be null");
+    requireNonNull(slug, "Brand slug cannot be null");
   }
 }

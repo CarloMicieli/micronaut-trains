@@ -20,6 +20,7 @@
  */
 package io.github.carlomicieli.catalog;
 
+import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +45,12 @@ public class BrandRepository {
   private Stream<Brand> brands() {
     return IntStream.range(1, 6)
         .boxed()
-        .map(id -> BrandBuilder.builder().id(String.valueOf(id)).name("Brand " + id).build());
+        .map(
+            id ->
+                BrandBuilder.builder()
+                    .id(String.valueOf(id))
+                    .name("Brand " + id)
+                    .slug(Slug.of("brand-" + id))
+                    .build());
   }
 }

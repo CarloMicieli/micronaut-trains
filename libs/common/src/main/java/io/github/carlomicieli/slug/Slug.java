@@ -18,27 +18,25 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.slug;
 
-import static java.util.Objects.requireNonNull;
+import com.github.slugify.Slugify;
 
-import io.github.carlomicieli.catalog.Brand;
-import io.micronaut.serde.annotation.Serdeable;
-import io.soabase.recordbuilder.core.RecordBuilder;
+/** It converts a string to a "slug". */
+public record Slug(String value) {
+  private static final Slugify SLUGIFY =
+      Slugify.builder().lowerCase(true).customReplacement("ä", "ae").build();
 
-@RecordBuilder
-@Serdeable
-public record BrandView(String id, String name, String slug) {
-  public BrandView {
-    requireNonNull(id, "The brand id cannot be null");
-    requireNonNull(slug, "The brand slug cannot be null");
+  public Slug {
+    value = SLUGIFY.slugify(value);
   }
 
-  public static BrandView fromBrand(final Brand brand) {
-    return BrandViewBuilder.builder()
-        .id(brand.id())
-        .name(brand.name())
-        .slug(brand.slug().toString())
-        .build();
+  public static Slug of(final String value) {
+    return new Slug(value);
+  }
+
+  @Override
+  public String toString() {
+    return value;
   }
 }

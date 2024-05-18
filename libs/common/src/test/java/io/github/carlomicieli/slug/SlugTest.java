@@ -18,30 +18,35 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.catalog;
+package io.github.carlomicieli.slug;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.github.carlomicieli.slug.Slug;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("Brands")
+@DisplayName("Slug")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class BrandTest {
+class SlugTest {
   @Test
-  void it_should_create_a_new_brand() {
-    Brand brand = new Brand("1", "Brand 1", Slug.of("brand-1"));
-    assertThat(brand).isNotNull();
+  void it_should_create_slug_from_strings() {
+    Slug slug = new Slug("hello World");
+    assertThat(slug).isNotNull();
+    assertThat(slug.value()).isEqualTo("hello-world");
   }
 
   @Test
-  void it_must_have_an_id() {
-    assertThatThrownBy(() -> new Brand(null, "Brand 1", Slug.of("brand-1")))
-        .isInstanceOf(NullPointerException.class)
-        .hasMessage("Brand id cannot be null");
+  void it_should_create_slug_with_custom_replacements() {
+    Slug slug = new Slug("Märklìn Modellbahnen");
+    assertThat(slug).isNotNull();
+    assertThat(slug.value()).isEqualTo("maerklin-modellbahnen");
+  }
+
+  @Test
+  void it_should_produce_string_representations() {
+    Slug slug = new Slug("hello World");
+    assertThat(slug).hasToString("hello-world");
   }
 }

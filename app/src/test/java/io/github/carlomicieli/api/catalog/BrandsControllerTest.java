@@ -51,11 +51,11 @@ class BrandsControllerTest {
         .isNotEmpty()
         .hasSize(5)
         .containsExactly(
-            new BrandView("1", "Brand 1"),
-            new BrandView("2", "Brand 2"),
-            new BrandView("3", "Brand 3"),
-            new BrandView("4", "Brand 4"),
-            new BrandView("5", "Brand 5"));
+            brandView("1"), brandView("2"), brandView("3"), brandView("4"), brandView("5"));
+  }
+
+  private BrandView brandView(String id) {
+    return new BrandView(id, "Brand " + id, "brand-" + id);
   }
 
   @Test

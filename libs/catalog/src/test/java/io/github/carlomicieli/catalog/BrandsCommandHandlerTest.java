@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.github.carlomicieli.slug.Slug;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +46,8 @@ class BrandsCommandHandlerTest {
 
   @Test
   void it_should_find_a_brand_by_id() {
-    Brand expected = BrandBuilder.builder().id("1").name("Brand 1").build();
+    Brand expected =
+        BrandBuilder.builder().id("1").name("Brand 1").slug(Slug.of("brand-1")).build();
     BrandCommand.FindBrandById findBrandById = new BrandCommand.FindBrandById("1");
     Optional<Brand> brand = commandHandler.handle(findBrandById);
     assertThat(brand).isNotEmpty().contains(expected);
