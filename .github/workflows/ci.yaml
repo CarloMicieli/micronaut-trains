@@ -1,9 +1,16 @@
 name: Java CI with Gradle (Kotlin)
 on:
   push:
+    paths-ignore:
+      - '.cz.toml'
+      - 'CONTRIBUTING.md'
+      - 'LICENSE'
+      - 'README.md'
+      - 'ROADMAP.md'
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
