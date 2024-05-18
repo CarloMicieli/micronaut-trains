@@ -12,6 +12,15 @@ A web application for model railways collectors
 * Git
 * Docker
 
+## How to run
+
+```bash
+  git clone https://github.com/CarloMicieli/micronaut-trains.git
+  cd micronaut-trains
+  
+  ./gradlew run
+```
+
 ## Contributing
 
 Contributions are always welcome!
