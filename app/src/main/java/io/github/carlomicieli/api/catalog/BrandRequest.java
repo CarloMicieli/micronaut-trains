@@ -18,15 +18,11 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.catalog;
+package io.github.carlomicieli.api.catalog;
 
-import static java.util.Objects.requireNonNull;
-
+import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
 
 @RecordBuilder
-public record Brand(String id, String name) {
-    public Brand {
-        requireNonNull(id, "Brand id cannot be null");
-    }
-}
+@Serdeable
+public record BrandRequest(String name) {}

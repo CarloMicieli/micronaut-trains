@@ -22,7 +22,6 @@ package io.github.carlomicieli.api.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.github.carlomicieli.catalog.Brand;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
@@ -45,21 +44,21 @@ import org.junit.jupiter.api.Test;
 class BrandsControllerTest {
     @Test
     void it_should_get_all_brands(final BrandsClient client) {
-        List<Brand> brands = client.getBrands();
+        List<BrandView> brands = client.getBrands();
         assertThat(brands)
                 .isNotEmpty()
                 .hasSize(5)
                 .containsExactly(
-                        new Brand("1", "Brand 1"),
-                        new Brand("2", "Brand 2"),
-                        new Brand("3", "Brand 3"),
-                        new Brand("4", "Brand 4"),
-                        new Brand("5", "Brand 5"));
+                        new BrandView("1", "Brand 1"),
+                        new BrandView("2", "Brand 2"),
+                        new BrandView("3", "Brand 3"),
+                        new BrandView("4", "Brand 4"),
+                        new BrandView("5", "Brand 5"));
     }
 
     @Test
     void it_should_find_brands_by_id(final BrandsClient client) {
-        Brand brand = client.getBrandById("1").body();
+        BrandView brand = client.getBrandById("1").body();
         assertThat(brand).isNotNull();
         assertThat(brand.id()).isEqualTo("1");
         assertThat(brand.name()).isEqualTo("Brand 1");
@@ -67,7 +66,7 @@ class BrandsControllerTest {
 
     @Test
     void it_should_return_NOT_FOUND_when_no_brand_with_the_given_id_is_found(final BrandsClient client) {
-        HttpResponse<Brand> response = client.getBrandById("not-found");
+        HttpResponse<BrandView> response = client.getBrandById("not-found");
         assertThat(response).isNotNull();
         assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.NOT_FOUND.getCode());
         assertThat(response.body()).isNull();
@@ -75,26 +74,26 @@ class BrandsControllerTest {
 
     @Test
     void it_should_create_new_brands(final BrandsClient client) {
-        Brand newBrand = new Brand("6", "Brand 6");
+        BrandRequest newBrand = new BrandRequest("Brand 6");
         HttpResponse<?> response = client.postBrand(newBrand);
         assertThat(response).isNotNull();
         assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.CREATED.getCode());
-        assertThat(response.getHeaders().get("Location")).contains("/api/brands/6");
+        assertThat(response.getHeaders().get("Location")).contains("/api/brands/7");
     }
 
     @Client("/api/brands")
     interface BrandsClient {
         @Get
         @Consumes(MediaType.APPLICATION_JSON)
-        List<Brand> getBrands();
+        List<BrandView> getBrands();
+
+        @Get("/{id}")
+        @Produces(MediaType.APPLICATION_JSON)
+        HttpResponse<BrandView> getBrandById(final String id);
 
         @Post
         @Consumes(MediaType.APPLICATION_JSON)
         @Produces(MediaType.APPLICATION_JSON)
-        HttpResponse<?> postBrand(@Body final Brand brand);
-
-        @Get("/{id}")
-        @Produces(MediaType.APPLICATION_JSON)
-        HttpResponse<Brand> getBrandById(final String id);
+        HttpResponse<?> postBrand(@Body final BrandRequest brand);
     }
 }

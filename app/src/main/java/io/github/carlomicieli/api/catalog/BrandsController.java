@@ -33,8 +33,8 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,38 +44,37 @@ public class BrandsController {
 
     @Get()
     @Produces(MediaType.APPLICATION_JSON)
-    List<Brand> getAllBrands() {
+    List<BrandView> getAllBrands() {
         LOG.info("GET /api/brands");
-        return IntStream.range(1, 6)
-                .boxed()
-                .map(id -> BrandBuilder.builder()
-                        .id(String.valueOf(id))
-                        .name("Brand " + id)
-                        .build())
-                .toList();
+        return brands().map(BrandView::fromBrand).toList();
     }
 
     @Get("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    HttpResponse<Brand> getBrandById(@PathVariable("id") final String brandId) {
+    HttpResponse<BrandView> getBrandById(@PathVariable("id") final String brandId) {
         LOG.info("GET /api/brands/{}", brandId);
-        Optional<Brand> result = IntStream.range(1, 6)
-                .boxed()
-                .map(id -> BrandBuilder.builder()
-                        .id(String.valueOf(id))
-                        .name("Brand " + id)
-                        .build())
+        return brands().map(BrandView::fromBrand)
                 .filter(brand -> brand.id().equals(brandId))
-                .findAny();
-
-        return result.map(HttpResponse::ok).orElseGet(HttpResponse::notFound);
+                .findAny()
+                .map(HttpResponse::ok)
+                .orElseGet(HttpResponse::notFound);
     }
 
     @Post()
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    HttpResponse<?> createBrand(@Body Brand brand) {
-        LOG.info("POST /api/brands {}", brand);
+    HttpResponse<?> createBrand(@Body final BrandRequest brandRequest) {
+        LOG.info("POST /api/brands {}", brandRequest);
+
+        Brand brand = BrandBuilder.builder().id("7").name(brandRequest.name()).build();
+
         return HttpResponse.created(URI.create("/api/brands/" + brand.id()));
+    }
+
+    private Stream<Brand> brands() {
+        return IntStream.range(1, 6).boxed().map(id -> BrandBuilder.builder()
+                .id(String.valueOf(id))
+                .name("Brand " + id)
+                .build());
     }
 }
