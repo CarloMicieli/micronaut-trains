@@ -27,7 +27,9 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Produces;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.Objects;
@@ -46,5 +48,16 @@ public class ScaleController {
     var command = new ScaleCommand.CreateScale(request.name(), request.ratio());
     var scaleId = commandHandler.handle(command);
     return HttpResponse.created(URI.create("/api/scales/" + scaleId));
+  }
+
+  @Get("/{id}")
+  @Produces(MediaType.APPLICATION_JSON)
+  HttpResponse<ScaleView> getScale(String id) {
+    var command = new ScaleCommand.GetScaleById(id);
+    return commandHandler
+        .handle(command)
+        .map(ScaleView::fromScale)
+        .map(HttpResponse::ok)
+        .orElse(HttpResponse.notFound());
   }
 }

@@ -18,24 +18,25 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.catalog;
+package io.github.carlomicieli.api.catalog;
 
-import java.util.Optional;
+import io.github.carlomicieli.catalog.Scale;
+import io.micronaut.serde.annotation.Serdeable;
+import io.soabase.recordbuilder.core.RecordBuilder;
+import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
-public sealed interface ScaleCommand<R> {
-  /**
-   * The command to create a new scale.
-   *
-   * @param name the scale name
-   * @param ratio the scale ratio
-   */
-  record CreateScale(@NotNull String name, float ratio) implements ScaleCommand<String> {}
-
-  /**
-   * The command to get a scale by its identifier.
-   *
-   * @param id the scale identifier
-   */
-  record GetScaleById(@NotNull String id) implements ScaleCommand<Optional<Scale>> {}
+@RecordBuilder
+@Serdeable
+public record ScaleView(
+    @NotNull String id, @NotNull String name, @NotNull String slug, @NotNull String ratio) {
+  @CheckReturnValue
+  public static @NotNull ScaleView fromScale(@NotNull final Scale scale) {
+    return ScaleViewBuilder.builder()
+        .id(scale.id())
+        .name(scale.name())
+        .ratio("1:" + scale.ratio())
+        .slug(scale.slug().toString())
+        .build();
+  }
 }

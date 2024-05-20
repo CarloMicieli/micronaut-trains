@@ -20,12 +20,16 @@
  */
 package io.github.carlomicieli.catalog;
 
+import java.util.Optional;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
 public interface ScaleRepository {
   @CheckReturnValue
   @NotNull String save(@NotNull final Scale scale);
+
+  @CheckReturnValue
+  @NotNull Optional<Scale> findById(@NotNull String id);
 
   ScaleRepository INSTANCE = new ScaleInMemoryRepository();
 }

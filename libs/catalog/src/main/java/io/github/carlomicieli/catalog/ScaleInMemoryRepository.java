@@ -23,6 +23,7 @@ package io.github.carlomicieli.catalog;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +32,11 @@ public final class ScaleInMemoryRepository implements ScaleRepository {
   @Override
   public @NotNull String save(@NotNull final Scale scale) {
     return scale.id();
+  }
+
+  @Override
+  public @NotNull Optional<Scale> findById(@NotNull String id) {
+    return scales().filter(s -> s.id().equals(id)).findFirst();
   }
 
   private Stream<Scale> scales() {

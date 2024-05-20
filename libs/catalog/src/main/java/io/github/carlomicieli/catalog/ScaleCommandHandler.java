@@ -50,6 +50,9 @@ public class ScaleCommandHandler {
                 .build();
         return (R) scaleRepository.save(scale);
       }
+      case ScaleCommand.GetScaleById getScaleById -> {
+        return (R) scaleRepository.findById(getScaleById.id());
+      }
       case null, default -> throw new IllegalArgumentException("Unknown command: " + command);
     }
   }

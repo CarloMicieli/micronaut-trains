@@ -28,7 +28,9 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -61,10 +63,30 @@ class ScaleControllerTest {
             "{\"field\":\"createScale.request.name\",\"message\":\"must not be blank\"}");
   }
 
+  @Test
+  void it_should_find_scale_by_id(final ScaleClient client) {
+    ScaleView scale = client.getScale("1").body();
+    assertThat(scale).isNotNull();
+    assertThat(scale.id()).isEqualTo("1");
+    assertThat(scale.name()).isEqualTo("1");
+    assertThat(scale.ratio()).isEqualTo("1:32");
+  }
+
+  @Test
+  void it_should_return_NOT_FOUND_when_the_scale_is_not_found(final ScaleClient client) {
+    HttpResponse<?> response = client.getScale("not-found");
+    assertThat(response).isNotNull();
+    assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.NOT_FOUND.getCode());
+  }
+
   @Client("/api/scales")
   interface ScaleClient {
     @Post
     @Consumes(MediaType.APPLICATION_JSON)
     HttpResponse<?> createScale(@Body ScaleRequest request);
+
+    @Get("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    HttpResponse<ScaleView> getScale(String id);
   }
 }

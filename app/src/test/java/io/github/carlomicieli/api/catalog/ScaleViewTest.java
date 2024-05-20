@@ -18,34 +18,29 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.catalog;
+package io.github.carlomicieli.api.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Optional;
+import io.github.carlomicieli.catalog.Scale;
+import io.github.carlomicieli.slug.Slug;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("ScaleCommandHandler")
+@DisplayName("ScaleView")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class ScaleCommandHandlerTest {
-  private final ScaleRepository scaleRepository = ScaleRepository.INSTANCE;
-  private final ScaleCommandHandler scaleCommandHandler = new ScaleCommandHandler(scaleRepository);
-
+class ScaleViewTest {
   @Test
-  void it_should_create_new_scales() {
-    ScaleCommand.CreateScale createScale = new ScaleCommand.CreateScale("H0", 87f);
-    String scaleId = scaleCommandHandler.handle(createScale);
-    assertThat(scaleId).isEqualTo("7");
-  }
-
-  @Test
-  void it_should_find_scale_by_it() {
-    ScaleCommand.GetScaleById getScaleById = new ScaleCommand.GetScaleById("1");
-    Optional<Scale> scale = scaleCommandHandler.handle(getScaleById);
-    assertThat(scale).isPresent();
-    assertThat(scale.get().id()).isEqualTo("1");
+  void it_should_create_a_new_scale_view() {
+    Scale scale = new Scale("1", "H0", Slug.of("H0"), BigDecimal.valueOf(87));
+    ScaleView scaleView = ScaleView.fromScale(scale);
+    assertThat(scaleView).isNotNull();
+    assertThat(scaleView.id()).isEqualTo("1");
+    assertThat(scaleView.name()).isEqualTo("H0");
+    assertThat(scaleView.slug()).isEqualTo("h0");
+    assertThat(scaleView.ratio()).isEqualTo("1:87");
   }
 }
