@@ -32,6 +32,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 
 @Controller("/api/scales")
@@ -53,11 +54,19 @@ public class ScaleController {
   @Get("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<ScaleView> getScale(String id) {
-    var command = new ScaleCommand.GetScaleById(id);
+    var command = new ScaleCommand.FindScaleById(id);
     return commandHandler
         .handle(command)
         .map(ScaleView::fromScale)
         .map(HttpResponse::ok)
         .orElse(HttpResponse.notFound());
+  }
+
+  @Get
+  @Produces(MediaType.APPLICATION_JSON)
+  HttpResponse<List<ScaleView>> getScales() {
+    var command = new ScaleCommand.FindAllScales();
+    var scales = commandHandler.handle(command).stream().map(ScaleView::fromScale).toList();
+    return HttpResponse.ok(scales);
   }
 }

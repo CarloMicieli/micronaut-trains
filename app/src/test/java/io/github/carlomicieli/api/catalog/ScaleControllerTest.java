@@ -23,6 +23,7 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.github.carlomicieli.slug.Slug;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
@@ -34,6 +35,8 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -79,6 +82,28 @@ class ScaleControllerTest {
     assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.NOT_FOUND.getCode());
   }
 
+  @Test
+  void it_should_get_all_scales(final ScaleClient client) {
+    List<ScaleView> scales = client.getScales().body();
+    assertThat(scales)
+        .isNotEmpty()
+        .hasSize(4)
+        .contains(
+            scaleView("1", BigDecimal.valueOf(32)),
+            scaleView("0", BigDecimal.valueOf(43.5)),
+            scaleView("H0", BigDecimal.valueOf(87)),
+            scaleView("N", BigDecimal.valueOf(160)));
+  }
+
+  private ScaleView scaleView(String name, BigDecimal ratio) {
+    return ScaleViewBuilder.builder()
+        .id(name)
+        .name(name)
+        .slug(Slug.of(name).toString())
+        .ratio("1:" + ratio)
+        .build();
+  }
+
   @Client("/api/scales")
   interface ScaleClient {
     @Post
@@ -88,5 +113,9 @@ class ScaleControllerTest {
     @Get("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     HttpResponse<ScaleView> getScale(String id);
+
+    @Get
+    @Produces(MediaType.APPLICATION_JSON)
+    HttpResponse<List<ScaleView>> getScales();
   }
 }

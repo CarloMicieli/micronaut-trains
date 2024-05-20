@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -42,10 +43,17 @@ class ScaleCommandHandlerTest {
   }
 
   @Test
-  void it_should_find_scale_by_it() {
-    ScaleCommand.GetScaleById getScaleById = new ScaleCommand.GetScaleById("1");
-    Optional<Scale> scale = scaleCommandHandler.handle(getScaleById);
+  void it_should_find_scale_by_id() {
+    ScaleCommand.FindScaleById findScaleById = new ScaleCommand.FindScaleById("1");
+    Optional<Scale> scale = scaleCommandHandler.handle(findScaleById);
     assertThat(scale).isPresent();
     assertThat(scale.get().id()).isEqualTo("1");
+  }
+
+  @Test
+  void it_should_find_scales() {
+    ScaleCommand.FindAllScales findAllScales = new ScaleCommand.FindAllScales();
+    List<Scale> scale = scaleCommandHandler.handle(findAllScales);
+    assertThat(scale).isNotNull().hasSize(4);
   }
 }

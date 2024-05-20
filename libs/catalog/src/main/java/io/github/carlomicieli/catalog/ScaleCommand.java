@@ -20,6 +20,7 @@
  */
 package io.github.carlomicieli.catalog;
 
+import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,5 +38,8 @@ public sealed interface ScaleCommand<R> {
    *
    * @param id the scale identifier
    */
-  record GetScaleById(@NotNull String id) implements ScaleCommand<Optional<Scale>> {}
+  record FindScaleById(@NotNull String id) implements ScaleCommand<Optional<Scale>> {}
+
+  /** The command to find all scales. */
+  record FindAllScales() implements ScaleCommand<List<Scale>> {}
 }
