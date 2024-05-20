@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class BrandCommandHandlerTest {
 
-  private final BrandRepository brandRepository = new BrandRepository();
+  private final BrandRepository brandRepository = BrandRepository.INSTANCE;
   private final BrandCommandHandler commandHandler = new BrandCommandHandler(brandRepository);
 
   @Test

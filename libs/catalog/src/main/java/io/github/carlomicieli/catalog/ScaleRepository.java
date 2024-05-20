@@ -20,42 +20,12 @@
  */
 package io.github.carlomicieli.catalog;
 
-import io.github.carlomicieli.slug.Slug;
-import jakarta.inject.Singleton;
-import java.math.BigDecimal;
-import java.util.stream.Stream;
+import org.jetbrains.annotations.CheckReturnValue;
+import org.jetbrains.annotations.NotNull;
 
-@Singleton
-public class ScaleRepository {
-  public String save(final Scale scale) {
-    return scale.id();
-  }
+public interface ScaleRepository {
+  @CheckReturnValue
+  @NotNull String save(@NotNull final Scale scale);
 
-  private Stream<Scale> scales() {
-    return Stream.of(
-        ScaleBuilder.builder()
-            .id("1")
-            .name("1")
-            .slug(Slug.of("1"))
-            .ratio(BigDecimal.valueOf(32))
-            .build(),
-        ScaleBuilder.builder()
-            .id("0")
-            .name("0")
-            .slug(Slug.of("0"))
-            .ratio(BigDecimal.valueOf(43.5))
-            .build(),
-        ScaleBuilder.builder()
-            .id("H0")
-            .name("H0")
-            .slug(Slug.of("H0"))
-            .ratio(BigDecimal.valueOf(87))
-            .build(),
-        ScaleBuilder.builder()
-            .id("N")
-            .name("N")
-            .slug(Slug.of("N"))
-            .ratio(BigDecimal.valueOf(160))
-            .build());
-  }
+  ScaleRepository INSTANCE = new ScaleInMemoryRepository();
 }

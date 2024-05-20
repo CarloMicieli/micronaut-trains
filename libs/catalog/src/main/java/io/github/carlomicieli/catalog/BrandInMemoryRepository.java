@@ -20,20 +20,41 @@
  */
 package io.github.carlomicieli.catalog;
 
+import io.github.carlomicieli.slug.Slug;
+import jakarta.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
-import org.jetbrains.annotations.CheckReturnValue;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
-public interface BrandRepository {
-  @CheckReturnValue
-  @NotNull List<Brand> findAll();
+@Singleton
+public final class BrandInMemoryRepository implements BrandRepository {
+  @Override
+  public @NotNull List<Brand> findAll() {
+    return brands().toList();
+  }
 
-  @CheckReturnValue
-  @NotNull Optional<Brand> findById(@NotNull final String brandId);
+  @Override
+  public @NotNull Optional<Brand> findById(final @NotNull String brandId) {
+    return brands().filter(brand -> brand.id().equals(brandId)).findAny();
+  }
 
-  @CheckReturnValue
-  @NotNull String save(@NotNull final Brand brand);
+  @Override
+  public @NotNull String save(@NotNull final Brand brand) {
+    return brand.id();
+  }
 
-  BrandRepository INSTANCE = new BrandInMemoryRepository();
+  private Stream<Brand> brands() {
+    return IntStream.range(1, 6)
+        .boxed()
+        .map(
+            id ->
+                BrandBuilder.builder()
+                    .id(String.valueOf(id))
+                    .name("Brand " + id)
+                    .slug(Slug.of("brand-" + id))
+                    .kind(BrandKind.INDUSTRIAL)
+                    .build());
+  }
 }
