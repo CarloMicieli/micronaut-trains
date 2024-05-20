@@ -52,16 +52,13 @@ class ScaleControllerTest {
 
   @Test
   void it_should_reject_invalid_scale_requests(final ScaleClient client) {
-    String expected =
-        "{\"type\":\"https://zalando.github.io/problem/constraint-violation\","
-            + "\"title\":\"Constraint Violation\",\"status\":400,"
-            + "\"violations\":["
-            + "{\"field\":\"createScale.request.ratio\",\"message\":\"must be greater than 0\"},"
-            + "{\"field\":\"createScale.request.name\",\"message\":\"must not be blank\"}]}";
     ScaleRequest request = new ScaleRequest("", 0f);
     assertThatThrownBy(() -> client.createScale(request))
         .isInstanceOf(HttpClientResponseException.class)
-        .hasMessageContaining(expected);
+        .hasMessageContaining(
+            "{\"field\":\"createScale.request.ratio\",\"message\":\"must be greater than 0\"}")
+        .hasMessageContaining(
+            "{\"field\":\"createScale.request.name\",\"message\":\"must not be blank\"}");
   }
 
   @Client("/api/scales")

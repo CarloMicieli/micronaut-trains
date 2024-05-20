@@ -23,31 +23,39 @@ package io.github.carlomicieli.catalog;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.util.stream.Stream;
 
 @Singleton
-public class ScaleCommandHandler {
-  private final ScaleRepository scaleRepository;
-
-  public ScaleCommandHandler(ScaleRepository scaleRepository) {
-    this.scaleRepository =
-        Objects.requireNonNull(scaleRepository, "scaleRepository must not be null");
+public class ScaleRepository {
+  public String save(final Scale scale) {
+    return scale.id();
   }
 
-  @SuppressWarnings("unchecked")
-  public <R> R handle(final ScaleCommand<R> command) {
-    switch (command) {
-      case ScaleCommand.CreateScale createScale -> {
-        Scale scale =
-            ScaleBuilder.builder()
-                .id("7")
-                .name(createScale.name())
-                .slug(Slug.of(createScale.name()))
-                .ratio(BigDecimal.valueOf(createScale.ratio()))
-                .build();
-        return (R) scaleRepository.save(scale);
-      }
-      case null, default -> throw new IllegalArgumentException("Unknown command: " + command);
-    }
+  private Stream<Scale> scales() {
+    return Stream.of(
+        ScaleBuilder.builder()
+            .id("1")
+            .name("1")
+            .slug(Slug.of("1"))
+            .ratio(BigDecimal.valueOf(32))
+            .build(),
+        ScaleBuilder.builder()
+            .id("0")
+            .name("0")
+            .slug(Slug.of("0"))
+            .ratio(BigDecimal.valueOf(43.5))
+            .build(),
+        ScaleBuilder.builder()
+            .id("H0")
+            .name("H0")
+            .slug(Slug.of("H0"))
+            .ratio(BigDecimal.valueOf(87))
+            .build(),
+        ScaleBuilder.builder()
+            .id("N")
+            .name("N")
+            .slug(Slug.of("N"))
+            .ratio(BigDecimal.valueOf(160))
+            .build());
   }
 }

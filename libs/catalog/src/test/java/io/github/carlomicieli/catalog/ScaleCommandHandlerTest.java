@@ -30,7 +30,8 @@ import org.junit.jupiter.api.Test;
 @DisplayName("ScaleCommandHandler")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ScaleCommandHandlerTest {
-  private final ScaleCommandHandler scaleCommandHandler = new ScaleCommandHandler();
+  private final ScaleRepository scaleRepository = new ScaleRepository();
+  private final ScaleCommandHandler scaleCommandHandler = new ScaleCommandHandler(scaleRepository);
 
   @Test
   void it_should_create_new_scales() {
