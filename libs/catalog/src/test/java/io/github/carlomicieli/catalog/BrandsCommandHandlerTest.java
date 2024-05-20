@@ -39,7 +39,7 @@ class BrandsCommandHandlerTest {
 
   @Test
   void it_should_create_a_new_brand() {
-    BrandCommand.CreateBrand createBrand = new BrandCommand.CreateBrand("New Brand");
+    BrandCommand.CreateBrand createBrand = new BrandCommand.CreateBrand("New Brand", "INDUSTRIAL");
     String brandId = commandHandler.handle(createBrand);
     assertThat(brandId).isNotEmpty().isEqualTo("7");
   }
@@ -47,7 +47,12 @@ class BrandsCommandHandlerTest {
   @Test
   void it_should_find_a_brand_by_id() {
     Brand expected =
-        BrandBuilder.builder().id("1").name("Brand 1").slug(Slug.of("brand-1")).build();
+        BrandBuilder.builder()
+            .id("1")
+            .name("Brand 1")
+            .slug(Slug.of("brand-1"))
+            .kind(BrandKind.INDUSTRIAL)
+            .build();
     BrandCommand.FindBrandById findBrandById = new BrandCommand.FindBrandById("1");
     Optional<Brand> brand = commandHandler.handle(findBrandById);
     assertThat(brand).isNotEmpty().contains(expected);

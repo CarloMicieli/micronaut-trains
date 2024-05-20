@@ -18,17 +18,10 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.catalog;
 
-import io.micronaut.core.annotation.Introspected;
-import io.micronaut.serde.annotation.Serdeable;
-import io.soabase.recordbuilder.core.RecordBuilder;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-
-@Introspected
-@RecordBuilder
-@Serdeable
-public record BrandRequest(
-    @NotBlank String name,
-    @Pattern(regexp = "BRASS_MODELS|INDUSTRIAL", message = "Invalid brand kind") String kind) {}
+/** The kinds of model railway brands */
+public enum BrandKind {
+  BRASS_MODELS,
+  INDUSTRIAL
+}

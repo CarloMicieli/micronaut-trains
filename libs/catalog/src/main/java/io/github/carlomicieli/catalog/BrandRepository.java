@@ -51,6 +51,7 @@ public class BrandRepository {
                     .id(String.valueOf(id))
                     .name("Brand " + id)
                     .slug(Slug.of("brand-" + id))
+                    .kind(BrandKind.INDUSTRIAL)
                     .build());
   }
 }

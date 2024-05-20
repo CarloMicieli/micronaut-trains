@@ -8,6 +8,7 @@ shadow = "8.1.1"
 spotless = "6.25.0"
 
 [libraries]
+jetbrains-annotations = { module = "org.jetbrains:annotations", version = "24.0.0" }
 micronaut-aot-plugin = { module = "io.micronaut.gradle:micronaut-aot-plugin", version.ref = "micronaut"}
 micronaut-plugin = { module = "io.micronaut.gradle:micronaut-gradle-plugin", version.ref = "micronaut" }
 record-builder = { module = "io.soabase.record-builder:record-builder-core", version.ref = "record-builder" }

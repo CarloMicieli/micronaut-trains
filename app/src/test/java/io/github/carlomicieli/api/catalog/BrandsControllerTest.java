@@ -55,7 +55,7 @@ class BrandsControllerTest {
   }
 
   private BrandView brandView(String id) {
-    return new BrandView(id, "Brand " + id, "brand-" + id);
+    return new BrandView(id, "Brand " + id, "brand-" + id, "INDUSTRIAL");
   }
 
   @Test
@@ -77,7 +77,7 @@ class BrandsControllerTest {
 
   @Test
   void it_should_create_new_brands(final BrandsClient client) {
-    BrandRequest newBrand = new BrandRequest("Brand 6");
+    BrandRequest newBrand = new BrandRequest("Brand 6", "INDUSTRIAL");
     HttpResponse<?> response = client.postBrand(newBrand);
     assertThat(response).isNotNull();
     assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.CREATED.getCode());
@@ -90,7 +90,7 @@ class BrandsControllerTest {
         "{\"type\":\"https://zalando.github.io/problem/constraint-violation\","
             + "\"title\":\"Constraint Violation\","
             + "\"status\":400,\"violations\":[{\"field\":\"createBrand.brandRequest.name\",\"message\":\"must not be blank\"}]}";
-    BrandRequest newBrand = new BrandRequest("");
+    BrandRequest newBrand = new BrandRequest("", null);
 
     assertThatThrownBy(() -> client.postBrand(newBrand))
         .isInstanceOf(HttpClientResponseException.class)

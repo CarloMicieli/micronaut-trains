@@ -24,11 +24,23 @@ import static java.util.Objects.requireNonNull;
 
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+/**
+ * A brand represents a manufacturer or a company that produces model railways.
+ *
+ * @param id the brand id
+ * @param name the brand name
+ * @param slug the brand slug
+ * @param kind the brand kind
+ */
 @RecordBuilder
-public record Brand(String id, String name, Slug slug) {
+public record Brand(
+    @NotNull String id, @NotNull String name, @NotNull Slug slug, @Nullable BrandKind kind) {
   public Brand {
     requireNonNull(id, "Brand id cannot be null");
+    requireNonNull(name, "Brand name cannot be null");
     requireNonNull(slug, "Brand slug cannot be null");
   }
 }

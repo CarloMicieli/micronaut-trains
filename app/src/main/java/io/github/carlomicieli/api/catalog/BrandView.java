@@ -20,25 +20,25 @@
  */
 package io.github.carlomicieli.api.catalog;
 
-import static java.util.Objects.requireNonNull;
-
 import io.github.carlomicieli.catalog.Brand;
+import io.github.carlomicieli.catalog.BrandKind;
 import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
+import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @RecordBuilder
 @Serdeable
-public record BrandView(String id, String name, String slug) {
-  public BrandView {
-    requireNonNull(id, "The brand id cannot be null");
-    requireNonNull(slug, "The brand slug cannot be null");
-  }
-
-  public static BrandView fromBrand(final Brand brand) {
+public record BrandView(
+    @NotNull String id, @NotNull String name, @NotNull String slug, @Nullable String kind) {
+  public static @NotNull BrandView fromBrand(@NotNull final Brand brand) {
+    var kind = Optional.ofNullable(brand.kind()).orElse(BrandKind.INDUSTRIAL).name();
     return BrandViewBuilder.builder()
         .id(brand.id())
         .name(brand.name())
         .slug(brand.slug().toString())
+        .kind(kind)
         .build();
   }
 }

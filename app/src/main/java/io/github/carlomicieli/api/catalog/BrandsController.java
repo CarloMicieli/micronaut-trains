@@ -72,7 +72,9 @@ public class BrandsController {
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<?> createBrand(@Valid @Body final BrandRequest brandRequest) {
     LOG.info("POST /api/brands {}", brandRequest);
-    String brandId = commandHandler.handle(new BrandCommand.CreateBrand(brandRequest.name()));
+    String brandId =
+        commandHandler.handle(
+            new BrandCommand.CreateBrand(brandRequest.name(), brandRequest.kind()));
 
     return HttpResponse.created(URI.create("/api/brands/" + brandId));
   }

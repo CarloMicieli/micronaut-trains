@@ -24,17 +24,24 @@ import static java.util.Objects.requireNonNull;
 
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.CheckReturnValue;
 
 @Singleton
 public class BrandsCommandHandler {
+  private static final Logger LOG = LoggerFactory.getLogger(BrandsCommandHandler.class);
   private final BrandRepository brandRepository;
 
   public BrandsCommandHandler(BrandRepository brandRepository) {
     this.brandRepository = requireNonNull(brandRepository, "brandRepository must not be null");
   }
 
+  @CheckReturnValue
   @SuppressWarnings("unchecked")
-  public <R> R handle(final BrandCommand<R> command) {
+  public <R> R handle(@NotNull final BrandCommand<R> command) {
     switch (command) {
       case BrandCommand.CreateBrand createBrand -> {
         Brand brand =
@@ -42,6 +49,7 @@ public class BrandsCommandHandler {
                 .id("7")
                 .name(createBrand.name())
                 .slug(Slug.of(createBrand.name()))
+                .kind(kindFromString(createBrand.kind()))
                 .build();
         return (R) brandRepository.save(brand);
       }
@@ -53,5 +61,17 @@ public class BrandsCommandHandler {
       }
       case null, default -> throw new IllegalArgumentException("Unknown command: " + command);
     }
+  }
+
+  @CheckReturnValue
+  private @Nullable BrandKind kindFromString(@Nullable final String kind) {
+    for (var value : BrandKind.values()) {
+      if (value.name().equalsIgnoreCase(kind)) {
+        return value;
+      }
+    }
+
+    LOG.warn("Unknown brand kind: '{}'", kind);
+    return null;
   }
 }

@@ -40,6 +40,9 @@ dependencies {
     versionCatalog.findLibrary("record-builder").ifPresent {
         compileOnly(it)
     }
+    versionCatalog.findLibrary("jetbrains-annotations").ifPresent {
+        compileOnly(it)
+    }
 
     implementation(platform("io.micronaut.platform:micronaut-platform:${micronautVersion}"))
     testImplementation("org.assertj:assertj-core")

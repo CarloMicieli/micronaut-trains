@@ -22,11 +22,24 @@ package io.github.carlomicieli.catalog;
 
 import java.util.List;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
 public sealed interface BrandCommand<R> {
-  record CreateBrand(String name) implements BrandCommand<String> {}
+  /**
+   * The command to create a new brand.
+   *
+   * @param name the brand name
+   * @param kind the brand kind
+   */
+  record CreateBrand(@NotNull String name, String kind) implements BrandCommand<String> {}
 
-  record FindBrandById(String brandId) implements BrandCommand<Optional<Brand>> {}
+  /**
+   * The command to find an existing brand by its id.
+   *
+   * @param brandId the brand id
+   */
+  record FindBrandById(@NotNull String brandId) implements BrandCommand<Optional<Brand>> {}
 
+  /** The command to find all brands. */
   record FindAllBrands() implements BrandCommand<List<Brand>> {}
 }

@@ -9,3 +9,14 @@ GET http://{{host}}:{{port}}/api/brands
 # Get a brand by id
 // @no-log
 GET http://{{host}}:{{port}}/api/brands/acme
+
+###
+
+# Create a brand
+POST http://{{host}}:{{port}}/api/brands
+Content-Type: application/json
+
+{
+    "name": "ACME",
+    "kind": "INDUSTRIAL"
+}
