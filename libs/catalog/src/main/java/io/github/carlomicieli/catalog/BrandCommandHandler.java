@@ -24,24 +24,23 @@ import static java.util.Objects.requireNonNull;
 
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
+import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.CheckReturnValue;
 
 @Singleton
-public class BrandsCommandHandler {
-  private static final Logger LOG = LoggerFactory.getLogger(BrandsCommandHandler.class);
+public class BrandCommandHandler {
+  private static final Logger LOG = LoggerFactory.getLogger(BrandCommandHandler.class);
   private final BrandRepository brandRepository;
 
-  public BrandsCommandHandler(BrandRepository brandRepository) {
+  public BrandCommandHandler(final BrandRepository brandRepository) {
     this.brandRepository = requireNonNull(brandRepository, "brandRepository must not be null");
   }
 
   @CheckReturnValue
   @SuppressWarnings("unchecked")
-  public <R> R handle(@NotNull final BrandCommand<R> command) {
+  public <R> @NotNull R handle(@NotNull final BrandCommand<R> command) {
     switch (command) {
       case BrandCommand.CreateBrand createBrand -> {
         Brand brand =
@@ -63,8 +62,7 @@ public class BrandsCommandHandler {
     }
   }
 
-  @CheckReturnValue
-  private @Nullable BrandKind kindFromString(@Nullable final String kind) {
+  private BrandKind kindFromString(final String kind) {
     for (var value : BrandKind.values()) {
       if (value.name().equalsIgnoreCase(kind)) {
         return value;

@@ -25,10 +25,11 @@ import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.jetbrains.annotations.NotNull;
 
 @Introspected
 @RecordBuilder
 @Serdeable
 public record BrandRequest(
-    @NotBlank String name,
+    @NotBlank @NotNull String name,
     @Pattern(regexp = "BRASS_MODELS|INDUSTRIAL", message = "Invalid brand kind") String kind) {}

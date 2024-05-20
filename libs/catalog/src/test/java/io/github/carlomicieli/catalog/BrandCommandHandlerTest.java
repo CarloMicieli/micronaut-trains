@@ -32,10 +32,10 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Brands Command Handler")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class BrandsCommandHandlerTest {
+class BrandCommandHandlerTest {
 
   private final BrandRepository brandRepository = new BrandRepository();
-  private final BrandsCommandHandler commandHandler = new BrandsCommandHandler(brandRepository);
+  private final BrandCommandHandler commandHandler = new BrandCommandHandler(brandRepository);
 
   @Test
   void it_should_create_a_new_brand() {

@@ -25,12 +25,23 @@ import static java.util.Objects.requireNonNull;
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import java.math.BigDecimal;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * A scale represents the ratio between the size of a model and the size of the real object.
+ *
+ * @param id the scale id
+ * @param name the scale name
+ * @param slug the scale slug
+ * @param ratio the scale ratio
+ */
 @RecordBuilder
-public record Scale(String id, String name, Slug slug, BigDecimal ratio) {
+public record Scale(
+    @NotNull String id, @NotNull String name, @NotNull Slug slug, @NotNull BigDecimal ratio) {
   public Scale {
     requireNonNull(id, "Scale id cannot be null");
     requireNonNull(name, "Scale name cannot be null");
+    requireNonNull(slug, "Scale slug cannot be null");
     requireNonNull(ratio, "Scale ratio cannot be null");
   }
 

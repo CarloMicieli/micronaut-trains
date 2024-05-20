@@ -21,9 +21,10 @@
 package io.github.carlomicieli.slug;
 
 import com.github.slugify.Slugify;
+import org.jetbrains.annotations.NotNull;
 
 /** It converts a string to a "slug". */
-public record Slug(String value) {
+public record Slug(@NotNull String value) {
   private static final Slugify SLUGIFY =
       Slugify.builder().lowerCase(true).customReplacement("ä", "ae").build();
 

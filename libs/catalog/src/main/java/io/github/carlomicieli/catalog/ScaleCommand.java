@@ -20,6 +20,14 @@
  */
 package io.github.carlomicieli.catalog;
 
+import org.jetbrains.annotations.NotNull;
+
 public sealed interface ScaleCommand<R> {
-  record CreateScale(String name, float ratio) implements ScaleCommand<String> {}
+  /**
+   * The command to create a new scale.
+   *
+   * @param name the scale name
+   * @param ratio the scale ratio
+   */
+  record CreateScale(@NotNull String name, float ratio) implements ScaleCommand<String> {}
 }

@@ -24,18 +24,21 @@ import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.math.BigDecimal;
 import java.util.Objects;
+import org.jetbrains.annotations.CheckReturnValue;
+import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class ScaleCommandHandler {
   private final ScaleRepository scaleRepository;
 
-  public ScaleCommandHandler(ScaleRepository scaleRepository) {
+  public ScaleCommandHandler(final ScaleRepository scaleRepository) {
     this.scaleRepository =
         Objects.requireNonNull(scaleRepository, "scaleRepository must not be null");
   }
 
+  @CheckReturnValue
   @SuppressWarnings("unchecked")
-  public <R> R handle(final ScaleCommand<R> command) {
+  public <R> @NotNull R handle(@NotNull final ScaleCommand<R> command) {
     switch (command) {
       case ScaleCommand.CreateScale createScale -> {
         Scale scale =

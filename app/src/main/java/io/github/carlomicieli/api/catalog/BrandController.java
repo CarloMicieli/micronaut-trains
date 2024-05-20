@@ -21,7 +21,7 @@
 package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.catalog.BrandCommand;
-import io.github.carlomicieli.catalog.BrandsCommandHandler;
+import io.github.carlomicieli.catalog.BrandCommandHandler;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -39,11 +39,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Controller("/api/brands")
-public class BrandsController {
-  private final Logger LOG = LoggerFactory.getLogger(BrandsController.class);
-  private final BrandsCommandHandler commandHandler;
+public class BrandController {
+  private final Logger LOG = LoggerFactory.getLogger(BrandController.class);
+  private final BrandCommandHandler commandHandler;
 
-  public BrandsController(final BrandsCommandHandler commandHandler) {
+  public BrandController(final BrandCommandHandler commandHandler) {
     this.commandHandler = Objects.requireNonNull(commandHandler, "commandHandler must not be null");
   }
 

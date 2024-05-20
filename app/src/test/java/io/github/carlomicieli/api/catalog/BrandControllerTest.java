@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
 @DisplayName("/api/brands")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @MicronautTest
-class BrandsControllerTest {
+class BrandControllerTest {
   @Test
   void it_should_get_all_brands(final BrandsClient client) {
     List<BrandView> brands = client.getBrands();

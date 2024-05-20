@@ -36,13 +36,13 @@ import java.util.Objects;
 public class ScaleController {
   private final ScaleCommandHandler commandHandler;
 
-  public ScaleController(ScaleCommandHandler commandHandler) {
+  public ScaleController(final ScaleCommandHandler commandHandler) {
     this.commandHandler = Objects.requireNonNull(commandHandler, "commandHandler must not be null");
   }
 
   @Post
   @Consumes(MediaType.APPLICATION_JSON)
-  public HttpResponse<?> createScale(@Valid @Body ScaleRequest request) {
+  HttpResponse<?> createScale(@Valid @Body ScaleRequest request) {
     var command = new ScaleCommand.CreateScale(request.name(), request.ratio());
     var scaleId = commandHandler.handle(command);
     return HttpResponse.created(URI.create("/api/scales/" + scaleId));

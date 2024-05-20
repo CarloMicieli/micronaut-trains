@@ -25,8 +25,9 @@ import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import org.jetbrains.annotations.NotNull;
 
 @Introspected
 @Serdeable
 @RecordBuilder
-public record ScaleRequest(@NotBlank String name, @Positive Float ratio) {}
+public record ScaleRequest(@NotBlank @NotNull String name, @Positive @NotNull Float ratio) {}
