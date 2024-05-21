@@ -24,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.catalog.Railway;
+import io.github.carlomicieli.catalog.RailwayBuilder;
+import io.github.carlomicieli.catalog.RailwayStatus;
 import io.github.carlomicieli.slug.Slug;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -35,7 +37,15 @@ import org.junit.jupiter.api.Test;
 class RailwayViewTest {
   @Test
   void it_should_create_a_RailwayView_from_a_Railway() {
-    Railway railway = new Railway("1", "FS", Slug.of("FS"), "fs", CountryCode.IT);
+    Railway railway =
+        RailwayBuilder.builder()
+            .id("1")
+            .name("FS")
+            .slug(Slug.of("FS"))
+            .abbreviation("fs")
+            .country(CountryCode.IT)
+            .status(RailwayStatus.ACTIVE)
+            .build();
     RailwayView view = RailwayView.fromRailway(railway);
     assertThat(view).isNotNull();
     assertThat(view.id()).isEqualTo("1");
@@ -43,5 +53,6 @@ class RailwayViewTest {
     assertThat(view.slug()).isEqualTo("fs");
     assertThat(view.abbreviation()).isEqualTo("fs");
     assertThat(view.country()).isEqualTo(CountryCode.IT.getAlpha2());
+    assertThat(view.status()).isEqualTo(RailwayStatus.ACTIVE.name());
   }
 }

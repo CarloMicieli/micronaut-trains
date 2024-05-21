@@ -21,10 +21,12 @@
 package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.catalog.Railway;
+import io.github.carlomicieli.catalog.RailwayStatus;
 import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Serdeable
 @RecordBuilder
@@ -33,7 +35,8 @@ public record RailwayView(
     @NotNull String name,
     @NotNull String slug,
     @NotNull String abbreviation,
-    @NotNull String country) {
+    @NotNull String country,
+    String status) {
   @CheckReturnValue
   public static @NotNull RailwayView fromRailway(@NotNull final Railway railway) {
     return RailwayViewBuilder.builder()
@@ -42,6 +45,11 @@ public record RailwayView(
         .slug(railway.slug().value())
         .abbreviation(railway.abbreviation())
         .country(railway.country().getAlpha2())
+        .status(toRailwayStatus(railway.status()))
         .build();
+  }
+
+  private static String toRailwayStatus(@Nullable RailwayStatus status) {
+    return status != null ? status.name() : null;
   }
 }

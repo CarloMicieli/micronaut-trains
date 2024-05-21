@@ -26,6 +26,7 @@ import jakarta.inject.Singleton;
 import java.util.Objects;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Singleton
 public final class RailwayCommandHandler {
@@ -48,6 +49,7 @@ public final class RailwayCommandHandler {
                 .slug(Slug.of(createRailway.name()))
                 .abbreviation(createRailway.abbreviation())
                 .country(CountryCode.getByCodeIgnoreCase(createRailway.country()))
+                .status(toRailwayStatus(createRailway.status()))
                 .build();
         yield (R) railwayRepository.save(railway);
       }
@@ -55,6 +57,14 @@ public final class RailwayCommandHandler {
       case RailwayCommand.FindRailwayById findRailwayById ->
           (R) railwayRepository.findById(findRailwayById.id());
       case RailwayCommand.FindAllRailways ignored -> (R) railwayRepository.findAll();
+    };
+  }
+
+  private RailwayStatus toRailwayStatus(@Nullable String status) {
+    return switch (status) {
+      case "active", "ACTIVE" -> RailwayStatus.ACTIVE;
+      case "inactive", "INACTIVE" -> RailwayStatus.INACTIVE;
+      case null, default -> null;
     };
   }
 }

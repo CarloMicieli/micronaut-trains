@@ -24,10 +24,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("RailwayCommandHandler")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -63,11 +67,27 @@ class RailwayCommandHandlerTest {
     assertThat(railways).isNotNull().hasSize(6);
   }
 
-  @Test
-  void it_should_create_a_new_railway() {
+  @ParameterizedTest
+  @MethodSource("createRailwayArguments")
+  void it_should_create_a_new_railway(
+      String name, String abbreviation, String country, String status) {
     RailwayCommand.CreateRailway createRailway =
-        new RailwayCommand.CreateRailway("Trenitalia", "FS", "it");
+        new RailwayCommand.CreateRailway(name, abbreviation, country, status);
     String id = railwayCommandHandler.handle(createRailway);
     assertThat(id).isNotNull().isEqualTo("7");
+
+    Optional<Railway> railway = railwayRepository.findById(id);
+    assertThat(railway).isPresent();
+    assertThat(railway.get().id()).isEqualTo("7");
+    assertThat(railway.get().name()).isEqualTo(name);
+    assertThat(railway.get().abbreviation()).isEqualTo(abbreviation);
+    assertThat(railway.get().country()).isEqualTo(CountryCode.IT);
+    assertThat(railway.get().status()).isEqualTo(RailwayStatus.ACTIVE);
+  }
+
+  private static Stream<Arguments> createRailwayArguments() {
+    return Stream.of(
+        Arguments.of("Ferrovie dello stato", "FS", "IT", "ACTIVE"),
+        Arguments.of("Ferrovie dello stato", "FS", "it", "active"));
   }
 }

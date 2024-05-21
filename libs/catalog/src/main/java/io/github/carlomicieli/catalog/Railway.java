@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * @param name the name of the railway company
  * @param abbreviation the abbreviation of the railway company
  * @param country the country where the railway company operates
+ * @param status the activity status of the railway company
  */
 @RecordBuilder
 public record Railway(
@@ -40,7 +41,8 @@ public record Railway(
     @NotNull String name,
     @NotNull Slug slug,
     @NotNull String abbreviation,
-    @NotNull CountryCode country) {
+    @NotNull CountryCode country,
+    RailwayStatus status) {
   public Railway {
     Objects.requireNonNull(id, "The railway id cannot be null");
     Objects.requireNonNull(name, "The railway name cannot be null");

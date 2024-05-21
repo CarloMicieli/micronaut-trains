@@ -19,5 +19,6 @@ Content-Type: application/json
 {
   "name": "FS",
   "abbreviation": "FS",
-  "country": "IT"
+  "country": "IT",
+  "status": "active"
 }

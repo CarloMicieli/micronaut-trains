@@ -25,7 +25,16 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface RailwayCommand<R> {
-  record CreateRailway(@NotNull String name, @NotNull String abbreviation, @NotNull String country)
+  /**
+   * Creates a new railway company.
+   *
+   * @param name the name of the railway company
+   * @param abbreviation the abbreviation of the railway company
+   * @param country the country where the railway company operates
+   * @param status the activity status of the railway company
+   */
+  record CreateRailway(
+      @NotNull String name, @NotNull String abbreviation, @NotNull String country, String status)
       implements RailwayCommand<String> {}
 
   record FindRailwayById(@NotNull String id) implements RailwayCommand<Optional<Railway>> {}

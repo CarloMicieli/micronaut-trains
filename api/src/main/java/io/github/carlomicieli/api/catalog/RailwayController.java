@@ -68,7 +68,8 @@ public class RailwayController {
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<?> createRailway(@Valid @Body final RailwayRequest request) {
     var command =
-        new RailwayCommand.CreateRailway(request.name(), request.abbreviation(), request.country());
+        new RailwayCommand.CreateRailway(
+            request.name(), request.abbreviation(), request.country(), request.status());
     var railwayId = commandHandler.handle(command);
     return HttpResponse.created(URI.create("/api/railways/" + railwayId));
   }

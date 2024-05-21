@@ -18,18 +18,10 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.catalog;
 
-import io.micronaut.core.annotation.Introspected;
-import io.micronaut.serde.annotation.Serdeable;
-import io.soabase.recordbuilder.core.RecordBuilder;
-import jakarta.validation.constraints.NotBlank;
-
-@Introspected
-@Serdeable
-@RecordBuilder
-public record RailwayRequest(
-    @NotBlank String name,
-    @NotBlank String abbreviation,
-    @NotBlank String country,
-    String status) {}
+/** the railway activity status */
+public enum RailwayStatus {
+  ACTIVE,
+  INACTIVE;
+}

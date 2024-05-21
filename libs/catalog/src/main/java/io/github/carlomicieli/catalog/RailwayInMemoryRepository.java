@@ -23,15 +23,21 @@ package io.github.carlomicieli.catalog;
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public class RailwayInMemoryRepository implements RailwayRepository {
+  private final List<Railway> railways =
+      initRailways().collect(Collectors.toCollection(ArrayList::new));
+
   @Override
   public @NotNull String save(@NotNull Railway railway) {
+    railways.add(railway);
     return railway.id();
   }
 
@@ -42,10 +48,14 @@ public class RailwayInMemoryRepository implements RailwayRepository {
 
   @Override
   public List<Railway> findAll() {
-    return railways().toList();
+    return List.copyOf(railways);
   }
 
   private Stream<Railway> railways() {
+    return railways.stream();
+  }
+
+  private Stream<Railway> initRailways() {
     return Stream.of(
         RailwayBuilder.builder()
             .id("1")
