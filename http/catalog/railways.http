@@ -1,0 +1,23 @@
+###
+
+# Get all railways
+// @no-log
+GET http://{{host}}:{{port}}/api/railways
+
+###
+
+# Get a railway by id
+// @no-log
+GET http://{{host}}:{{port}}/api/railways/fs
+
+###
+
+# Create a railway
+POST http://{{host}}:{{port}}/api/railways
+Content-Type: application/json
+
+{
+  "name": "FS",
+  "abbreviation": "FS",
+  "country": "IT"
+}
