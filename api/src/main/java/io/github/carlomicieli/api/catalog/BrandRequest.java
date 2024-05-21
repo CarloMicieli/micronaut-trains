@@ -32,4 +32,5 @@ import org.jetbrains.annotations.NotNull;
 @Serdeable
 public record BrandRequest(
     @NotBlank @NotNull String name,
-    @Pattern(regexp = "BRASS_MODELS|INDUSTRIAL", message = "Invalid brand kind") String kind) {}
+    @Pattern(regexp = "BRASS_MODELS|INDUSTRIAL", message = "Invalid brand kind") String kind,
+    String status) {}

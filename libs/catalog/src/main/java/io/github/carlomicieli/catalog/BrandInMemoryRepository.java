@@ -22,31 +22,36 @@ package io.github.carlomicieli.catalog;
 
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public final class BrandInMemoryRepository implements BrandRepository {
+  private final List<Brand> brands = brands().collect(Collectors.toCollection(ArrayList::new));
+
   @Override
   public @NotNull List<Brand> findAll() {
-    return brands().toList();
+    return List.copyOf(brands);
   }
 
   @Override
   public @NotNull Optional<Brand> findById(final @NotNull String brandId) {
-    return brands().filter(brand -> brand.id().equals(brandId)).findAny();
+    return brands.stream().filter(brand -> brand.id().equals(brandId)).findAny();
   }
 
   @Override
   public @NotNull String save(@NotNull final Brand brand) {
+    brands.add(brand);
     return brand.id();
   }
 
   private Stream<Brand> brands() {
-    return IntStream.range(1, 6)
+    return IntStream.range(1, 7)
         .boxed()
         .map(
             id ->

@@ -74,7 +74,8 @@ public class BrandController {
     LOG.info("POST /api/brands {}", brandRequest);
     String brandId =
         commandHandler.handle(
-            new BrandCommand.CreateBrand(brandRequest.name(), brandRequest.kind()));
+            new BrandCommand.CreateBrand(
+                brandRequest.name(), brandRequest.kind(), brandRequest.status()));
 
     return HttpResponse.created(URI.create("/api/brands/" + brandId));
   }

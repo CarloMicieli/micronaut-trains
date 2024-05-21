@@ -39,9 +39,17 @@ class BrandCommandHandlerTest {
 
   @Test
   void it_should_create_a_new_brand() {
-    BrandCommand.CreateBrand createBrand = new BrandCommand.CreateBrand("New Brand", "INDUSTRIAL");
+    BrandCommand.CreateBrand createBrand =
+        new BrandCommand.CreateBrand("New Brand", "INDUSTRIAL", "ACTIVE");
     String brandId = commandHandler.handle(createBrand);
     assertThat(brandId).isNotEmpty().isEqualTo("7");
+
+    Optional<Brand> newBrand = brandRepository.findById("7");
+    assertThat(newBrand).isNotEmpty();
+    assertThat(newBrand.get().name()).isEqualTo("New Brand");
+    assertThat(newBrand.get().slug()).isEqualTo(Slug.of("new-brand"));
+    assertThat(newBrand.get().kind()).isEqualTo(BrandKind.INDUSTRIAL);
+    assertThat(newBrand.get().status()).isEqualTo(BrandStatus.ACTIVE);
   }
 
   @Test
@@ -62,6 +70,6 @@ class BrandCommandHandlerTest {
   void it_should_find_all_brands() {
     BrandCommand.FindAllBrands findAllBrands = new BrandCommand.FindAllBrands();
     List<Brand> brands = commandHandler.handle(findAllBrands);
-    assertThat(brands).isNotNull().hasSize(5);
+    assertThat(brands).isNotNull().hasSize(7);
   }
 }

@@ -20,29 +20,8 @@
  */
 package io.github.carlomicieli.catalog;
 
-import java.util.List;
-import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-public sealed interface BrandCommand<R> {
-  /**
-   * The command to create a new brand.
-   *
-   * @param name the brand name
-   * @param kind the brand kind
-   * @param status the brand status
-   */
-  record CreateBrand(@NotNull String name, @Nullable String kind, @Nullable String status)
-      implements BrandCommand<String> {}
-
-  /**
-   * The command to find an existing brand by its id.
-   *
-   * @param brandId the brand id
-   */
-  record FindBrandById(@NotNull String brandId) implements BrandCommand<Optional<Brand>> {}
-
-  /** The command to find all brands. */
-  record FindAllBrands() implements BrandCommand<List<Brand>> {}
+/** It represents the status of a brand. */
+public enum BrandStatus {
+  ACTIVE,
+  OUT_OF_BUSINESS;
 }

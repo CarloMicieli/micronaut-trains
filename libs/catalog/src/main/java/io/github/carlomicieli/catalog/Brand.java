@@ -37,7 +37,11 @@ import org.jetbrains.annotations.Nullable;
  */
 @RecordBuilder
 public record Brand(
-    @NotNull String id, @NotNull String name, @NotNull Slug slug, @Nullable BrandKind kind) {
+    @NotNull String id,
+    @NotNull String name,
+    @NotNull Slug slug,
+    @Nullable BrandKind kind,
+    @Nullable BrandStatus status) {
   public Brand {
     requireNonNull(id, "Brand id cannot be null");
     requireNonNull(name, "Brand name cannot be null");

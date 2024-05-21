@@ -31,13 +31,18 @@ import org.jetbrains.annotations.Nullable;
 @RecordBuilder
 @Serdeable
 public record BrandView(
-    @NotNull String id, @NotNull String name, @NotNull String slug, @Nullable String kind) {
+    @NotNull String id,
+    @NotNull String name,
+    @NotNull String slug,
+    @Nullable String kind,
+    @Nullable String status) {
   public static @NotNull BrandView fromBrand(@NotNull final Brand brand) {
     var kind = Optional.ofNullable(brand.kind()).orElse(BrandKind.INDUSTRIAL).name();
     return BrandViewBuilder.builder()
         .id(brand.id())
         .name(brand.name())
         .slug(brand.slug().toString())
+        .status(Optional.ofNullable(brand.status()).map(Enum::name).orElse(null))
         .kind(kind)
         .build();
   }

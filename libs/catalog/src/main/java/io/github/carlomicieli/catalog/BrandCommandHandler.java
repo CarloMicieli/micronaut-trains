@@ -49,6 +49,7 @@ public class BrandCommandHandler {
                 .name(createBrand.name())
                 .slug(Slug.of(createBrand.name()))
                 .kind(kindFromString(createBrand.kind()))
+                .status(statusFromString(createBrand.status()))
                 .build();
         return (R) brandRepository.save(brand);
       }
@@ -60,6 +61,17 @@ public class BrandCommandHandler {
       }
       case null, default -> throw new IllegalArgumentException("Unknown command: " + command);
     }
+  }
+
+  private BrandStatus statusFromString(final String status) {
+    for (var value : BrandStatus.values()) {
+      if (value.name().equalsIgnoreCase(status)) {
+        return value;
+      }
+    }
+
+    LOG.warn("Unknown brand status: '{}'", status);
+    return null;
   }
 
   private BrandKind kindFromString(final String kind) {
