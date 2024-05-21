@@ -46,7 +46,8 @@ public class ScaleController {
   @Post
   @Consumes(MediaType.APPLICATION_JSON)
   HttpResponse<?> createScale(@Valid @Body ScaleRequest request) {
-    var command = new ScaleCommand.CreateScale(request.name(), request.ratio());
+    var command =
+        new ScaleCommand.CreateScale(request.name(), request.ratio(), request.trackGauge());
     var scaleId = commandHandler.handle(command);
     return HttpResponse.created(URI.create("/api/scales/" + scaleId));
   }

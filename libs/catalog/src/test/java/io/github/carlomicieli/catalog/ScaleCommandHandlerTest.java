@@ -37,7 +37,7 @@ class ScaleCommandHandlerTest {
 
   @Test
   void it_should_create_new_scales() {
-    ScaleCommand.CreateScale createScale = new ScaleCommand.CreateScale("H0", 87f);
+    ScaleCommand.CreateScale createScale = new ScaleCommand.CreateScale("H0", 87f, "STANDARD");
     String scaleId = scaleCommandHandler.handle(createScale);
     assertThat(scaleId).isEqualTo("7");
   }
@@ -54,6 +54,6 @@ class ScaleCommandHandlerTest {
   void it_should_find_scales() {
     ScaleCommand.FindAllScales findAllScales = new ScaleCommand.FindAllScales();
     List<Scale> scale = scaleCommandHandler.handle(findAllScales);
-    assertThat(scale).isNotNull().hasSize(4);
+    assertThat(scale).isNotNull().hasSize(5);
   }
 }

@@ -23,6 +23,8 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.carlomicieli.catalog.Scale;
+import io.github.carlomicieli.catalog.ScaleBuilder;
+import io.github.carlomicieli.catalog.TrackGauge;
 import io.github.carlomicieli.slug.Slug;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.DisplayName;
@@ -35,12 +37,20 @@ import org.junit.jupiter.api.Test;
 class ScaleViewTest {
   @Test
   void it_should_create_a_new_scale_view() {
-    Scale scale = new Scale("1", "H0", Slug.of("H0"), BigDecimal.valueOf(87));
+    Scale scale =
+        ScaleBuilder.builder()
+            .id("1")
+            .name("H0")
+            .slug(Slug.of("H0"))
+            .ratio(BigDecimal.valueOf(87))
+            .trackGauge(TrackGauge.STANDARD)
+            .build();
     ScaleView scaleView = ScaleView.fromScale(scale);
     assertThat(scaleView).isNotNull();
     assertThat(scaleView.id()).isEqualTo("1");
     assertThat(scaleView.name()).isEqualTo("H0");
     assertThat(scaleView.slug()).isEqualTo("h0");
     assertThat(scaleView.ratio()).isEqualTo("1:87");
+    assertThat(scaleView.trackGauge()).isEqualTo("STANDARD");
   }
 }

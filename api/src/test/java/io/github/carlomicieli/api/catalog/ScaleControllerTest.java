@@ -48,7 +48,7 @@ import org.junit.jupiter.api.Test;
 class ScaleControllerTest {
   @Test
   void it_should_create_new_scales(final ScaleClient client) {
-    ScaleRequest request = new ScaleRequest("H0", 87f);
+    ScaleRequest request = new ScaleRequest("H0", 87f, "STANDARD");
     HttpResponse<?> response = client.createScale(request);
     assertThat(response).isNotNull();
     assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.CREATED.getCode());
@@ -57,7 +57,7 @@ class ScaleControllerTest {
 
   @Test
   void it_should_reject_invalid_scale_requests(final ScaleClient client) {
-    ScaleRequest request = new ScaleRequest("", 0f);
+    ScaleRequest request = new ScaleRequest("", 0f, "STANDARD");
     assertThatThrownBy(() -> client.createScale(request))
         .isInstanceOf(HttpClientResponseException.class)
         .hasMessageContaining(
@@ -87,11 +87,12 @@ class ScaleControllerTest {
     List<ScaleView> scales = client.getScales().body();
     assertThat(scales)
         .isNotEmpty()
-        .hasSize(4)
+        .hasSize(5)
         .contains(
             scaleView("1", BigDecimal.valueOf(32)),
             scaleView("0", BigDecimal.valueOf(43.5)),
             scaleView("H0", BigDecimal.valueOf(87)),
+            narrowScaleView("H0m", BigDecimal.valueOf(87)),
             scaleView("N", BigDecimal.valueOf(160)));
   }
 
@@ -101,6 +102,17 @@ class ScaleControllerTest {
         .name(name)
         .slug(Slug.of(name).toString())
         .ratio("1:" + ratio)
+        .trackGauge("STANDARD")
+        .build();
+  }
+
+  private ScaleView narrowScaleView(String name, BigDecimal ratio) {
+    return ScaleViewBuilder.builder()
+        .id(name)
+        .name(name)
+        .slug(Slug.of(name).toString())
+        .ratio("1:" + ratio)
+        .trackGauge("NARROW")
         .build();
   }
 

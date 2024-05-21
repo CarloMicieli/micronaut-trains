@@ -47,6 +47,7 @@ public class ScaleCommandHandler {
                 .name(createScale.name())
                 .slug(Slug.of(createScale.name()))
                 .ratio(BigDecimal.valueOf(createScale.ratio()))
+                .trackGauge(TrackGauge.valueOf(createScale.trackGauge()))
                 .build();
         return (R) scaleRepository.save(scale);
       }

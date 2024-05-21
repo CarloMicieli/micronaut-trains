@@ -9,3 +9,16 @@ GET http://{{host}}:{{port}}/api/scales
 # Get a scale by id
 // @no-log
 GET http://{{host}}:{{port}}/api/scales/h0
+
+###
+
+# Create a new scale
+
+POST http://{{host}}:{{port}}/api/scales
+Content-Type: application/json
+
+{
+  "name": "1",
+  "ratio": 87,
+  "track_gauge": "STANDARD"
+}

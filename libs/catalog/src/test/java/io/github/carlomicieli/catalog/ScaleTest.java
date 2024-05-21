@@ -38,12 +38,19 @@ class ScaleTest {
   @Test
   void it_should_create_new_scales() {
     Scale scale =
-        ScaleBuilder.builder().id("1").name("H0").ratio(EIGHTY_SEVEN).slug(Slug.of("H0")).build();
+        ScaleBuilder.builder()
+            .id("1")
+            .name("H0")
+            .ratio(EIGHTY_SEVEN)
+            .slug(Slug.of("H0"))
+            .trackGauge(TrackGauge.STANDARD)
+            .build();
     assertThat(scale).isNotNull();
     assertThat(scale.id()).isEqualTo("1");
     assertThat(scale.ratio()).isEqualTo(EIGHTY_SEVEN);
     assertThat(scale.slug()).isEqualTo(Slug.of("H0"));
     assertThat(scale.name()).isEqualTo("H0");
+    assertThat(scale.trackGauge()).isEqualTo(TrackGauge.STANDARD);
   }
 
   @Test
@@ -72,7 +79,13 @@ class ScaleTest {
   @Test
   void it_should_produce_string_representations() {
     Scale halfZero =
-        ScaleBuilder.builder().id("1").name("H0").ratio(EIGHTY_SEVEN).slug(Slug.of("H0")).build();
+        ScaleBuilder.builder()
+            .id("1")
+            .name("H0")
+            .ratio(EIGHTY_SEVEN)
+            .slug(Slug.of("H0"))
+            .trackGauge(TrackGauge.STANDARD)
+            .build();
     assertThat(halfZero.toString()).isEqualTo("H0 (1:87)");
 
     Scale zero =
@@ -81,6 +94,7 @@ class ScaleTest {
             .name("0")
             .ratio(BigDecimal.valueOf(43.5))
             .slug(Slug.of("0"))
+            .trackGauge(TrackGauge.STANDARD)
             .build();
     assertThat(zero.toString()).isEqualTo("0 (1:43.5)");
   }

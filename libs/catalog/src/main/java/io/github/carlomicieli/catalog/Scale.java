@@ -34,15 +34,21 @@ import org.jetbrains.annotations.NotNull;
  * @param name the scale name
  * @param slug the scale slug
  * @param ratio the scale ratio
+ * @param trackGauge the track gauge
  */
 @RecordBuilder
 public record Scale(
-    @NotNull String id, @NotNull String name, @NotNull Slug slug, @NotNull BigDecimal ratio) {
+    @NotNull String id,
+    @NotNull String name,
+    @NotNull Slug slug,
+    @NotNull BigDecimal ratio,
+    @NotNull TrackGauge trackGauge) {
   public Scale {
     requireNonNull(id, "Scale id cannot be null");
     requireNonNull(name, "Scale name cannot be null");
     requireNonNull(slug, "Scale slug cannot be null");
     requireNonNull(ratio, "Scale ratio cannot be null");
+    requireNonNull(trackGauge, "Track gauge cannot be null");
   }
 
   @Override

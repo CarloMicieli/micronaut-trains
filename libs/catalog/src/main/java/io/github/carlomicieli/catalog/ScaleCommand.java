@@ -30,8 +30,10 @@ public sealed interface ScaleCommand<R> {
    *
    * @param name the scale name
    * @param ratio the scale ratio
+   * @param trackGauge the track gauge
    */
-  record CreateScale(@NotNull String name, float ratio) implements ScaleCommand<String> {}
+  record CreateScale(@NotNull String name, float ratio, @NotNull String trackGauge)
+      implements ScaleCommand<String> {}
 
   /**
    * The command to get a scale by its identifier.

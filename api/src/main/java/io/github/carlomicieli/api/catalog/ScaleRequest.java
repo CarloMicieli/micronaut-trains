@@ -22,12 +22,14 @@ package io.github.carlomicieli.api.catalog;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
+import io.micronaut.serde.config.naming.SnakeCaseStrategy;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import org.jetbrains.annotations.NotNull;
 
 @Introspected
-@Serdeable
+@Serdeable(naming = SnakeCaseStrategy.class)
 @RecordBuilder
-public record ScaleRequest(@NotBlank @NotNull String name, @Positive @NotNull Float ratio) {}
+public record ScaleRequest(
+    @NotBlank @NotNull String name, @Positive @NotNull Float ratio, @NotBlank String trackGauge) {}

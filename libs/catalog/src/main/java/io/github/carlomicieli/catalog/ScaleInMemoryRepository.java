@@ -52,24 +52,35 @@ public final class ScaleInMemoryRepository implements ScaleRepository {
             .name("1")
             .slug(Slug.of("1"))
             .ratio(BigDecimal.valueOf(32))
+            .trackGauge(TrackGauge.STANDARD)
             .build(),
         ScaleBuilder.builder()
             .id("0")
             .name("0")
             .slug(Slug.of("0"))
             .ratio(BigDecimal.valueOf(43.5))
+            .trackGauge(TrackGauge.STANDARD)
             .build(),
         ScaleBuilder.builder()
             .id("H0")
             .name("H0")
             .slug(Slug.of("H0"))
             .ratio(BigDecimal.valueOf(87))
+            .trackGauge(TrackGauge.STANDARD)
+            .build(),
+        ScaleBuilder.builder()
+            .id("H0m")
+            .name("H0m")
+            .slug(Slug.of("H0m"))
+            .ratio(BigDecimal.valueOf(87))
+            .trackGauge(TrackGauge.NARROW)
             .build(),
         ScaleBuilder.builder()
             .id("N")
             .name("N")
             .slug(Slug.of("N"))
             .ratio(BigDecimal.valueOf(160))
+            .trackGauge(TrackGauge.STANDARD)
             .build());
   }
 }

@@ -18,31 +18,12 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.catalog;
 
-import io.github.carlomicieli.catalog.Scale;
-import io.micronaut.serde.annotation.Serdeable;
-import io.micronaut.serde.config.naming.SnakeCaseStrategy;
-import io.soabase.recordbuilder.core.RecordBuilder;
-import org.jetbrains.annotations.CheckReturnValue;
-import org.jetbrains.annotations.NotNull;
-
-@RecordBuilder
-@Serdeable(naming = SnakeCaseStrategy.class)
-public record ScaleView(
-    @NotNull String id,
-    @NotNull String name,
-    @NotNull String slug,
-    @NotNull String ratio,
-    @NotNull String trackGauge) {
-  @CheckReturnValue
-  public static @NotNull ScaleView fromScale(@NotNull final Scale scale) {
-    return ScaleViewBuilder.builder()
-        .id(scale.id())
-        .name(scale.name())
-        .ratio("1:" + scale.ratio())
-        .slug(scale.slug().toString())
-        .trackGauge(scale.trackGauge().name())
-        .build();
-  }
+public enum TrackGauge {
+  BROAD,
+  MEDIUM,
+  MINIMUM,
+  NARROW,
+  STANDARD;
 }
