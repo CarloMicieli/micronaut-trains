@@ -20,6 +20,7 @@
  */
 package io.github.carlomicieli.catalog;
 
+import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.util.List;
@@ -51,42 +52,42 @@ public class RailwayInMemoryRepository implements RailwayRepository {
             .name("FS")
             .slug(Slug.of("fs"))
             .abbreviation("fs")
-            .country("Italy")
+            .country(CountryCode.IT)
             .build(),
         RailwayBuilder.builder()
             .id("2")
             .name("DB")
             .slug(Slug.of("db"))
             .abbreviation("db")
-            .country("Germany")
+            .country(CountryCode.DE)
             .build(),
         RailwayBuilder.builder()
             .id("3")
             .name("SNCF")
             .slug(Slug.of("sncf"))
             .abbreviation("sncf")
-            .country("France")
+            .country(CountryCode.FR)
             .build(),
         RailwayBuilder.builder()
             .id("4")
             .name("RENFE")
             .slug(Slug.of("renfe"))
             .abbreviation("renfe")
-            .country("Spain")
+            .country(CountryCode.ES)
             .build(),
         RailwayBuilder.builder()
             .id("5")
             .name("NS")
             .slug(Slug.of("ns"))
             .abbreviation("ns")
-            .country("Netherlands")
+            .country(CountryCode.NL)
             .build(),
         RailwayBuilder.builder()
             .id("6")
             .name("SBB")
             .slug(Slug.of("sbb"))
             .abbreviation("sbb")
-            .country("Switzerland")
+            .country(CountryCode.CH)
             .build());
   }
 }

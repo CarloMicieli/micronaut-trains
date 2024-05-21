@@ -20,6 +20,7 @@
  */
 package io.github.carlomicieli.catalog;
 
+import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.util.Objects;
@@ -46,7 +47,7 @@ public final class RailwayCommandHandler {
                 .name(createRailway.name())
                 .slug(Slug.of(createRailway.name()))
                 .abbreviation(createRailway.abbreviation())
-                .country(createRailway.country())
+                .country(CountryCode.getByCodeIgnoreCase(createRailway.country()))
                 .build();
         yield (R) railwayRepository.save(railway);
       }

@@ -20,6 +20,7 @@
  */
 package io.github.carlomicieli.catalog;
 
+import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import java.util.Objects;
@@ -39,7 +40,7 @@ public record Railway(
     @NotNull String name,
     @NotNull Slug slug,
     @NotNull String abbreviation,
-    @NotNull String country) {
+    @NotNull CountryCode country) {
   public Railway {
     Objects.requireNonNull(id, "The railway id cannot be null");
     Objects.requireNonNull(name, "The railway name cannot be null");

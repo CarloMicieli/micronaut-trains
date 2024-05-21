@@ -18,3 +18,4 @@ record-builder = { module = "io.soabase.record-builder:record-builder-core", ver
 record-builder-processor = { module = "io.soabase.record-builder:record-builder-processor", version.ref = "record-builder" }
 shadow-plugin = { module = "com.github.johnrengelman:shadow", version.ref = "shadow" }
 spotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
+nv-i18n = "com.neovisionaries:nv-i18n:1.28"

@@ -41,7 +41,7 @@ public record RailwayView(
         .name(railway.name())
         .slug(railway.slug().value())
         .abbreviation(railway.abbreviation())
-        .country(railway.country())
+        .country(railway.country().getAlpha2())
         .build();
   }
 }

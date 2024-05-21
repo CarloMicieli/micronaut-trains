@@ -7,6 +7,7 @@ com.fasterxml.jackson.core:jackson-annotations:2.16.1=compileClasspath
 com.fasterxml.jackson.core:jackson-core:2.16.1=compileClasspath
 com.fasterxml.jackson:jackson-bom:2.16.1=compileClasspath
 com.google.protobuf:protobuf-bom:3.25.3=compileClasspath
+com.neovisionaries:nv-i18n:1.28=compileClasspath
 com.oracle.coherence.ce:coherence-bom:23.03=compileClasspath
 io.grpc:grpc-bom:1.62.2=compileClasspath
 io.kotest:kotest-bom:5.8.1=compileClasspath

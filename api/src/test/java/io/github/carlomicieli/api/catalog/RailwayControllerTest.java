@@ -22,6 +22,7 @@ package io.github.carlomicieli.api.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.neovisionaries.i18n.CountryCode;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
@@ -57,12 +58,12 @@ class RailwayControllerTest {
     assertThat(railway.body().name()).isEqualTo("FS");
     assertThat(railway.body().slug()).isEqualTo("fs");
     assertThat(railway.body().abbreviation()).isEqualTo("fs");
-    assertThat(railway.body().country()).isEqualTo("Italy");
+    assertThat(railway.body().country()).isEqualTo(CountryCode.IT.getAlpha2());
   }
 
   @Test
   void it_should_create_a_new_railway(final RailwayClient client) {
-    var request = new RailwayRequest("Trenitalia", "FS", "Italy");
+    var request = new RailwayRequest("Trenitalia", "FS", CountryCode.IT.getAlpha2());
     var response = client.createRailway(request);
     assertThat(response).isNotNull();
     assertThat(response.status().getCode()).isEqualTo(HttpStatus.CREATED.getCode());

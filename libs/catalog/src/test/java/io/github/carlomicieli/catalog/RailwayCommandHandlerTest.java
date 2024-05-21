@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.neovisionaries.i18n.CountryCode;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -43,7 +44,7 @@ class RailwayCommandHandlerTest {
     assertThat(railway.get().id()).isEqualTo("1");
     assertThat(railway.get().name()).isEqualTo("FS");
     assertThat(railway.get().abbreviation()).isEqualTo("fs");
-    assertThat(railway.get().country()).isEqualTo("Italy");
+    assertThat(railway.get().country()).isEqualTo(CountryCode.IT);
     assertThat(railway.get().slug().value()).isEqualTo("fs");
   }
 
@@ -65,7 +66,7 @@ class RailwayCommandHandlerTest {
   @Test
   void it_should_create_a_new_railway() {
     RailwayCommand.CreateRailway createRailway =
-        new RailwayCommand.CreateRailway("Trenitalia", "FS", "Italy");
+        new RailwayCommand.CreateRailway("Trenitalia", "FS", "it");
     String id = railwayCommandHandler.handle(createRailway);
     assertThat(id).isNotNull().isEqualTo("7");
   }

@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.slug.Slug;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -34,7 +35,12 @@ class RailwayTest {
   @Test
   void it_should_require_an_id() {
     assertThatThrownBy(
-            () -> RailwayBuilder.builder().name("FS").abbreviation("FS").country("Italy").build())
+            () ->
+                RailwayBuilder.builder()
+                    .name("FS")
+                    .abbreviation("FS")
+                    .country(CountryCode.IT)
+                    .build())
         .isInstanceOf(NullPointerException.class)
         .hasMessage("The railway id cannot be null");
   }
@@ -42,7 +48,8 @@ class RailwayTest {
   @Test
   void it_should_require_a_name() {
     assertThatThrownBy(
-            () -> RailwayBuilder.builder().id("1").abbreviation("FS").country("Italy").build())
+            () ->
+                RailwayBuilder.builder().id("1").abbreviation("FS").country(CountryCode.IT).build())
         .isInstanceOf(NullPointerException.class)
         .hasMessage("The railway name cannot be null");
   }
@@ -55,7 +62,7 @@ class RailwayTest {
                     .id("1")
                     .name("FS")
                     .abbreviation("FS")
-                    .country("Italy")
+                    .country(CountryCode.IT)
                     .build())
         .isInstanceOf(NullPointerException.class)
         .hasMessage("The railway slug cannot be null");
@@ -69,7 +76,7 @@ class RailwayTest {
                     .id("1")
                     .name("FS")
                     .slug(Slug.of("FS"))
-                    .country("Italy")
+                    .country(CountryCode.IT)
                     .build())
         .isInstanceOf(NullPointerException.class)
         .hasMessage("The railway abbreviation cannot be null");
