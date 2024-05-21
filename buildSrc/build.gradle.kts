@@ -7,8 +7,9 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.spotless.plugin)
-    implementation(libs.micronaut.plugin)
+    implementation(libs.git.versioning.plugin)
     implementation(libs.micronaut.aot.plugin)
+    implementation(libs.micronaut.plugin)
     implementation(libs.shadow.plugin)
+    implementation(libs.spotless.plugin)
 }

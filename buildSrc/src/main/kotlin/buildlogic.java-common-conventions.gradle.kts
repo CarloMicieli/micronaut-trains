@@ -8,6 +8,24 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 plugins {
     java
     id("com.diffplug.spotless")
+    id("me.qoomon.git-versioning")
+}
+
+group = "io.github.carlomicieli"
+version = "0.0.0-SNAPSHOT"
+gitVersioning.apply {
+    refs {
+        branch("main") {
+            version = "\${commit.timestamp}-\${commit.short}"
+        }
+        tag("v(?<version>.*)") {
+            version = "\${ref.version}"
+        }
+    }
+
+    rev {
+        version = "\${commit.short}-SNAPSHOT"
+    }
 }
 
 configurations {

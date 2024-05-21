@@ -2,12 +2,15 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
+git-versioning = "6.4.3"
 micronaut = "4.4.0"
 record-builder = "41"
 shadow = "8.1.1"
 spotless = "6.25.0"
 
 [libraries]
+git-versioning-plugin = { module = "me.qoomon:gradle-git-versioning-plugin", version.ref = "git-versioning" }
+gradle-docker-plugin = { module = "com.bmuschko:gradle-docker-plugin", version = "6.7.0" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "24.0.0" }
 micronaut-aot-plugin = { module = "io.micronaut.gradle:micronaut-aot-plugin", version.ref = "micronaut"}
 micronaut-plugin = { module = "io.micronaut.gradle:micronaut-gradle-plugin", version.ref = "micronaut" }
