@@ -4,7 +4,7 @@ plugins {
 }
 
 rootProject.name = "micronaut-trains"
-include("app")
+include("api")
 include(":libs:common")
 include(":libs:catalog")
 
