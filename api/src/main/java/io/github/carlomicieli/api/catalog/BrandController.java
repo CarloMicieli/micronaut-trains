@@ -38,7 +38,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Controller("/api/brands")
+@Controller(ApiCatalog.API_BRANDS)
 public class BrandController {
   private final Logger LOG = LoggerFactory.getLogger(BrandController.class);
   private final BrandCommandHandler commandHandler;
@@ -50,7 +50,7 @@ public class BrandController {
   @Get()
   @Produces(MediaType.APPLICATION_JSON)
   List<BrandView> getAllBrands() {
-    LOG.info("GET /api/brands");
+    LOG.info("GET {}", ApiCatalog.API_BRANDS);
     return commandHandler.handle(new BrandCommand.FindAllBrands()).stream()
         .map(BrandView::fromBrand)
         .toList();
@@ -59,7 +59,7 @@ public class BrandController {
   @Get("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<BrandView> getBrandById(@PathVariable("id") final String brandId) {
-    LOG.info("GET /api/brands/{}", brandId);
+    LOG.info("GET {}/{}", ApiCatalog.API_BRANDS, brandId);
     return commandHandler
         .handle(new BrandCommand.FindBrandById(brandId))
         .map(BrandView::fromBrand)
@@ -71,12 +71,12 @@ public class BrandController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<?> createBrand(@Valid @Body final BrandRequest brandRequest) {
-    LOG.info("POST /api/brands {}", brandRequest);
+    LOG.info("POST {} {}", ApiCatalog.API_BRANDS, brandRequest);
     String brandId =
         commandHandler.handle(
             new BrandCommand.CreateBrand(
                 brandRequest.name(), brandRequest.kind(), brandRequest.status()));
 
-    return HttpResponse.created(URI.create("/api/brands/" + brandId));
+    return HttpResponse.created(URI.create(ApiCatalog.API_BRANDS + "/" + brandId));
   }
 }

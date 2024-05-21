@@ -34,9 +34,12 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Controller("/api/scales")
+@Controller(ApiCatalog.API_SCALES)
 public class ScaleController {
+  private static final Logger LOG = LoggerFactory.getLogger(ScaleController.class);
   private final ScaleCommandHandler commandHandler;
 
   public ScaleController(final ScaleCommandHandler commandHandler) {
@@ -46,15 +49,17 @@ public class ScaleController {
   @Post
   @Consumes(MediaType.APPLICATION_JSON)
   HttpResponse<?> createScale(@Valid @Body ScaleRequest request) {
+    LOG.info("POST {} {}", ApiCatalog.API_SCALES, request);
     var command =
         new ScaleCommand.CreateScale(request.name(), request.ratio(), request.trackGauge());
     var scaleId = commandHandler.handle(command);
-    return HttpResponse.created(URI.create("/api/scales/" + scaleId));
+    return HttpResponse.created(URI.create(ApiCatalog.API_SCALES + "/" + scaleId));
   }
 
   @Get("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<ScaleView> getScale(String id) {
+    LOG.info("GET {}/{}", ApiCatalog.API_SCALES, id);
     var command = new ScaleCommand.FindScaleById(id);
     return commandHandler
         .handle(command)
@@ -66,6 +71,7 @@ public class ScaleController {
   @Get
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<List<ScaleView>> getScales() {
+    LOG.info("GET {}", ApiCatalog.API_SCALES);
     var command = new ScaleCommand.FindAllScales();
     var scales = commandHandler.handle(command).stream().map(ScaleView::fromScale).toList();
     return HttpResponse.ok(scales);

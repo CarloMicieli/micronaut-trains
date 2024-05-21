@@ -35,9 +35,12 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Controller("/api/railways")
+@Controller(ApiCatalog.API_RAILWAYS)
 public class RailwayController {
+  private static final Logger LOG = LoggerFactory.getLogger(RailwayController.class);
   private final RailwayCommandHandler commandHandler;
 
   public RailwayController(RailwayCommandHandler commandHandler) {
@@ -47,6 +50,7 @@ public class RailwayController {
   @Get
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<List<RailwayView>> getRailways() {
+    LOG.info("GET {}", ApiCatalog.API_RAILWAYS);
     var command = new RailwayCommand.FindAllRailways();
     var railways = commandHandler.handle(command).stream().map(RailwayView::fromRailway).toList();
     return HttpResponse.ok(railways);
@@ -55,6 +59,7 @@ public class RailwayController {
   @Get("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<RailwayView> getRailwayById(@PathVariable final String id) {
+    LOG.info("GET {}/{}", ApiCatalog.API_RAILWAYS, id);
     var command = new RailwayCommand.FindRailwayById(id);
     return commandHandler
         .handle(command)
@@ -67,10 +72,11 @@ public class RailwayController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<?> createRailway(@Valid @Body final RailwayRequest request) {
+    LOG.info("POST {} {}", ApiCatalog.API_RAILWAYS, request);
     var command =
         new RailwayCommand.CreateRailway(
             request.name(), request.abbreviation(), request.country(), request.status());
     var railwayId = commandHandler.handle(command);
-    return HttpResponse.created(URI.create("/api/railways/" + railwayId));
+    return HttpResponse.created(URI.create(ApiCatalog.API_RAILWAYS + "/" + railwayId));
   }
 }
