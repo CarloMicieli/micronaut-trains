@@ -7,6 +7,12 @@ plugins {
     id("com.github.johnrengelman.shadow")
     id("io.micronaut.aot")
     id("io.micronaut.application")
+    jacoco
+    id("jacoco-report-aggregation")
+}
+
+tasks.check {
+    dependsOn(tasks.named<JacocoReport>("testCodeCoverageReport"))
 }
 
 dependencies {

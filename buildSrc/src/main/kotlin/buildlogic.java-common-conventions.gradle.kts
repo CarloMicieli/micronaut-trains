@@ -7,8 +7,20 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
 
 plugins {
     java
+    jacoco
     id("com.diffplug.spotless")
     id("me.qoomon.git-versioning")
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks {
+    jacocoTestReport {
+        // Do not generate reports for individual projects
+        enabled = false
+    }
 }
 
 group = "io.github.carlomicieli"
