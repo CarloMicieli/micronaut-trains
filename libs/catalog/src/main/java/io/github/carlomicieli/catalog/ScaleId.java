@@ -18,31 +18,36 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.catalog;
 
-import io.github.carlomicieli.catalog.Scale;
-import io.micronaut.serde.annotation.Serdeable;
-import io.micronaut.serde.config.naming.SnakeCaseStrategy;
-import io.soabase.recordbuilder.core.RecordBuilder;
+import io.github.carlomicieli.slug.Slug;
+import io.github.carlomicieli.trn.TRN;
+import java.util.Objects;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
-@RecordBuilder
-@Serdeable(naming = SnakeCaseStrategy.class)
-public record ScaleView(
-    @NotNull String id,
-    @NotNull String name,
-    @NotNull String slug,
-    @NotNull String ratio,
-    @NotNull String trackGauge) {
+/** A <strong>Scale ID</strong> is a unique identifier for a scale. */
+public record ScaleId(@NotNull String value) {
+  private static final String NAMESPACE = "scale";
+
+  public ScaleId {
+    Objects.requireNonNull(value, "The scale ID value cannot be null");
+    TRN trn = TRN.requireValid(value, NAMESPACE, "Invalid scale ID value: " + value);
+    value = trn.toString();
+  }
+
+  private ScaleId(@NotNull TRN trn) {
+    this(trn.toString());
+  }
+
   @CheckReturnValue
-  public static @NotNull ScaleView fromScale(@NotNull final Scale scale) {
-    return ScaleViewBuilder.builder()
-        .id(scale.id().value())
-        .name(scale.name())
-        .ratio("1:" + scale.ratio())
-        .slug(scale.slug().toString())
-        .trackGauge(scale.trackGauge().name())
-        .build();
+  public static @NotNull ScaleId fromName(@NotNull final String name) {
+    TRN trn = new TRN(NAMESPACE, Slug.of(name).toString());
+    return new ScaleId(trn);
+  }
+
+  @Override
+  public String toString() {
+    return value;
   }
 }

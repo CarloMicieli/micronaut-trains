@@ -23,6 +23,7 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.github.carlomicieli.catalog.ScaleId;
 import io.github.carlomicieli.slug.Slug;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -48,11 +49,11 @@ import org.junit.jupiter.api.Test;
 class ScaleControllerTest {
   @Test
   void it_should_create_new_scales(final ScaleClient client) {
-    ScaleRequest request = new ScaleRequest("H0", 87f, "STANDARD");
+    ScaleRequest request = new ScaleRequest("H0e", 87f, "NARROW");
     HttpResponse<?> response = client.createScale(request);
     assertThat(response).isNotNull();
     assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.CREATED.getCode());
-    assertThat(response.getHeaders().get("Location")).contains("/api/scales/7");
+    assertThat(response.getHeaders().get("Location")).contains("/api/scales/trn:scale:h0e");
   }
 
   @Test
@@ -70,7 +71,7 @@ class ScaleControllerTest {
   void it_should_find_scale_by_id(final ScaleClient client) {
     ScaleView scale = client.getScale("1").body();
     assertThat(scale).isNotNull();
-    assertThat(scale.id()).isEqualTo("1");
+    assertThat(scale.id()).isEqualTo("trn:scale:1");
     assertThat(scale.name()).isEqualTo("1");
     assertThat(scale.ratio()).isEqualTo("1:32");
   }
@@ -87,7 +88,7 @@ class ScaleControllerTest {
     List<ScaleView> scales = client.getScales().body();
     assertThat(scales)
         .isNotEmpty()
-        .hasSize(5)
+        .hasSize(6)
         .contains(
             scaleView("1", BigDecimal.valueOf(32)),
             scaleView("0", BigDecimal.valueOf(43.5)),
@@ -98,7 +99,7 @@ class ScaleControllerTest {
 
   private ScaleView scaleView(String name, BigDecimal ratio) {
     return ScaleViewBuilder.builder()
-        .id(name)
+        .id(ScaleId.fromName(name).value())
         .name(name)
         .slug(Slug.of(name).toString())
         .ratio("1:" + ratio)
@@ -108,7 +109,7 @@ class ScaleControllerTest {
 
   private ScaleView narrowScaleView(String name, BigDecimal ratio) {
     return ScaleViewBuilder.builder()
-        .id(name)
+        .id(ScaleId.fromName(name).value())
         .name(name)
         .slug(Slug.of(name).toString())
         .ratio("1:" + ratio)

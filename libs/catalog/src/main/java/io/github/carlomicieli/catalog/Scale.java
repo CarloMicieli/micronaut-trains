@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @RecordBuilder
 public record Scale(
-    @NotNull String id,
+    @NotNull ScaleId id,
     @NotNull String name,
     @NotNull Slug slug,
     @NotNull BigDecimal ratio,

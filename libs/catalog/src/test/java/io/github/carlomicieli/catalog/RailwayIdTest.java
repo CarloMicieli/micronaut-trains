@@ -54,7 +54,7 @@ class RailwayIdTest {
 
   @Test
   void it_should_produce_String_representation() {
-    RailwayId RailwayId = new RailwayId("trn:railway:123");
-    assertThat(RailwayId.toString()).isEqualTo("trn:railway:123");
+    RailwayId railwayId = new RailwayId("trn:railway:123");
+    assertThat(railwayId.toString()).isEqualTo("trn:railway:123");
   }
 }

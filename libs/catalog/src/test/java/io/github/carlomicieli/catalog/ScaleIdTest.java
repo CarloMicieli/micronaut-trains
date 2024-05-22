@@ -21,40 +21,40 @@
 package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("ScaleCommandHandler")
+@DisplayName("ScaleId")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class ScaleCommandHandlerTest {
-  private final ScaleRepository scaleRepository = ScaleRepository.INSTANCE;
-  private final ScaleCommandHandler scaleCommandHandler = new ScaleCommandHandler(scaleRepository);
-
+class ScaleIdTest {
   @Test
-  void it_should_create_new_scales() {
-    ScaleCommand.CreateScale createScale = new ScaleCommand.CreateScale("H0e", 87f, "NARROW");
-    ScaleId scaleId = scaleCommandHandler.handle(createScale);
-    assertThat(scaleId).isEqualTo(ScaleId.fromName("H0e"));
+  void it_should_not_allow_null_values() {
+    assertThatThrownBy(() -> new ScaleId(null))
+        .isInstanceOf(NullPointerException.class)
+        .hasMessageContaining("The scale ID value cannot be null");
   }
 
   @Test
-  void it_should_find_scale_by_id() {
-    ScaleCommand.FindScaleById findScaleById =
-        new ScaleCommand.FindScaleById(ScaleId.fromName("1"));
-    Optional<Scale> scale = scaleCommandHandler.handle(findScaleById);
-    assertThat(scale).isPresent();
-    assertThat(scale.get().id()).isEqualTo(ScaleId.fromName("1"));
+  void it_should_be_a_valid_TRN() {
+    assertThatThrownBy(() -> new ScaleId("123"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Invalid scale ID value: 123");
   }
 
   @Test
-  void it_should_find_scales() {
-    ScaleCommand.FindAllScales findAllScales = new ScaleCommand.FindAllScales();
-    List<Scale> scale = scaleCommandHandler.handle(findAllScales);
-    assertThat(scale).isNotNull().hasSize(5);
+  void it_should_be_a_valid_TRN_with_the_correct_namespace_identifier() {
+    assertThatThrownBy(() -> new ScaleId("trn:something-else:name"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Invalid scale ID value: trn:something-else:name");
+  }
+
+  @Test
+  void it_should_produce_String_representation() {
+    ScaleId scaleId = new ScaleId("trn:scale:123");
+    assertThat(scaleId.toString()).isEqualTo("trn:scale:123");
   }
 }

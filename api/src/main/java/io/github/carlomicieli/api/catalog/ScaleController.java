@@ -22,12 +22,14 @@ package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.catalog.ScaleCommand;
 import io.github.carlomicieli.catalog.ScaleCommandHandler;
+import io.github.carlomicieli.catalog.ScaleId;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import jakarta.validation.Valid;
@@ -58,9 +60,10 @@ public class ScaleController {
 
   @Get("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  HttpResponse<ScaleView> getScale(String id) {
+  HttpResponse<ScaleView> getScale(@PathVariable final String id) {
     LOG.info("GET {}/{}", ApiCatalog.API_SCALES, id);
-    var command = new ScaleCommand.FindScaleById(id);
+    var scaleId = ScaleId.fromName(id);
+    var command = new ScaleCommand.FindScaleById(scaleId);
     return commandHandler
         .handle(command)
         .map(ScaleView::fromScale)

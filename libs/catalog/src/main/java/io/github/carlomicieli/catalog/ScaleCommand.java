@@ -33,14 +33,14 @@ public sealed interface ScaleCommand<R> {
    * @param trackGauge the track gauge
    */
   record CreateScale(@NotNull String name, float ratio, @NotNull String trackGauge)
-      implements ScaleCommand<String> {}
+      implements ScaleCommand<ScaleId> {}
 
   /**
    * The command to get a scale by its identifier.
    *
    * @param id the scale identifier
    */
-  record FindScaleById(@NotNull String id) implements ScaleCommand<Optional<Scale>> {}
+  record FindScaleById(@NotNull ScaleId id) implements ScaleCommand<Optional<Scale>> {}
 
   /** The command to find all scales. */
   record FindAllScales() implements ScaleCommand<List<Scale>> {}

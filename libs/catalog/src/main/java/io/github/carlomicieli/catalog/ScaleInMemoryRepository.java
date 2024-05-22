@@ -23,60 +23,65 @@ package io.github.carlomicieli.catalog;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
 public final class ScaleInMemoryRepository implements ScaleRepository {
+  private final List<Scale> scales = scales().collect(Collectors.toCollection(ArrayList::new));
+
   @Override
-  public @NotNull String save(@NotNull final Scale scale) {
+  public @NotNull ScaleId save(@NotNull final Scale scale) {
+    scales.add(scale);
     return scale.id();
   }
 
   @Override
-  public @NotNull Optional<Scale> findById(@NotNull String id) {
-    return scales().filter(s -> s.id().equals(id)).findFirst();
+  public @NotNull Optional<Scale> findById(@NotNull ScaleId id) {
+    return scales.stream().filter(s -> s.id().equals(id)).findFirst();
   }
 
   @Override
   public @NotNull List<Scale> findAll() {
-    return scales().toList();
+    return List.copyOf(scales);
   }
 
   private Stream<Scale> scales() {
     return Stream.of(
         ScaleBuilder.builder()
-            .id("1")
+            .id(ScaleId.fromName("1"))
             .name("1")
             .slug(Slug.of("1"))
             .ratio(BigDecimal.valueOf(32))
             .trackGauge(TrackGauge.STANDARD)
             .build(),
         ScaleBuilder.builder()
-            .id("0")
+            .id(ScaleId.fromName("0"))
             .name("0")
             .slug(Slug.of("0"))
             .ratio(BigDecimal.valueOf(43.5))
             .trackGauge(TrackGauge.STANDARD)
             .build(),
         ScaleBuilder.builder()
-            .id("H0")
+            .id(ScaleId.fromName("H0"))
             .name("H0")
             .slug(Slug.of("H0"))
             .ratio(BigDecimal.valueOf(87))
             .trackGauge(TrackGauge.STANDARD)
             .build(),
         ScaleBuilder.builder()
-            .id("H0m")
+            .id(ScaleId.fromName("H0m"))
             .name("H0m")
             .slug(Slug.of("H0m"))
             .ratio(BigDecimal.valueOf(87))
             .trackGauge(TrackGauge.NARROW)
             .build(),
         ScaleBuilder.builder()
-            .id("N")
+            .id(ScaleId.fromName("N"))
             .name("N")
             .slug(Slug.of("N"))
             .ratio(BigDecimal.valueOf(160))

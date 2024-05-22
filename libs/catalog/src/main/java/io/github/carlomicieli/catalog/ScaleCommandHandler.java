@@ -43,7 +43,7 @@ public class ScaleCommandHandler {
       case ScaleCommand.CreateScale createScale -> {
         Scale scale =
             ScaleBuilder.builder()
-                .id("7")
+                .id(ScaleId.fromName(createScale.name()))
                 .name(createScale.name())
                 .slug(Slug.of(createScale.name()))
                 .ratio(BigDecimal.valueOf(createScale.ratio()))

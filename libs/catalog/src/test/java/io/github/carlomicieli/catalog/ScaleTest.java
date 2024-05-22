@@ -39,14 +39,14 @@ class ScaleTest {
   void it_should_create_new_scales() {
     Scale scale =
         ScaleBuilder.builder()
-            .id("1")
+            .id(ScaleId.fromName("H0"))
             .name("H0")
             .ratio(EIGHTY_SEVEN)
             .slug(Slug.of("H0"))
             .trackGauge(TrackGauge.STANDARD)
             .build();
     assertThat(scale).isNotNull();
-    assertThat(scale.id()).isEqualTo("1");
+    assertThat(scale.id()).isEqualTo(ScaleId.fromName("H0"));
     assertThat(scale.ratio()).isEqualTo(EIGHTY_SEVEN);
     assertThat(scale.slug()).isEqualTo(Slug.of("H0"));
     assertThat(scale.name()).isEqualTo("H0");
@@ -56,14 +56,25 @@ class ScaleTest {
   @Test
   void it_should_require_a_name() {
     assertThatThrownBy(
-            () -> ScaleBuilder.builder().id("1").ratio(EIGHTY_SEVEN).slug(Slug.of("H0")).build())
+            () ->
+                ScaleBuilder.builder()
+                    .id(ScaleId.fromName("H0"))
+                    .ratio(EIGHTY_SEVEN)
+                    .slug(Slug.of("H0"))
+                    .build())
         .isInstanceOf(NullPointerException.class)
         .hasMessageContaining("Scale name cannot be null");
   }
 
   @Test
   void it_should_require_a_ratio() {
-    assertThatThrownBy(() -> ScaleBuilder.builder().id("1").name("H0").slug(Slug.of("H0")).build())
+    assertThatThrownBy(
+            () ->
+                ScaleBuilder.builder()
+                    .id(ScaleId.fromName("H0"))
+                    .name("H0")
+                    .slug(Slug.of("H0"))
+                    .build())
         .isInstanceOf(NullPointerException.class)
         .hasMessageContaining("Scale ratio cannot be null");
   }
@@ -80,7 +91,7 @@ class ScaleTest {
   void it_should_produce_string_representations() {
     Scale halfZero =
         ScaleBuilder.builder()
-            .id("1")
+            .id(ScaleId.fromName("H0"))
             .name("H0")
             .ratio(EIGHTY_SEVEN)
             .slug(Slug.of("H0"))
@@ -90,7 +101,7 @@ class ScaleTest {
 
     Scale zero =
         ScaleBuilder.builder()
-            .id("1")
+            .id(ScaleId.fromName("H0"))
             .name("0")
             .ratio(BigDecimal.valueOf(43.5))
             .slug(Slug.of("0"))
