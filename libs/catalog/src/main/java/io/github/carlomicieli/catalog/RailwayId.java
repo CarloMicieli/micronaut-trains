@@ -40,6 +40,12 @@ public record RailwayId(@NotNull String value) {
     this(trn.toString());
   }
 
+  /**
+   * Creates a new {@code RailwayId} from the given name.
+   *
+   * @param name the name of the railway
+   * @return a new {@code RailwayId} instance
+   */
   @CheckReturnValue
   public static @NotNull RailwayId fromName(@NotNull final String name) {
     TRN trn = new TRN(NAMESPACE, Slug.of(name).toString());

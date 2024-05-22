@@ -36,7 +36,8 @@ public record RailwayView(
     @NotNull String slug,
     @NotNull String abbreviation,
     @NotNull String country,
-    String status) {
+    @Nullable String status,
+    @NotNull MetadataView metadata) {
   @CheckReturnValue
   public static @NotNull RailwayView fromRailway(@NotNull final Railway railway) {
     return RailwayViewBuilder.builder()
@@ -46,6 +47,7 @@ public record RailwayView(
         .abbreviation(railway.abbreviation())
         .country(railway.country().getAlpha2())
         .status(toRailwayStatus(railway.status()))
+        .metadata(MetadataView.fromMetadata(railway.metadata()))
         .build();
   }
 

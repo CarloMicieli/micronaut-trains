@@ -23,11 +23,13 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.catalog.Railway;
 import io.github.carlomicieli.catalog.RailwayBuilder;
 import io.github.carlomicieli.catalog.RailwayId;
 import io.github.carlomicieli.catalog.RailwayStatus;
 import io.github.carlomicieli.slug.Slug;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -36,6 +38,8 @@ import org.junit.jupiter.api.Test;
 @DisplayName("RailwayView")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class RailwayViewTest {
+  private static final ZonedDateTime NOW = ZonedDateTime.now();
+
   @Test
   void it_should_create_a_RailwayView_from_a_Railway() {
     Railway railway =
@@ -46,6 +50,7 @@ class RailwayViewTest {
             .abbreviation("fs")
             .country(CountryCode.IT)
             .status(RailwayStatus.ACTIVE)
+            .metadata(Metadata.createdAt(NOW))
             .build();
     RailwayView view = RailwayView.fromRailway(railway);
     assertThat(view).isNotNull();
@@ -55,5 +60,9 @@ class RailwayViewTest {
     assertThat(view.abbreviation()).isEqualTo("fs");
     assertThat(view.country()).isEqualTo(CountryCode.IT.getAlpha2());
     assertThat(view.status()).isEqualTo(RailwayStatus.ACTIVE.name());
+    assertThat(view.metadata()).isNotNull();
+    assertThat(view.metadata().createdAt()).isEqualTo(NOW);
+    assertThat(view.metadata().lastModifiedAt()).isEqualTo(NOW);
+    assertThat(view.metadata().version()).isEqualTo(0);
   }
 }

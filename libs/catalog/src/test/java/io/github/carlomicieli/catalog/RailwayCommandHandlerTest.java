@@ -23,6 +23,7 @@ package io.github.carlomicieli.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.TestConstants;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +39,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class RailwayCommandHandlerTest {
   private final RailwayRepository railwayRepository = RailwayRepository.INSTANCE;
   private final RailwayCommandHandler railwayCommandHandler =
-      new RailwayCommandHandler(railwayRepository);
+      new RailwayCommandHandler(railwayRepository, TestConstants.TEST_CLOCK);
 
   @Test
   void it_should_find_railway_by_id_when_it_exists() {

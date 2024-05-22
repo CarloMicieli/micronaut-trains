@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import java.math.BigDecimal;
@@ -35,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
  * @param slug the scale slug
  * @param ratio the scale ratio
  * @param trackGauge the track gauge
+ * @param metadata the metadata
  */
 @RecordBuilder
 public record Scale(
@@ -42,13 +44,15 @@ public record Scale(
     @NotNull String name,
     @NotNull Slug slug,
     @NotNull BigDecimal ratio,
-    @NotNull TrackGauge trackGauge) {
+    @NotNull TrackGauge trackGauge,
+    @NotNull Metadata metadata) {
   public Scale {
     requireNonNull(id, "Scale id cannot be null");
     requireNonNull(name, "Scale name cannot be null");
     requireNonNull(slug, "Scale slug cannot be null");
     requireNonNull(ratio, "Scale ratio cannot be null");
     requireNonNull(trackGauge, "Track gauge cannot be null");
+    requireNonNull(metadata, "Scale metadata cannot be null");
   }
 
   @Override

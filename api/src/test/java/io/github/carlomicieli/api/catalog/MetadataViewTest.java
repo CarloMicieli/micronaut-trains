@@ -23,44 +23,30 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.carlomicieli.Metadata;
-import io.github.carlomicieli.catalog.Scale;
-import io.github.carlomicieli.catalog.ScaleBuilder;
-import io.github.carlomicieli.catalog.ScaleId;
-import io.github.carlomicieli.catalog.TrackGauge;
-import io.github.carlomicieli.slug.Slug;
-import java.math.BigDecimal;
+import io.github.carlomicieli.MetadataBuilder;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("ScaleView")
+@DisplayName("MetadataView")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class ScaleViewTest {
-  private static final ZonedDateTime NOW = ZonedDateTime.now();
-
+class MetadataViewTest {
   @Test
-  void it_should_create_a_new_scale_view() {
-    Scale scale =
-        ScaleBuilder.builder()
-            .id(ScaleId.fromName("H0"))
-            .name("H0")
-            .slug(Slug.of("H0"))
-            .ratio(BigDecimal.valueOf(87))
-            .trackGauge(TrackGauge.STANDARD)
-            .metadata(Metadata.createdAt(NOW))
+  void it_should_convert_metadata_to_view() {
+    Metadata metadata =
+        MetadataBuilder.builder()
+            .version(1)
+            .createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"))
+            .lastModifiedAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"))
             .build();
-    ScaleView scaleView = ScaleView.fromScale(scale);
-    assertThat(scaleView).isNotNull();
-    assertThat(scaleView.id()).isEqualTo("trn:scale:h0");
-    assertThat(scaleView.name()).isEqualTo("H0");
-    assertThat(scaleView.slug()).isEqualTo("h0");
-    assertThat(scaleView.ratio()).isEqualTo("1:87");
-    assertThat(scaleView.trackGauge()).isEqualTo("STANDARD");
-    assertThat(scaleView.metadata()).isNotNull();
-    assertThat(scaleView.metadata().createdAt()).isEqualTo(NOW);
-    assertThat(scaleView.metadata().lastModifiedAt()).isEqualTo(NOW);
-    assertThat(scaleView.metadata().version()).isEqualTo(0);
+
+    MetadataView view = MetadataView.fromMetadata(metadata);
+    assertThat(view).isNotNull();
+    assertThat(view.version()).isEqualTo(1);
+    assertThat(view.createdAt()).isEqualTo(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"));
+    assertThat(view.lastModifiedAt())
+        .isEqualTo(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"));
   }
 }

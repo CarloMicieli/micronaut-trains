@@ -25,13 +25,31 @@ import java.util.Optional;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
+/** A repository for {@link Scale} entities. */
 public interface ScaleRepository {
+  /**
+   * Saves a new scale entity.
+   *
+   * @param scale the scale entity to save
+   * @return the unique identifier of the saved entity
+   */
   @CheckReturnValue
   @NotNull ScaleId save(@NotNull final Scale scale);
 
+  /**
+   * Finds a scale entity by its unique identifier.
+   *
+   * @param id the unique identifier
+   * @return an {@link Optional} containing the scale entity, if found
+   */
   @CheckReturnValue
-  @NotNull Optional<Scale> findById(@NotNull ScaleId id);
+  @NotNull Optional<Scale> findById(@NotNull final ScaleId id);
 
+  /**
+   * Finds all the scale entities.
+   *
+   * @return a list of all the scale entities
+   */
   @CheckReturnValue
   @NotNull List<Scale> findAll();
 

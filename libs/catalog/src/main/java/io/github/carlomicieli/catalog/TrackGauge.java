@@ -20,6 +20,7 @@
  */
 package io.github.carlomicieli.catalog;
 
+/** The track gauge of a railway. */
 public enum TrackGauge {
   BROAD,
   MEDIUM,

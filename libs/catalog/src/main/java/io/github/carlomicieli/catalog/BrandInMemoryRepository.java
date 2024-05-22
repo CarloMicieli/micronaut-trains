@@ -20,8 +20,10 @@
  */
 package io.github.carlomicieli.catalog;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +53,7 @@ public final class BrandInMemoryRepository implements BrandRepository {
   }
 
   private Stream<Brand> brands() {
+
     return IntStream.range(1, 7)
         .boxed()
         .map(
@@ -60,6 +63,8 @@ public final class BrandInMemoryRepository implements BrandRepository {
                     .name("Brand " + id)
                     .slug(Slug.of("brand-" + id))
                     .kind(BrandKind.INDUSTRIAL)
+                    .metadata(
+                        Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
                     .build());
   }
 }

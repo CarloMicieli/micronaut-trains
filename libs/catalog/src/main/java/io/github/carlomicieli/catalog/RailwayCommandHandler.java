@@ -21,8 +21,11 @@
 package io.github.carlomicieli.catalog;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -31,10 +34,14 @@ import org.jetbrains.annotations.Nullable;
 @Singleton
 public final class RailwayCommandHandler {
   private final RailwayRepository railwayRepository;
+  private final Clock clock;
 
-  public RailwayCommandHandler(RailwayRepository railwayRepository) {
+  public RailwayCommandHandler(
+      @NotNull final RailwayRepository railwayRepository,
+      @SuppressWarnings("MnInjectionPoints") @NotNull final Clock clock) {
     this.railwayRepository =
         Objects.requireNonNull(railwayRepository, "The railway repository cannot be null");
+    this.clock = Objects.requireNonNull(clock, "The clock cannot be null");
   }
 
   @SuppressWarnings("unchecked")
@@ -49,7 +56,8 @@ public final class RailwayCommandHandler {
                 .slug(Slug.of(createRailway.name()))
                 .abbreviation(createRailway.abbreviation())
                 .country(CountryCode.getByCodeIgnoreCase(createRailway.country()))
-                .status(toRailwayStatus(createRailway.status()))
+                .status(statusFromString(createRailway.status()))
+                .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         yield (R) railwayRepository.save(railway);
       }
@@ -60,7 +68,7 @@ public final class RailwayCommandHandler {
     };
   }
 
-  private RailwayStatus toRailwayStatus(@Nullable String status) {
+  private RailwayStatus statusFromString(@Nullable String status) {
     return switch (status) {
       case "active", "ACTIVE" -> RailwayStatus.ACTIVE;
       case "inactive", "INACTIVE" -> RailwayStatus.INACTIVE;

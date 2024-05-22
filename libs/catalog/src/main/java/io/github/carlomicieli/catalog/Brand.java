@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,8 @@ import org.jetbrains.annotations.Nullable;
  * @param name the brand name
  * @param slug the brand slug
  * @param kind the brand kind
+ * @param status the brand status
+ * @param metadata the brand metadata
  */
 @RecordBuilder
 public record Brand(
@@ -41,10 +44,12 @@ public record Brand(
     @NotNull String name,
     @NotNull Slug slug,
     @Nullable BrandKind kind,
-    @Nullable BrandStatus status) {
+    @Nullable BrandStatus status,
+    @NotNull Metadata metadata) {
   public Brand {
     requireNonNull(id, "Brand id cannot be null");
     requireNonNull(name, "Brand name cannot be null");
     requireNonNull(slug, "Brand slug cannot be null");
+    requireNonNull(metadata, "Metadata cannot be null");
   }
 }

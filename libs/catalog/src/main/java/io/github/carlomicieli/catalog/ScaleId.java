@@ -40,6 +40,12 @@ public record ScaleId(@NotNull String value) {
     this(trn.toString());
   }
 
+  /**
+   * Creates a new {@code ScaleId} from the given name.
+   *
+   * @param name the name of the scale
+   * @return a new {@code ScaleId} instance
+   */
   @CheckReturnValue
   public static @NotNull ScaleId fromName(@NotNull final String name) {
     TRN trn = new TRN(NAMESPACE, Slug.of(name).toString());

@@ -34,7 +34,8 @@ public record ScaleView(
     @NotNull String name,
     @NotNull String slug,
     @NotNull String ratio,
-    @NotNull String trackGauge) {
+    @NotNull String trackGauge,
+    @NotNull MetadataView metadata) {
   @CheckReturnValue
   public static @NotNull ScaleView fromScale(@NotNull final Scale scale) {
     return ScaleViewBuilder.builder()
@@ -43,6 +44,7 @@ public record ScaleView(
         .ratio("1:" + scale.ratio())
         .slug(scale.slug().toString())
         .trackGauge(scale.trackGauge().name())
+        .metadata(MetadataView.fromMetadata(scale.metadata()))
         .build();
   }
 }

@@ -18,40 +18,19 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.catalog;
+package io.github.carlomicieli;
 
-import java.util.List;
-import java.util.Optional;
-import org.jetbrains.annotations.CheckReturnValue;
-import org.jetbrains.annotations.NotNull;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 
-/** A repository for {@link Brand} entities. */
-public interface BrandRepository {
-  /**
-   * Finds all the brands.
-   *
-   * @return a list of all brands
-   */
-  @CheckReturnValue
-  @NotNull List<Brand> findAll();
+public final class TestConstants {
+  public static final Instant NOW = Instant.parse("2024-05-22T17:20:38.935152086Z");
+  public static final ZonedDateTime DATE_TIME_NOW =
+      ZonedDateTime.ofInstant(NOW, Clock.systemUTC().getZone());
+  public static final Clock TEST_CLOCK = Clock.fixed(NOW, Clock.systemUTC().getZone());
 
-  /**
-   * Finds a brand by its id.
-   *
-   * @param brandId the brand id
-   * @return an optional brand
-   */
-  @CheckReturnValue
-  @NotNull Optional<Brand> findById(@NotNull final BrandId brandId);
-
-  /**
-   * Saves a new brand.
-   *
-   * @param brand the brand to save
-   * @return the brand id
-   */
-  @CheckReturnValue
-  @NotNull BrandId save(@NotNull final Brand brand);
-
-  BrandRepository INSTANCE = new BrandInMemoryRepository();
+  private TestConstants() {
+    throw new AssertionError("No instances for you!");
+  }
 }

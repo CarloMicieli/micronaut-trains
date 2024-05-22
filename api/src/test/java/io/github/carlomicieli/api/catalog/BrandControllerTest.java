@@ -35,6 +35,7 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import java.time.ZonedDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -63,7 +64,12 @@ class BrandControllerTest {
 
   private BrandView brandView(String id) {
     return new BrandView(
-        BrandId.fromName("Brand " + id).value(), "Brand " + id, "brand-" + id, "INDUSTRIAL", null);
+        BrandId.fromName("Brand " + id).value(),
+        "Brand " + id,
+        "brand-" + id,
+        "INDUSTRIAL",
+        null,
+        metadataView());
   }
 
   private BrandView activeBrandView(String id) {
@@ -72,7 +78,15 @@ class BrandControllerTest {
         "Brand " + id,
         "brand-" + id,
         "INDUSTRIAL",
-        "ACTIVE");
+        "ACTIVE",
+        metadataView());
+  }
+
+  private MetadataView metadataView() {
+    return new MetadataView(
+        0,
+        ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"),
+        ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"));
   }
 
   @Test

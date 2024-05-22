@@ -53,7 +53,8 @@ public class RailwayController {
   HttpResponse<List<RailwayView>> getRailways() {
     LOG.info("GET {}", ApiCatalog.API_RAILWAYS);
     var command = new RailwayCommand.FindAllRailways();
-    var railways = commandHandler.handle(command).stream().map(RailwayView::fromRailway).toList();
+    List<RailwayView> railways =
+        commandHandler.handle(command).stream().map(RailwayView::fromRailway).toList();
     return HttpResponse.ok(railways);
   }
 
@@ -78,7 +79,7 @@ public class RailwayController {
     var command =
         new RailwayCommand.CreateRailway(
             request.name(), request.abbreviation(), request.country(), request.status());
-    var railwayId = commandHandler.handle(command);
+    RailwayId railwayId = commandHandler.handle(command);
     return HttpResponse.created(URI.create(ApiCatalog.API_RAILWAYS + "/" + railwayId));
   }
 }

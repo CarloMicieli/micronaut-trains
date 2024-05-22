@@ -22,8 +22,11 @@ package io.github.carlomicieli.catalog;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -33,9 +36,13 @@ import org.slf4j.LoggerFactory;
 public class BrandCommandHandler {
   private static final Logger LOG = LoggerFactory.getLogger(BrandCommandHandler.class);
   private final BrandRepository brandRepository;
+  private final Clock clock;
 
-  public BrandCommandHandler(final BrandRepository brandRepository) {
+  public BrandCommandHandler(
+      @NotNull final BrandRepository brandRepository,
+      @SuppressWarnings("MnInjectionPoints") @NotNull final Clock clock) {
     this.brandRepository = requireNonNull(brandRepository, "brandRepository must not be null");
+    this.clock = requireNonNull(clock, "clock must not be null");
   }
 
   @CheckReturnValue
@@ -50,6 +57,7 @@ public class BrandCommandHandler {
                 .slug(Slug.of(createBrand.name()))
                 .kind(kindFromString(createBrand.kind()))
                 .status(statusFromString(createBrand.status()))
+                .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         return (R) brandRepository.save(brand);
       }

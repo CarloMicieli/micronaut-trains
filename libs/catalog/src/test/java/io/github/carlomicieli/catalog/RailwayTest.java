@@ -20,10 +20,13 @@
  */
 package io.github.carlomicieli.catalog;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -32,6 +35,23 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Railway")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class RailwayTest {
+  private static final ZonedDateTime NOW = ZonedDateTime.now();
+
+  @Test
+  void it_should_create_railways() {
+    assertThatCode(
+            () ->
+                RailwayBuilder.builder()
+                    .id(RailwayId.fromName("FS"))
+                    .name("FS")
+                    .slug(Slug.of("FS"))
+                    .abbreviation("fs")
+                    .country(CountryCode.IT)
+                    .metadata(Metadata.createdAt(NOW))
+                    .build())
+        .doesNotThrowAnyException();
+  }
+
   @Test
   void it_should_require_an_id() {
     assertThatThrownBy(
@@ -84,6 +104,21 @@ class RailwayTest {
                     .build())
         .isInstanceOf(NullPointerException.class)
         .hasMessage("The railway abbreviation cannot be null");
+  }
+
+  @Test
+  void it_should_require_metadata() {
+    assertThatThrownBy(
+            () ->
+                RailwayBuilder.builder()
+                    .id(RailwayId.fromName("FS"))
+                    .name("FS")
+                    .slug(Slug.of("FS"))
+                    .abbreviation("FS")
+                    .country(CountryCode.IT)
+                    .build())
+        .isInstanceOf(NullPointerException.class)
+        .hasMessage("The railway metadata cannot be null");
   }
 
   @Test

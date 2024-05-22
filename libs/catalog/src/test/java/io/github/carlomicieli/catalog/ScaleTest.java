@@ -23,8 +23,10 @@ package io.github.carlomicieli.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -34,6 +36,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ScaleTest {
   private static final BigDecimal EIGHTY_SEVEN = BigDecimal.valueOf(87);
+  private static final ZonedDateTime NOW = ZonedDateTime.now();
 
   @Test
   void it_should_create_new_scales() {
@@ -44,6 +47,7 @@ class ScaleTest {
             .ratio(EIGHTY_SEVEN)
             .slug(Slug.of("H0"))
             .trackGauge(TrackGauge.STANDARD)
+            .metadata(Metadata.createdAt(NOW))
             .build();
     assertThat(scale).isNotNull();
     assertThat(scale.id()).isEqualTo(ScaleId.fromName("H0"));
@@ -51,6 +55,10 @@ class ScaleTest {
     assertThat(scale.slug()).isEqualTo(Slug.of("H0"));
     assertThat(scale.name()).isEqualTo("H0");
     assertThat(scale.trackGauge()).isEqualTo(TrackGauge.STANDARD);
+    assertThat(scale.metadata()).isNotNull();
+    assertThat(scale.metadata().createdAt()).isEqualTo(NOW);
+    assertThat(scale.metadata().lastModifiedAt()).isEqualTo(NOW);
+    assertThat(scale.metadata().version()).isEqualTo(0);
   }
 
   @Test
@@ -80,6 +88,21 @@ class ScaleTest {
   }
 
   @Test
+  void it_should_require_metadata() {
+    assertThatThrownBy(
+            () ->
+                ScaleBuilder.builder()
+                    .id(ScaleId.fromName("H0"))
+                    .name("H0")
+                    .slug(Slug.of("H0"))
+                    .ratio(EIGHTY_SEVEN)
+                    .trackGauge(TrackGauge.STANDARD)
+                    .build())
+        .isInstanceOf(NullPointerException.class)
+        .hasMessageContaining("Scale metadata cannot be null");
+  }
+
+  @Test
   void it_should_require_an_id() {
     assertThatThrownBy(
             () -> ScaleBuilder.builder().ratio(EIGHTY_SEVEN).name("H0").slug(Slug.of("H0")).build())
@@ -96,6 +119,7 @@ class ScaleTest {
             .ratio(EIGHTY_SEVEN)
             .slug(Slug.of("H0"))
             .trackGauge(TrackGauge.STANDARD)
+            .metadata(Metadata.createdAt(ZonedDateTime.now()))
             .build();
     assertThat(halfZero.toString()).isEqualTo("H0 (1:87)");
 
@@ -106,6 +130,7 @@ class ScaleTest {
             .ratio(BigDecimal.valueOf(43.5))
             .slug(Slug.of("0"))
             .trackGauge(TrackGauge.STANDARD)
+            .metadata(Metadata.createdAt(ZonedDateTime.now()))
             .build();
     assertThat(zero.toString()).isEqualTo("0 (1:43.5)");
   }

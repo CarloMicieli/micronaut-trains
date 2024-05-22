@@ -21,19 +21,23 @@
 package io.github.carlomicieli.catalog;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * It represents a railway company.
  *
  * @param id the unique identifier
  * @param name the name of the railway company
+ * @param slug the slug of the railway company
  * @param abbreviation the abbreviation of the railway company
  * @param country the country where the railway company operates
  * @param status the activity status of the railway company
+ * @param metadata the metadata information
  */
 @RecordBuilder
 public record Railway(
@@ -42,12 +46,14 @@ public record Railway(
     @NotNull Slug slug,
     @NotNull String abbreviation,
     @NotNull CountryCode country,
-    RailwayStatus status) {
+    @Nullable RailwayStatus status,
+    @NotNull Metadata metadata) {
   public Railway {
     Objects.requireNonNull(id, "The railway id cannot be null");
     Objects.requireNonNull(name, "The railway name cannot be null");
     Objects.requireNonNull(abbreviation, "The railway abbreviation cannot be null");
     Objects.requireNonNull(country, "The railway country cannot be null");
     Objects.requireNonNull(slug, "The railway slug cannot be null");
+    Objects.requireNonNull(metadata, "The railway metadata cannot be null");
   }
 }

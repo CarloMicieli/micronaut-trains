@@ -20,9 +20,12 @@
  */
 package io.github.carlomicieli.catalog;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -30,10 +33,14 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 public class ScaleCommandHandler {
   private final ScaleRepository scaleRepository;
+  private final Clock clock;
 
-  public ScaleCommandHandler(final ScaleRepository scaleRepository) {
+  public ScaleCommandHandler(
+      @NotNull final ScaleRepository scaleRepository,
+      @SuppressWarnings("MnInjectionPoints") @NotNull final Clock clock) {
     this.scaleRepository =
         Objects.requireNonNull(scaleRepository, "scaleRepository must not be null");
+    this.clock = Objects.requireNonNull(clock, "clock must not be null");
   }
 
   @CheckReturnValue
@@ -47,7 +54,8 @@ public class ScaleCommandHandler {
                 .name(createScale.name())
                 .slug(Slug.of(createScale.name()))
                 .ratio(BigDecimal.valueOf(createScale.ratio()))
-                .trackGauge(TrackGauge.valueOf(createScale.trackGauge()))
+                .trackGauge(trackGaugeFromString(createScale.trackGauge()))
+                .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         return (R) scaleRepository.save(scale);
       }
@@ -59,5 +67,9 @@ public class ScaleCommandHandler {
       }
       case null, default -> throw new IllegalArgumentException("Unknown command: " + command);
     }
+  }
+
+  private TrackGauge trackGaugeFromString(final String trackGauge) {
+    return TrackGauge.valueOf(trackGauge);
   }
 }

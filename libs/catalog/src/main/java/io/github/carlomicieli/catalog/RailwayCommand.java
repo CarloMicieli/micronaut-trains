@@ -44,5 +44,6 @@ public sealed interface RailwayCommand<R> {
    */
   record FindRailwayById(@NotNull RailwayId id) implements RailwayCommand<Optional<Railway>> {}
 
+  /** The command to find all the railway companies. */
   record FindAllRailways() implements RailwayCommand<List<Railway>> {}
 }

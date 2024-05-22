@@ -18,40 +18,32 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.catalog;
+package io.github.carlomicieli.api.catalog;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.carlomicieli.Metadata;
+import io.micronaut.serde.annotation.Serdeable;
+import io.micronaut.serde.config.naming.SnakeCaseStrategy;
+import io.soabase.recordbuilder.core.RecordBuilder;
+import java.time.ZonedDateTime;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
-/** A repository for {@link Railway} entities. */
-public interface RailwayRepository {
-  /**
-   * Saves a new railway entity.
-   *
-   * @param railway the railway entity to save
-   * @return the unique identifier of the saved entity
-   */
-  @CheckReturnValue
-  @NotNull RailwayId save(@NotNull final Railway railway);
+@Serdeable(naming = SnakeCaseStrategy.class)
+@RecordBuilder
+public record MetadataView(int version, ZonedDateTime createdAt, ZonedDateTime lastModifiedAt) {
 
   /**
-   * Finds a railway entity by its unique identifier.
+   * Creates a new {@link MetadataView} instance with the given metadata values
    *
-   * @param id the unique identifier
-   * @return an {@link Optional} containing the railway entity, if found
+   * @param metadata the metadata value
+   * @return a new {@link MetadataView} instance
    */
   @CheckReturnValue
-  @NotNull Optional<Railway> findById(@NotNull final RailwayId id);
-
-  /**
-   * Finds all the railway entities.
-   *
-   * @return a list of all the railway entities
-   */
-  @CheckReturnValue
-  @NotNull List<Railway> findAll();
-
-  RailwayRepository INSTANCE = new RailwayInMemoryRepository();
+  public static @NotNull MetadataView fromMetadata(@NotNull final Metadata metadata) {
+    return MetadataViewBuilder.builder()
+        .version(metadata.version())
+        .createdAt(metadata.createdAt())
+        .lastModifiedAt(metadata.lastModifiedAt())
+        .build();
+  }
 }

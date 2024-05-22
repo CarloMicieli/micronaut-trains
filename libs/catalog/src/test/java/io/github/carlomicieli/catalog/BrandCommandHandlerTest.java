@@ -22,6 +22,8 @@ package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.github.carlomicieli.Metadata;
+import io.github.carlomicieli.TestConstants;
 import io.github.carlomicieli.slug.Slug;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +37,8 @@ import org.junit.jupiter.api.Test;
 class BrandCommandHandlerTest {
 
   private final BrandRepository brandRepository = BrandRepository.INSTANCE;
-  private final BrandCommandHandler commandHandler = new BrandCommandHandler(brandRepository);
+  private final BrandCommandHandler commandHandler =
+      new BrandCommandHandler(brandRepository, TestConstants.TEST_CLOCK);
 
   @Test
   void it_should_create_a_new_brand() {
@@ -60,6 +63,7 @@ class BrandCommandHandlerTest {
             .name("Brand 1")
             .slug(Slug.of("brand-1"))
             .kind(BrandKind.INDUSTRIAL)
+            .metadata(Metadata.createdAt(TestConstants.DATE_TIME_NOW))
             .build();
     BrandCommand.FindBrandById findBrandById =
         new BrandCommand.FindBrandById(BrandId.fromName("brand-1"));

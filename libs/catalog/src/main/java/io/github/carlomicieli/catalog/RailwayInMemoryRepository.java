@@ -21,8 +21,10 @@
 package io.github.carlomicieli.catalog;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,18 +38,18 @@ public class RailwayInMemoryRepository implements RailwayRepository {
       initRailways().collect(Collectors.toCollection(ArrayList::new));
 
   @Override
-  public @NotNull RailwayId save(@NotNull Railway railway) {
+  public @NotNull RailwayId save(@NotNull final Railway railway) {
     railways.add(railway);
     return railway.id();
   }
 
   @Override
-  public Optional<Railway> findById(@NotNull RailwayId id) {
+  public @NotNull Optional<Railway> findById(@NotNull final RailwayId id) {
     return railways().filter(railway -> railway.id().equals(id)).findAny();
   }
 
   @Override
-  public List<Railway> findAll() {
+  public @NotNull List<Railway> findAll() {
     return List.copyOf(railways);
   }
 
@@ -63,6 +65,7 @@ public class RailwayInMemoryRepository implements RailwayRepository {
             .slug(Slug.of("fs"))
             .abbreviation("fs")
             .country(CountryCode.IT)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         RailwayBuilder.builder()
             .id(RailwayId.fromName("DB"))
@@ -70,6 +73,7 @@ public class RailwayInMemoryRepository implements RailwayRepository {
             .slug(Slug.of("db"))
             .abbreviation("db")
             .country(CountryCode.DE)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         RailwayBuilder.builder()
             .id(RailwayId.fromName("SNCF"))
@@ -77,6 +81,7 @@ public class RailwayInMemoryRepository implements RailwayRepository {
             .slug(Slug.of("sncf"))
             .abbreviation("sncf")
             .country(CountryCode.FR)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         RailwayBuilder.builder()
             .id(RailwayId.fromName("RENFE"))
@@ -84,6 +89,7 @@ public class RailwayInMemoryRepository implements RailwayRepository {
             .slug(Slug.of("renfe"))
             .abbreviation("renfe")
             .country(CountryCode.ES)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         RailwayBuilder.builder()
             .id(RailwayId.fromName("NS"))
@@ -91,6 +97,7 @@ public class RailwayInMemoryRepository implements RailwayRepository {
             .slug(Slug.of("ns"))
             .abbreviation("ns")
             .country(CountryCode.NL)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         RailwayBuilder.builder()
             .id(RailwayId.fromName("SBB"))
@@ -98,6 +105,7 @@ public class RailwayInMemoryRepository implements RailwayRepository {
             .slug(Slug.of("sbb"))
             .abbreviation("sbb")
             .country(CountryCode.CH)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build());
   }
 }

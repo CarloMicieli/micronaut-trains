@@ -13,6 +13,7 @@ GET http://{{host}}:{{port}}/api/brands/acme
 ###
 
 # Create a brand
+// @no-log
 POST http://{{host}}:{{port}}/api/brands
 Content-Type: application/json
 

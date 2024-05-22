@@ -35,15 +35,18 @@ public record BrandView(
     @NotNull String name,
     @NotNull String slug,
     @Nullable String kind,
-    @Nullable String status) {
+    @Nullable String status,
+    @NotNull MetadataView metadata) {
   public static @NotNull BrandView fromBrand(@NotNull final Brand brand) {
     var kind = Optional.ofNullable(brand.kind()).orElse(BrandKind.INDUSTRIAL).name();
+    var status = Optional.ofNullable(brand.status()).map(Enum::name).orElse(null);
     return BrandViewBuilder.builder()
         .id(brand.id().value())
         .name(brand.name())
         .slug(brand.slug().toString())
-        .status(Optional.ofNullable(brand.status()).map(Enum::name).orElse(null))
+        .status(status)
         .kind(kind)
+        .metadata(MetadataView.fromMetadata(brand.metadata()))
         .build();
   }
 }

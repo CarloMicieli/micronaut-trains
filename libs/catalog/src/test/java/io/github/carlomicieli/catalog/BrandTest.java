@@ -20,10 +20,12 @@
  */
 package io.github.carlomicieli.catalog;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -32,16 +34,20 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Brands")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class BrandTest {
+  private static final ZonedDateTime NOW = ZonedDateTime.now();
+
   @Test
   void it_should_create_a_new_brand() {
-    Brand brand =
-        new Brand(
-            BrandId.fromName("Brand 1"),
-            "Brand 1",
-            Slug.of("brand-1"),
-            BrandKind.INDUSTRIAL,
-            BrandStatus.ACTIVE);
-    assertThat(brand).isNotNull();
+    assertThatCode(
+            () ->
+                new Brand(
+                    BrandId.fromName("Brand 1"),
+                    "Brand 1",
+                    Slug.of("brand-1"),
+                    BrandKind.INDUSTRIAL,
+                    BrandStatus.ACTIVE,
+                    Metadata.createdAt(NOW)))
+        .doesNotThrowAnyException();
   }
 
   @Test
@@ -49,8 +55,43 @@ class BrandTest {
     assertThatThrownBy(
             () ->
                 new Brand(
-                    null, "Brand 1", Slug.of("brand-1"), BrandKind.INDUSTRIAL, BrandStatus.ACTIVE))
+                    null,
+                    "Brand 1",
+                    Slug.of("brand-1"),
+                    BrandKind.INDUSTRIAL,
+                    BrandStatus.ACTIVE,
+                    Metadata.createdAt(NOW)))
         .isInstanceOf(NullPointerException.class)
         .hasMessage("Brand id cannot be null");
+  }
+
+  @Test
+  void it_must_have_a_name() {
+    assertThatThrownBy(
+            () ->
+                new Brand(
+                    BrandId.fromName("brand-1"),
+                    null,
+                    Slug.of("brand-1"),
+                    BrandKind.INDUSTRIAL,
+                    BrandStatus.ACTIVE,
+                    Metadata.createdAt(NOW)))
+        .isInstanceOf(NullPointerException.class)
+        .hasMessage("Brand name cannot be null");
+  }
+
+  @Test
+  void it_must_have_a_slug() {
+    assertThatThrownBy(
+            () ->
+                new Brand(
+                    BrandId.fromName("brand-1"),
+                    "Brand 1",
+                    null,
+                    BrandKind.INDUSTRIAL,
+                    BrandStatus.ACTIVE,
+                    Metadata.createdAt(NOW)))
+        .isInstanceOf(NullPointerException.class)
+        .hasMessage("Brand slug cannot be null");
   }
 }

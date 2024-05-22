@@ -18,45 +18,44 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.catalog;
+package io.github.carlomicieli;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.github.carlomicieli.TestConstants;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("ScaleCommandHandler")
+@DisplayName("Metadata")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class ScaleCommandHandlerTest {
-  private final ScaleRepository scaleRepository = ScaleRepository.INSTANCE;
-  private final ScaleCommandHandler scaleCommandHandler =
-      new ScaleCommandHandler(scaleRepository, TestConstants.TEST_CLOCK);
-
+class MetadataTest {
   @Test
-  void it_should_create_new_scales() {
-    ScaleCommand.CreateScale createScale = new ScaleCommand.CreateScale("H0e", 87f, "NARROW");
-    ScaleId scaleId = scaleCommandHandler.handle(createScale);
-    assertThat(scaleId).isEqualTo(ScaleId.fromName("H0e"));
+  void it_should_have_a_non_negative_version() {
+    assertThatThrownBy(() -> MetadataBuilder.builder().version(-1).build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Version must be a positive integer");
   }
 
   @Test
-  void it_should_find_scale_by_id() {
-    ScaleCommand.FindScaleById findScaleById =
-        new ScaleCommand.FindScaleById(ScaleId.fromName("1"));
-    Optional<Scale> scale = scaleCommandHandler.handle(findScaleById);
-    assertThat(scale).isPresent();
-    assertThat(scale.get().id()).isEqualTo(ScaleId.fromName("1"));
+  void it_should_represent_a_creation_metadata() {
+    Metadata metadata = Metadata.createdAt(ZonedDateTime.now());
+    assertThat(metadata).isNotNull();
+    assertThat(metadata.version()).isEqualTo(0);
+    assertThat(metadata.createdAt()).isNotNull();
+    assertThat(metadata.lastModifiedAt()).isNotNull();
   }
 
   @Test
-  void it_should_find_scales() {
-    ScaleCommand.FindAllScales findAllScales = new ScaleCommand.FindAllScales();
-    List<Scale> scale = scaleCommandHandler.handle(findAllScales);
-    assertThat(scale).isNotNull().hasSize(5);
+  void it_should_update_the_last_modified_timestamp() {
+    Metadata metadata = Metadata.createdAt(ZonedDateTime.now());
+    ZonedDateTime now = ZonedDateTime.now();
+    Metadata updated = metadata.lastModifiedAt(now);
+    assertThat(updated).isNotNull().isNotSameAs(metadata);
+    assertThat(updated.version()).isEqualTo(1);
+    assertThat(updated.createdAt()).isNotNull();
+    assertThat(updated.lastModifiedAt()).isEqualTo(now);
   }
 }

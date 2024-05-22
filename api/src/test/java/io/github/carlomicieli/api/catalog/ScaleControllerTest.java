@@ -37,6 +37,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -104,6 +105,7 @@ class ScaleControllerTest {
         .slug(Slug.of(name).toString())
         .ratio("1:" + ratio)
         .trackGauge("STANDARD")
+        .metadata(metadataView())
         .build();
   }
 
@@ -114,7 +116,15 @@ class ScaleControllerTest {
         .slug(Slug.of(name).toString())
         .ratio("1:" + ratio)
         .trackGauge("NARROW")
+        .metadata(metadataView())
         .build();
+  }
+
+  private MetadataView metadataView() {
+    return new MetadataView(
+        0,
+        ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"),
+        ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"));
   }
 
   @Client("/api/scales")

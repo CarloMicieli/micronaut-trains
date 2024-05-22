@@ -23,6 +23,7 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.slug.Slug;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
@@ -33,6 +34,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import java.time.ZonedDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -43,10 +45,40 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @MicronautTest
 class RailwayControllerTest {
+
   @Test
   void it_should_return_all_railways(final RailwayClient client) {
     var railways = client.getRailways();
-    assertThat(railways).isNotNull().hasSize(6);
+    assertThat(railways)
+        .isNotNull()
+        .hasSize(6)
+        .contains(
+            railwayView("FS", "fs", CountryCode.IT),
+            railwayView("DB", "db", CountryCode.DE),
+            railwayView("SNCF", "sncf", CountryCode.FR),
+            railwayView("RENFE", "renfe", CountryCode.ES),
+            railwayView("NS", "ns", CountryCode.NL),
+            railwayView("SBB", "sbb", CountryCode.CH));
+  }
+
+  private RailwayView railwayView(
+      final String name, final String abbreviation, final CountryCode countryCode) {
+    var slug = Slug.of(name);
+    return new RailwayView(
+        "trn:railway:" + slug.value(),
+        name,
+        slug.value(),
+        abbreviation,
+        countryCode.getAlpha2(),
+        null,
+        metadataView());
+  }
+
+  private MetadataView metadataView() {
+    return new MetadataView(
+        0,
+        ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"),
+        ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z"));
   }
 
   @Test

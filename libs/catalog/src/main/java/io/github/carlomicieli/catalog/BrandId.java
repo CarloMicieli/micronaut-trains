@@ -40,6 +40,12 @@ public record BrandId(@NotNull String value) {
     this(trn.toString());
   }
 
+  /**
+   * Creates a new {@code BrandId} from the given name.
+   *
+   * @param name the brand name
+   * @return a new {@code BrandId} instance
+   */
   @CheckReturnValue
   public static @NotNull BrandId fromName(@NotNull final String name) {
     TRN brandTrn = new TRN(NAMESPACE, Slug.of(name).toString());

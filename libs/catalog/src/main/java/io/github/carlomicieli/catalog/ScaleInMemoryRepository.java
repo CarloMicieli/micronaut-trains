@@ -20,9 +20,11 @@
  */
 package io.github.carlomicieli.catalog;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +43,7 @@ public final class ScaleInMemoryRepository implements ScaleRepository {
   }
 
   @Override
-  public @NotNull Optional<Scale> findById(@NotNull ScaleId id) {
+  public @NotNull Optional<Scale> findById(@NotNull final ScaleId id) {
     return scales.stream().filter(s -> s.id().equals(id)).findFirst();
   }
 
@@ -58,6 +60,7 @@ public final class ScaleInMemoryRepository implements ScaleRepository {
             .slug(Slug.of("1"))
             .ratio(BigDecimal.valueOf(32))
             .trackGauge(TrackGauge.STANDARD)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         ScaleBuilder.builder()
             .id(ScaleId.fromName("0"))
@@ -65,6 +68,7 @@ public final class ScaleInMemoryRepository implements ScaleRepository {
             .slug(Slug.of("0"))
             .ratio(BigDecimal.valueOf(43.5))
             .trackGauge(TrackGauge.STANDARD)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         ScaleBuilder.builder()
             .id(ScaleId.fromName("H0"))
@@ -72,6 +76,7 @@ public final class ScaleInMemoryRepository implements ScaleRepository {
             .slug(Slug.of("H0"))
             .ratio(BigDecimal.valueOf(87))
             .trackGauge(TrackGauge.STANDARD)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         ScaleBuilder.builder()
             .id(ScaleId.fromName("H0m"))
@@ -79,6 +84,7 @@ public final class ScaleInMemoryRepository implements ScaleRepository {
             .slug(Slug.of("H0m"))
             .ratio(BigDecimal.valueOf(87))
             .trackGauge(TrackGauge.NARROW)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build(),
         ScaleBuilder.builder()
             .id(ScaleId.fromName("N"))
@@ -86,6 +92,7 @@ public final class ScaleInMemoryRepository implements ScaleRepository {
             .slug(Slug.of("N"))
             .ratio(BigDecimal.valueOf(160))
             .trackGauge(TrackGauge.STANDARD)
+            .metadata(Metadata.createdAt(ZonedDateTime.parse("2024-05-22T17:20:38.935152086Z")))
             .build());
   }
 }
