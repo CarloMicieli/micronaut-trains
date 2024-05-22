@@ -49,7 +49,11 @@ class RailwayTest {
   void it_should_require_a_name() {
     assertThatThrownBy(
             () ->
-                RailwayBuilder.builder().id("1").abbreviation("FS").country(CountryCode.IT).build())
+                RailwayBuilder.builder()
+                    .id(RailwayId.fromName("FS"))
+                    .abbreviation("FS")
+                    .country(CountryCode.IT)
+                    .build())
         .isInstanceOf(NullPointerException.class)
         .hasMessage("The railway name cannot be null");
   }
@@ -59,7 +63,7 @@ class RailwayTest {
     assertThatThrownBy(
             () ->
                 RailwayBuilder.builder()
-                    .id("1")
+                    .id(RailwayId.fromName("FS"))
                     .name("FS")
                     .abbreviation("FS")
                     .country(CountryCode.IT)
@@ -73,7 +77,7 @@ class RailwayTest {
     assertThatThrownBy(
             () ->
                 RailwayBuilder.builder()
-                    .id("1")
+                    .id(RailwayId.fromName("FS"))
                     .name("FS")
                     .slug(Slug.of("FS"))
                     .country(CountryCode.IT)
@@ -87,7 +91,7 @@ class RailwayTest {
     assertThatThrownBy(
             () ->
                 RailwayBuilder.builder()
-                    .id("1")
+                    .id(RailwayId.fromName("FS"))
                     .name("FS")
                     .slug(Slug.of("FS"))
                     .abbreviation("FS")

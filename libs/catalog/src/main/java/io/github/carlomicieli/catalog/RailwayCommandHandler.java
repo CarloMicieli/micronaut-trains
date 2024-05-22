@@ -44,7 +44,7 @@ public final class RailwayCommandHandler {
       case RailwayCommand.CreateRailway createRailway -> {
         var railway =
             RailwayBuilder.builder()
-                .id("7")
+                .id(RailwayId.fromName(createRailway.name()))
                 .name(createRailway.name())
                 .slug(Slug.of(createRailway.name()))
                 .abbreviation(createRailway.abbreviation())

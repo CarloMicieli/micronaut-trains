@@ -27,10 +27,10 @@ import org.jetbrains.annotations.NotNull;
 
 public interface RailwayRepository {
   @CheckReturnValue
-  @NotNull String save(@NotNull final Railway railway);
+  @NotNull RailwayId save(@NotNull final Railway railway);
 
   @CheckReturnValue
-  Optional<Railway> findById(@NotNull final String id);
+  Optional<Railway> findById(@NotNull final RailwayId id);
 
   @CheckReturnValue
   List<Railway> findAll();

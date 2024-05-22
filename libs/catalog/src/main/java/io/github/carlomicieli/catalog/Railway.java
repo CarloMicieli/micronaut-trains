@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @RecordBuilder
 public record Railway(
-    @NotNull String id,
+    @NotNull RailwayId id,
     @NotNull String name,
     @NotNull Slug slug,
     @NotNull String abbreviation,

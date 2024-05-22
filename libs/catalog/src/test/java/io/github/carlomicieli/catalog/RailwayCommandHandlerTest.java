@@ -42,10 +42,11 @@ class RailwayCommandHandlerTest {
 
   @Test
   void it_should_find_railway_by_id_when_it_exists() {
-    RailwayCommand.FindRailwayById findRailwayById = new RailwayCommand.FindRailwayById("1");
+    RailwayCommand.FindRailwayById findRailwayById =
+        new RailwayCommand.FindRailwayById(RailwayId.fromName("FS"));
     Optional<Railway> railway = railwayCommandHandler.handle(findRailwayById);
     assertThat(railway).isPresent();
-    assertThat(railway.get().id()).isEqualTo("1");
+    assertThat(railway.get().id()).isEqualTo(RailwayId.fromName("FS"));
     assertThat(railway.get().name()).isEqualTo("FS");
     assertThat(railway.get().abbreviation()).isEqualTo("fs");
     assertThat(railway.get().country()).isEqualTo(CountryCode.IT);
@@ -55,7 +56,7 @@ class RailwayCommandHandlerTest {
   @Test
   void it_should_find_railway_by_id() {
     RailwayCommand.FindRailwayById findRailwayById =
-        new RailwayCommand.FindRailwayById("not-found");
+        new RailwayCommand.FindRailwayById(RailwayId.fromName("Not Found"));
     Optional<Railway> railway = railwayCommandHandler.handle(findRailwayById);
     assertThat(railway).isEmpty();
   }
@@ -73,12 +74,12 @@ class RailwayCommandHandlerTest {
       String name, String abbreviation, String country, String status) {
     RailwayCommand.CreateRailway createRailway =
         new RailwayCommand.CreateRailway(name, abbreviation, country, status);
-    String id = railwayCommandHandler.handle(createRailway);
-    assertThat(id).isNotNull().isEqualTo("7");
+    RailwayId id = railwayCommandHandler.handle(createRailway);
+    assertThat(id).isNotNull().isEqualTo(RailwayId.fromName("Ferrovie dello stato"));
 
     Optional<Railway> railway = railwayRepository.findById(id);
     assertThat(railway).isPresent();
-    assertThat(railway.get().id()).isEqualTo("7");
+    assertThat(railway.get().id()).isEqualTo(RailwayId.fromName("Ferrovie dello stato"));
     assertThat(railway.get().name()).isEqualTo(name);
     assertThat(railway.get().abbreviation()).isEqualTo(abbreviation);
     assertThat(railway.get().country()).isEqualTo(CountryCode.IT);

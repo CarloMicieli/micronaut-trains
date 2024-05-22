@@ -51,10 +51,10 @@ class RailwayControllerTest {
 
   @Test
   void it_should_return_a_railway_by_id(final RailwayClient client) {
-    var railway = client.getRailwayById("1");
+    var railway = client.getRailwayById("fs");
     assertThat(railway).isNotNull();
     assertThat(railway.body()).isNotNull();
-    assertThat(railway.body().id()).isEqualTo("1");
+    assertThat(railway.body().id()).isEqualTo("trn:railway:fs");
     assertThat(railway.body().name()).isEqualTo("FS");
     assertThat(railway.body().slug()).isEqualTo("fs");
     assertThat(railway.body().abbreviation()).isEqualTo("fs");
@@ -67,7 +67,9 @@ class RailwayControllerTest {
     var response = client.createRailway(request);
     assertThat(response).isNotNull();
     assertThat(response.status().getCode()).isEqualTo(HttpStatus.CREATED.getCode());
-    assertThat(response.getHeaders().get("Location")).isNotNull().isEqualTo("/api/railways/7");
+    assertThat(response.getHeaders().get("Location"))
+        .isNotNull()
+        .isEqualTo("/api/railways/trn:railway:trenitalia");
   }
 
   @Client("/api/railways")

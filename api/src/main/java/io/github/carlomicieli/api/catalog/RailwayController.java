@@ -22,6 +22,7 @@ package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.catalog.RailwayCommand;
 import io.github.carlomicieli.catalog.RailwayCommandHandler;
+import io.github.carlomicieli.catalog.RailwayId;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -60,7 +61,8 @@ public class RailwayController {
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<RailwayView> getRailwayById(@PathVariable final String id) {
     LOG.info("GET {}/{}", ApiCatalog.API_RAILWAYS, id);
-    var command = new RailwayCommand.FindRailwayById(id);
+    RailwayId railwayId = RailwayId.fromName(id);
+    var command = new RailwayCommand.FindRailwayById(railwayId);
     return commandHandler
         .handle(command)
         .map(RailwayView::fromRailway)

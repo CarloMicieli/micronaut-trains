@@ -18,42 +18,43 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.neovisionaries.i18n.CountryCode;
-import io.github.carlomicieli.catalog.Railway;
-import io.github.carlomicieli.catalog.RailwayBuilder;
-import io.github.carlomicieli.catalog.RailwayId;
-import io.github.carlomicieli.catalog.RailwayStatus;
-import io.github.carlomicieli.slug.Slug;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("RailwayView")
+@DisplayName("RailwayId")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class RailwayViewTest {
+class RailwayIdTest {
   @Test
-  void it_should_create_a_RailwayView_from_a_Railway() {
-    Railway railway =
-        RailwayBuilder.builder()
-            .id(RailwayId.fromName("FS"))
-            .name("FS")
-            .slug(Slug.of("FS"))
-            .abbreviation("fs")
-            .country(CountryCode.IT)
-            .status(RailwayStatus.ACTIVE)
-            .build();
-    RailwayView view = RailwayView.fromRailway(railway);
-    assertThat(view).isNotNull();
-    assertThat(view.id()).isEqualTo("trn:railway:fs");
-    assertThat(view.name()).isEqualTo("FS");
-    assertThat(view.slug()).isEqualTo("fs");
-    assertThat(view.abbreviation()).isEqualTo("fs");
-    assertThat(view.country()).isEqualTo(CountryCode.IT.getAlpha2());
-    assertThat(view.status()).isEqualTo(RailwayStatus.ACTIVE.name());
+  void it_should_not_allow_null_values() {
+    assertThatThrownBy(() -> new RailwayId(null))
+        .isInstanceOf(NullPointerException.class)
+        .hasMessageContaining("The railway ID value cannot be null");
+  }
+
+  @Test
+  void it_should_be_a_valid_TRN() {
+    assertThatThrownBy(() -> new RailwayId("123"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Invalid railway ID value: 123");
+  }
+
+  @Test
+  void it_should_be_a_valid_TRN_with_the_correct_namespace_identifier() {
+    assertThatThrownBy(() -> new RailwayId("trn:something-else:name"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Invalid railway ID value: trn:something-else:name");
+  }
+
+  @Test
+  void it_should_produce_String_representation() {
+    RailwayId RailwayId = new RailwayId("trn:railway:123");
+    assertThat(RailwayId.toString()).isEqualTo("trn:railway:123");
   }
 }

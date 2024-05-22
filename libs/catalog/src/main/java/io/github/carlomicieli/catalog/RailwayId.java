@@ -18,38 +18,36 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.catalog;
 
-import io.github.carlomicieli.catalog.Railway;
-import io.github.carlomicieli.catalog.RailwayStatus;
-import io.micronaut.serde.annotation.Serdeable;
-import io.soabase.recordbuilder.core.RecordBuilder;
+import io.github.carlomicieli.slug.Slug;
+import io.github.carlomicieli.trn.TRN;
+import java.util.Objects;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-@Serdeable
-@RecordBuilder
-public record RailwayView(
-    @NotNull String id,
-    @NotNull String name,
-    @NotNull String slug,
-    @NotNull String abbreviation,
-    @NotNull String country,
-    String status) {
-  @CheckReturnValue
-  public static @NotNull RailwayView fromRailway(@NotNull final Railway railway) {
-    return RailwayViewBuilder.builder()
-        .id(railway.id().value())
-        .name(railway.name())
-        .slug(railway.slug().value())
-        .abbreviation(railway.abbreviation())
-        .country(railway.country().getAlpha2())
-        .status(toRailwayStatus(railway.status()))
-        .build();
+/** A <strong>Railway ID</strong> is a unique identifier for a railway. */
+public record RailwayId(@NotNull String value) {
+  private static final String NAMESPACE = "railway";
+
+  public RailwayId {
+    Objects.requireNonNull(value, "The railway ID value cannot be null");
+    TRN trn = TRN.requireValid(value, NAMESPACE, "Invalid railway ID value: " + value);
+    value = trn.toString();
   }
 
-  private static String toRailwayStatus(@Nullable RailwayStatus status) {
-    return status != null ? status.name() : null;
+  private RailwayId(@NotNull TRN trn) {
+    this(trn.toString());
+  }
+
+  @CheckReturnValue
+  public static @NotNull RailwayId fromName(@NotNull final String name) {
+    TRN trn = new TRN(NAMESPACE, Slug.of(name).toString());
+    return new RailwayId(trn);
+  }
+
+  @Override
+  public String toString() {
+    return value;
   }
 }

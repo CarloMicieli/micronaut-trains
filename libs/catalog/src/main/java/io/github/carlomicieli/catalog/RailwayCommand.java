@@ -35,9 +35,14 @@ public sealed interface RailwayCommand<R> {
    */
   record CreateRailway(
       @NotNull String name, @NotNull String abbreviation, @NotNull String country, String status)
-      implements RailwayCommand<String> {}
+      implements RailwayCommand<RailwayId> {}
 
-  record FindRailwayById(@NotNull String id) implements RailwayCommand<Optional<Railway>> {}
+  /**
+   * The command to find a railway company by its unique identifier.
+   *
+   * @param id the unique identifier
+   */
+  record FindRailwayById(@NotNull RailwayId id) implements RailwayCommand<Optional<Railway>> {}
 
   record FindAllRailways() implements RailwayCommand<List<Railway>> {}
 }
