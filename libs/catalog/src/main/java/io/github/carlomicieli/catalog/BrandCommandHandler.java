@@ -45,7 +45,7 @@ public class BrandCommandHandler {
       case BrandCommand.CreateBrand createBrand -> {
         Brand brand =
             BrandBuilder.builder()
-                .id("7")
+                .id(BrandId.fromName(createBrand.name()))
                 .name(createBrand.name())
                 .slug(Slug.of(createBrand.name()))
                 .kind(kindFromString(createBrand.kind()))

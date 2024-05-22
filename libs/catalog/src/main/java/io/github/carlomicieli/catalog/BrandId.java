@@ -18,32 +18,36 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli.catalog;
 
-import io.github.carlomicieli.catalog.Brand;
-import io.github.carlomicieli.catalog.BrandKind;
-import io.micronaut.serde.annotation.Serdeable;
-import io.soabase.recordbuilder.core.RecordBuilder;
-import java.util.Optional;
+import io.github.carlomicieli.slug.Slug;
+import io.github.carlomicieli.trn.TRN;
+import java.util.Objects;
+import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-@RecordBuilder
-@Serdeable
-public record BrandView(
-    @NotNull String id,
-    @NotNull String name,
-    @NotNull String slug,
-    @Nullable String kind,
-    @Nullable String status) {
-  public static @NotNull BrandView fromBrand(@NotNull final Brand brand) {
-    var kind = Optional.ofNullable(brand.kind()).orElse(BrandKind.INDUSTRIAL).name();
-    return BrandViewBuilder.builder()
-        .id(brand.id().value())
-        .name(brand.name())
-        .slug(brand.slug().toString())
-        .status(Optional.ofNullable(brand.status()).map(Enum::name).orElse(null))
-        .kind(kind)
-        .build();
+/** A <strong>Brand ID</strong> is a unique identifier for a brand. */
+public record BrandId(@NotNull String value) {
+  private static final String NAMESPACE = "brand";
+
+  public BrandId {
+    Objects.requireNonNull(value, "The brand ID value cannot be null");
+    TRN trn = TRN.requireValid(value, NAMESPACE, "Invalid brand ID value: " + value);
+    value = trn.toString();
+  }
+
+  private BrandId(@NotNull TRN trn) {
+    this(trn.toString());
+  }
+
+  @CheckReturnValue
+  public static @NotNull BrandId fromName(@NotNull final String name) {
+    TRN brandTrn = new TRN(NAMESPACE, Slug.of(name).toString());
+    return new BrandId(brandTrn);
+  }
+
+  @Override
+  public String toString() {
+    return value;
   }
 }

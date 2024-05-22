@@ -68,6 +68,37 @@ public record TRN(String namespaceIdentifier, String namespaceSpecificString) {
   }
 
   /**
+   * Checks if the given string is a valid TRN.
+   *
+   * @param value the string to check
+   * @param message the exception message
+   * @throws IllegalArgumentException if the given string is not a valid TRN
+   */
+  public static TRN requireValid(@NotNull final String value, @NotNull final String message) {
+    return tryParse(value).orElseThrow(() -> new IllegalArgumentException(message));
+  }
+
+  /**
+   * Checks if the given string is a valid TRN with the specified namespace identifier.
+   *
+   * @param value the string to check
+   * @param namespaceIdentifier the expected namespace identifier
+   * @param message the exception message
+   * @throws IllegalArgumentException if the given string is not a valid TRN or if the namespace
+   *     identifier does not match the expected value
+   */
+  public static TRN requireValid(
+      @NotNull final String value,
+      @NotNull final String namespaceIdentifier,
+      @NotNull final String message) {
+    TRN trn = tryParse(value).orElseThrow(() -> new IllegalArgumentException(message));
+    if (!trn.namespaceIdentifier().equals(namespaceIdentifier)) {
+      throw new IllegalArgumentException(message);
+    }
+    return trn;
+  }
+
+  /**
    * Tries to parse the given string as a TRN.
    *
    * @param value the string to parse

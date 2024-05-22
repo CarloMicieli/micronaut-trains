@@ -23,6 +23,7 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import io.github.carlomicieli.catalog.BrandId;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
@@ -61,18 +62,24 @@ class BrandControllerTest {
   }
 
   private BrandView brandView(String id) {
-    return new BrandView(id, "Brand " + id, "brand-" + id, "INDUSTRIAL", null);
+    return new BrandView(
+        BrandId.fromName("Brand " + id).value(), "Brand " + id, "brand-" + id, "INDUSTRIAL", null);
   }
 
   private BrandView activeBrandView(String id) {
-    return new BrandView(id, "Brand " + id, "brand-" + id, "INDUSTRIAL", "ACTIVE");
+    return new BrandView(
+        BrandId.fromName("Brand " + id).value(),
+        "Brand " + id,
+        "brand-" + id,
+        "INDUSTRIAL",
+        "ACTIVE");
   }
 
   @Test
   void it_should_find_brands_by_id(final BrandsClient client) {
-    BrandView brand = client.getBrandById("1").body();
+    BrandView brand = client.getBrandById("brand-1").body();
     assertThat(brand).isNotNull();
-    assertThat(brand.id()).isEqualTo("1");
+    assertThat(brand.id()).isEqualTo("trn:brand:brand-1");
     assertThat(brand.name()).isEqualTo("Brand 1");
   }
 
@@ -91,7 +98,7 @@ class BrandControllerTest {
     HttpResponse<?> response = client.postBrand(newBrand);
     assertThat(response).isNotNull();
     assertThat(response.getStatus().getCode()).isEqualTo(HttpStatus.CREATED.getCode());
-    assertThat(response.getHeaders().get("Location")).contains("/api/brands/7");
+    assertThat(response.getHeaders().get("Location")).contains("/api/brands/trn:brand:brand-7");
   }
 
   @Test

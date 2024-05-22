@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @RecordBuilder
 public record Brand(
-    @NotNull String id,
+    @NotNull BrandId id,
     @NotNull String name,
     @NotNull Slug slug,
     @Nullable BrandKind kind,

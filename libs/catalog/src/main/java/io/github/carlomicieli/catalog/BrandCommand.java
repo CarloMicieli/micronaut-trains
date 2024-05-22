@@ -34,14 +34,14 @@ public sealed interface BrandCommand<R> {
    * @param status the brand status
    */
   record CreateBrand(@NotNull String name, @Nullable String kind, @Nullable String status)
-      implements BrandCommand<String> {}
+      implements BrandCommand<BrandId> {}
 
   /**
    * The command to find an existing brand by its id.
    *
    * @param brandId the brand id
    */
-  record FindBrandById(@NotNull String brandId) implements BrandCommand<Optional<Brand>> {}
+  record FindBrandById(@NotNull BrandId brandId) implements BrandCommand<Optional<Brand>> {}
 
   /** The command to find all brands. */
   record FindAllBrands() implements BrandCommand<List<Brand>> {}

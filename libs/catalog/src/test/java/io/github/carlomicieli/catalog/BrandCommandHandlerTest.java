@@ -41,10 +41,10 @@ class BrandCommandHandlerTest {
   void it_should_create_a_new_brand() {
     BrandCommand.CreateBrand createBrand =
         new BrandCommand.CreateBrand("New Brand", "INDUSTRIAL", "ACTIVE");
-    String brandId = commandHandler.handle(createBrand);
-    assertThat(brandId).isNotEmpty().isEqualTo("7");
+    BrandId brandId = commandHandler.handle(createBrand);
+    assertThat(brandId).isNotNull().isEqualTo(new BrandId("trn:brand:new-brand"));
 
-    Optional<Brand> newBrand = brandRepository.findById("7");
+    Optional<Brand> newBrand = brandRepository.findById(BrandId.fromName("new-brand"));
     assertThat(newBrand).isNotEmpty();
     assertThat(newBrand.get().name()).isEqualTo("New Brand");
     assertThat(newBrand.get().slug()).isEqualTo(Slug.of("new-brand"));
@@ -56,12 +56,13 @@ class BrandCommandHandlerTest {
   void it_should_find_a_brand_by_id() {
     Brand expected =
         BrandBuilder.builder()
-            .id("1")
+            .id(BrandId.fromName("Brand 1"))
             .name("Brand 1")
             .slug(Slug.of("brand-1"))
             .kind(BrandKind.INDUSTRIAL)
             .build();
-    BrandCommand.FindBrandById findBrandById = new BrandCommand.FindBrandById("1");
+    BrandCommand.FindBrandById findBrandById =
+        new BrandCommand.FindBrandById(BrandId.fromName("brand-1"));
     Optional<Brand> brand = commandHandler.handle(findBrandById);
     assertThat(brand).isNotEmpty().contains(expected);
   }

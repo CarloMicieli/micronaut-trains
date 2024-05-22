@@ -22,6 +22,7 @@ package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.catalog.BrandCommand;
 import io.github.carlomicieli.catalog.BrandCommandHandler;
+import io.github.carlomicieli.catalog.BrandId;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -58,8 +59,9 @@ public class BrandController {
 
   @Get("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  HttpResponse<BrandView> getBrandById(@PathVariable("id") final String brandId) {
-    LOG.info("GET {}/{}", ApiCatalog.API_BRANDS, brandId);
+  HttpResponse<BrandView> getBrandById(@PathVariable("id") final String id) {
+    LOG.info("GET {}/{}", ApiCatalog.API_BRANDS, id);
+    BrandId brandId = BrandId.fromName(id);
     return commandHandler
         .handle(new BrandCommand.FindBrandById(brandId))
         .map(BrandView::fromBrand)
@@ -72,7 +74,7 @@ public class BrandController {
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<?> createBrand(@Valid @Body final BrandRequest brandRequest) {
     LOG.info("POST {} {}", ApiCatalog.API_BRANDS, brandRequest);
-    String brandId =
+    BrandId brandId =
         commandHandler.handle(
             new BrandCommand.CreateBrand(
                 brandRequest.name(), brandRequest.kind(), brandRequest.status()));

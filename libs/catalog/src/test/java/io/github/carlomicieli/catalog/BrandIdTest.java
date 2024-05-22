@@ -23,34 +23,38 @@ package io.github.carlomicieli.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.github.carlomicieli.slug.Slug;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("Brands")
+@DisplayName("BrandId")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class BrandTest {
+class BrandIdTest {
   @Test
-  void it_should_create_a_new_brand() {
-    Brand brand =
-        new Brand(
-            BrandId.fromName("Brand 1"),
-            "Brand 1",
-            Slug.of("brand-1"),
-            BrandKind.INDUSTRIAL,
-            BrandStatus.ACTIVE);
-    assertThat(brand).isNotNull();
+  void it_should_not_allow_null_values() {
+    assertThatThrownBy(() -> new BrandId(null))
+        .isInstanceOf(NullPointerException.class)
+        .hasMessageContaining("The brand ID value cannot be null");
   }
 
   @Test
-  void it_must_have_an_id() {
-    assertThatThrownBy(
-            () ->
-                new Brand(
-                    null, "Brand 1", Slug.of("brand-1"), BrandKind.INDUSTRIAL, BrandStatus.ACTIVE))
-        .isInstanceOf(NullPointerException.class)
-        .hasMessage("Brand id cannot be null");
+  void it_should_be_a_valid_TRN() {
+    assertThatThrownBy(() -> new BrandId("123"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Invalid brand ID value: 123");
+  }
+
+  @Test
+  void it_should_be_a_valid_TRN_with_the_correct_namespace_identifier() {
+    assertThatThrownBy(() -> new BrandId("trn:something-else:name"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Invalid brand ID value: trn:something-else:name");
+  }
+
+  @Test
+  void it_should_produce_String_representation() {
+    BrandId brandId = new BrandId("trn:brand:123");
+    assertThat(brandId.toString()).isEqualTo("trn:brand:123");
   }
 }

@@ -23,6 +23,7 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.github.carlomicieli.catalog.Brand;
+import io.github.carlomicieli.catalog.BrandId;
 import io.github.carlomicieli.catalog.BrandKind;
 import io.github.carlomicieli.catalog.BrandStatus;
 import io.github.carlomicieli.slug.Slug;
@@ -37,9 +38,14 @@ class BrandViewTest {
   @Test
   void it_should_convert_brands_to_brand_views() {
     Brand brand =
-        new Brand("1", "Brand 1", Slug.of("Brand 1"), BrandKind.INDUSTRIAL, BrandStatus.ACTIVE);
+        new Brand(
+            BrandId.fromName("Brand 1"),
+            "Brand 1",
+            Slug.of("Brand 1"),
+            BrandKind.INDUSTRIAL,
+            BrandStatus.ACTIVE);
     BrandView brandView = BrandView.fromBrand(brand);
-    assertThat(brandView.id()).isEqualTo("1");
+    assertThat(brandView.id()).isEqualTo("trn:brand:brand-1");
     assertThat(brandView.name()).isEqualTo("Brand 1");
     assertThat(brandView.slug()).isEqualTo("brand-1");
     assertThat(brandView.kind()).isEqualTo("INDUSTRIAL");
@@ -48,7 +54,7 @@ class BrandViewTest {
 
   @Test
   void it_should_default_to_industrial_kind() {
-    Brand brand = new Brand("1", "Brand 1", Slug.of("Brand 1"), null, null);
+    Brand brand = new Brand(BrandId.fromName("Brand 1"), "Brand 1", Slug.of("Brand 1"), null, null);
     BrandView brandView = BrandView.fromBrand(brand);
     assertThat(brandView.kind()).isEqualTo("INDUSTRIAL");
   }

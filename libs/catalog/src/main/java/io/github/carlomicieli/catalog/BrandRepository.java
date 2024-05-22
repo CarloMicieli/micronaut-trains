@@ -30,10 +30,10 @@ public interface BrandRepository {
   @NotNull List<Brand> findAll();
 
   @CheckReturnValue
-  @NotNull Optional<Brand> findById(@NotNull final String brandId);
+  @NotNull Optional<Brand> findById(@NotNull final BrandId brandId);
 
   @CheckReturnValue
-  @NotNull String save(@NotNull final Brand brand);
+  @NotNull BrandId save(@NotNull final Brand brand);
 
   BrandRepository INSTANCE = new BrandInMemoryRepository();
 }

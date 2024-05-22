@@ -40,12 +40,12 @@ public final class BrandInMemoryRepository implements BrandRepository {
   }
 
   @Override
-  public @NotNull Optional<Brand> findById(final @NotNull String brandId) {
+  public @NotNull Optional<Brand> findById(final @NotNull BrandId brandId) {
     return brands.stream().filter(brand -> brand.id().equals(brandId)).findAny();
   }
 
   @Override
-  public @NotNull String save(@NotNull final Brand brand) {
+  public @NotNull BrandId save(@NotNull final Brand brand) {
     brands.add(brand);
     return brand.id();
   }
@@ -56,7 +56,7 @@ public final class BrandInMemoryRepository implements BrandRepository {
         .map(
             id ->
                 BrandBuilder.builder()
-                    .id(String.valueOf(id))
+                    .id(BrandId.fromName("brand-" + id))
                     .name("Brand " + id)
                     .slug(Slug.of("brand-" + id))
                     .kind(BrandKind.INDUSTRIAL)

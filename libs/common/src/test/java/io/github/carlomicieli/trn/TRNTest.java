@@ -94,6 +94,53 @@ class TRNTest {
         .hasMessage("Invalid TRN value: " + value);
   }
 
+  @Test
+  void it_should_check_if_the_TRN_is_valid_and_return_its_value() {
+    TRN trn1 = TRN.requireValid("trn:namespace:namespace-specific-string", "Invalid TRN");
+    TRN trn2 =
+        TRN.requireValid("trn:namespace:namespace-specific-string", "namespace", "Invalid TRN");
+
+    assertThat(trn1).isNotNull();
+    assertThat(trn2).isNotNull();
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "\"\"",
+        "trn:",
+        "trn:namespace",
+        "trn:namespace:",
+        "urn:namespace:namespace-specific-string",
+        "trn:name space:namespace-specific-string",
+        "trn:namespace:namespace specific string"
+      })
+  void it_should_ensure_the_TRN_value_is_valid(final String value) {
+    String message = "Invalid TRN value: " + value;
+    assertThatThrownBy(() -> TRN.requireValid(value, message))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(message);
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "\"\"",
+        "trn:",
+        "trn:namespace",
+        "trn:namespace:",
+        "trn:different-namespace:namespace-specific-string",
+        "urn:namespace:namespace-specific-string",
+        "trn:name space:namespace-specific-string",
+        "trn:namespace:namespace specific string"
+      })
+  void it_should_ensure_the_TRN_value_is_valid_and_with_expected_namespace(final String value) {
+    String message = "Invalid TRN value: " + value;
+    assertThatThrownBy(() -> TRN.requireValid(value, "namespace", message))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(message);
+  }
+
   @ParameterizedTest
   @CsvSource({
     "\"\",false",
