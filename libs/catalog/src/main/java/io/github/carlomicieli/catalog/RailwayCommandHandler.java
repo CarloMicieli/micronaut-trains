@@ -30,9 +30,12 @@ import java.util.Objects;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public final class RailwayCommandHandler {
+  private static final Logger LOG = LoggerFactory.getLogger(RailwayCommandHandler.class);
   private final RailwayRepository railwayRepository;
   private final Clock clock;
 
@@ -57,6 +60,7 @@ public final class RailwayCommandHandler {
                 .abbreviation(createRailway.abbreviation())
                 .country(CountryCode.getByCodeIgnoreCase(createRailway.country()))
                 .status(statusFromString(createRailway.status()))
+                .address(createRailway.address())
                 .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         yield (R) railwayRepository.save(railway);
@@ -69,10 +73,13 @@ public final class RailwayCommandHandler {
   }
 
   private RailwayStatus statusFromString(@Nullable String status) {
-    return switch (status) {
-      case "active", "ACTIVE" -> RailwayStatus.ACTIVE;
-      case "inactive", "INACTIVE" -> RailwayStatus.INACTIVE;
-      case null, default -> null;
-    };
+    for (var value : RailwayStatus.values()) {
+      if (value.name().equalsIgnoreCase(status)) {
+        return value;
+      }
+    }
+
+    LOG.warn("Unknown railway status: '{}'", status);
+    return null;
   }
 }

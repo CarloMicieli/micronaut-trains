@@ -57,6 +57,7 @@ public class BrandCommandHandler {
                 .slug(Slug.of(createBrand.name()))
                 .kind(kindFromString(createBrand.kind()))
                 .status(statusFromString(createBrand.status()))
+                .address(createBrand.address())
                 .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         return (R) brandRepository.save(brand);

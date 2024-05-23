@@ -20,6 +20,7 @@
  */
 package io.github.carlomicieli.api.catalog;
 
+import io.github.carlomicieli.Address;
 import io.github.carlomicieli.catalog.RailwayCommand;
 import io.github.carlomicieli.catalog.RailwayCommandHandler;
 import io.github.carlomicieli.catalog.RailwayId;
@@ -36,6 +37,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,9 +78,11 @@ public class RailwayController {
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<?> createRailway(@Valid @Body final RailwayRequest request) {
     LOG.info("POST {} {}", ApiCatalog.API_RAILWAYS, request);
+    Address address =
+        Optional.ofNullable(request.address()).map(AddressRequest::toAddress).orElse(null);
     var command =
         new RailwayCommand.CreateRailway(
-            request.name(), request.abbreviation(), request.country(), request.status());
+            request.name(), request.abbreviation(), request.country(), request.status(), address);
     RailwayId railwayId = commandHandler.handle(command);
     return HttpResponse.created(URI.create(ApiCatalog.API_RAILWAYS + "/" + railwayId));
   }

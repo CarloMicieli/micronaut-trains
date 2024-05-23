@@ -22,11 +22,13 @@ package io.github.carlomicieli.catalog;
 
 import static java.util.Objects.requireNonNull;
 
+import io.github.carlomicieli.Address;
 import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import java.math.BigDecimal;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A scale represents the ratio between the size of a model and the size of the real object.
@@ -36,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
  * @param slug the scale slug
  * @param ratio the scale ratio
  * @param trackGauge the track gauge
+ * @param address the address
  * @param metadata the metadata
  */
 @RecordBuilder
@@ -45,6 +48,7 @@ public record Scale(
     @NotNull Slug slug,
     @NotNull BigDecimal ratio,
     @NotNull TrackGauge trackGauge,
+    @Nullable Address address,
     @NotNull Metadata metadata) {
   public Scale {
     requireNonNull(id, "Scale id cannot be null");

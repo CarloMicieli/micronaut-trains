@@ -29,9 +29,12 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class ScaleCommandHandler {
+  private static final Logger LOG = LoggerFactory.getLogger(ScaleCommandHandler.class);
   private final ScaleRepository scaleRepository;
   private final Clock clock;
 
@@ -69,7 +72,14 @@ public class ScaleCommandHandler {
     }
   }
 
-  private TrackGauge trackGaugeFromString(final String trackGauge) {
-    return TrackGauge.valueOf(trackGauge);
+  private @NotNull TrackGauge trackGaugeFromString(final String trackGauge) {
+    for (var value : TrackGauge.values()) {
+      if (value.name().equalsIgnoreCase(trackGauge)) {
+        return value;
+      }
+    }
+
+    LOG.error("Unknown railway status: '{}'", trackGauge);
+    throw new IllegalArgumentException("Unknown track gauge: " + trackGauge);
   }
 }

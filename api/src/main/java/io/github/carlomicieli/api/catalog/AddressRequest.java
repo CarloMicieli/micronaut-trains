@@ -20,18 +20,42 @@
  */
 package io.github.carlomicieli.api.catalog;
 
+import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Address;
+import io.github.carlomicieli.AddressBuilder;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
+import io.micronaut.serde.config.naming.SnakeCaseStrategy;
 import io.soabase.recordbuilder.core.RecordBuilder;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.jetbrains.annotations.CheckReturnValue;
 
+@Serdeable(naming = SnakeCaseStrategy.class)
 @Introspected
-@Serdeable
 @RecordBuilder
-public record RailwayRequest(
-    @NotBlank String name,
-    @NotBlank String abbreviation,
-    @NotBlank String country,
-    String status,
-    @Valid AddressRequest address) {}
+public record AddressRequest(
+    @NotNull String country,
+    @NotNull String city,
+    @NotBlank String streetAddress,
+    String extendedAddress,
+    String region,
+    String postalCode) {
+
+  /**
+   * Creates a new {@link Address} instance from this {@link AddressRequest} object.
+   *
+   * @return a new {@link Address} instance
+   */
+  @CheckReturnValue
+  public @org.jetbrains.annotations.NotNull Address toAddress() {
+    return AddressBuilder.builder()
+        .country(CountryCode.getByAlpha2Code(this.country()))
+        .city(this.city())
+        .streetAddress(this.streetAddress())
+        .extendedAddress(this.extendedAddress())
+        .region(this.region())
+        .postalCode(this.postalCode())
+        .build();
+  }
+}

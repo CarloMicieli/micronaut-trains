@@ -43,7 +43,7 @@ class BrandCommandHandlerTest {
   @Test
   void it_should_create_a_new_brand() {
     BrandCommand.CreateBrand createBrand =
-        new BrandCommand.CreateBrand("New Brand", "INDUSTRIAL", "ACTIVE");
+        new BrandCommand.CreateBrand("New Brand", "INDUSTRIAL", "ACTIVE", null);
     BrandId brandId = commandHandler.handle(createBrand);
     assertThat(brandId).isNotNull().isEqualTo(new BrandId("trn:brand:new-brand"));
 

@@ -20,9 +20,11 @@
  */
 package io.github.carlomicieli.catalog;
 
+import io.github.carlomicieli.Address;
 import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public sealed interface RailwayCommand<R> {
   /**
@@ -32,9 +34,14 @@ public sealed interface RailwayCommand<R> {
    * @param abbreviation the abbreviation of the railway company
    * @param country the country where the railway company operates
    * @param status the activity status of the railway company
+   * @param address the address of the railway company
    */
   record CreateRailway(
-      @NotNull String name, @NotNull String abbreviation, @NotNull String country, String status)
+      @NotNull String name,
+      @NotNull String abbreviation,
+      @NotNull String country,
+      @Nullable String status,
+      @Nullable Address address)
       implements RailwayCommand<RailwayId> {}
 
   /**

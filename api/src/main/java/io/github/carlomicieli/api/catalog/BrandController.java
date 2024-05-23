@@ -20,6 +20,7 @@
  */
 package io.github.carlomicieli.api.catalog;
 
+import io.github.carlomicieli.Address;
 import io.github.carlomicieli.catalog.BrandCommand;
 import io.github.carlomicieli.catalog.BrandCommandHandler;
 import io.github.carlomicieli.catalog.BrandId;
@@ -36,6 +37,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,10 +76,12 @@ public class BrandController {
   @Produces(MediaType.APPLICATION_JSON)
   HttpResponse<?> createBrand(@Valid @Body final BrandRequest brandRequest) {
     LOG.info("POST {} {}", ApiCatalog.API_BRANDS, brandRequest);
+    Address address =
+        Optional.ofNullable(brandRequest.address()).map(AddressRequest::toAddress).orElse(null);
     BrandId brandId =
         commandHandler.handle(
             new BrandCommand.CreateBrand(
-                brandRequest.name(), brandRequest.kind(), brandRequest.status()));
+                brandRequest.name(), brandRequest.kind(), brandRequest.status(), address));
 
     return HttpResponse.created(URI.create(ApiCatalog.API_BRANDS + "/" + brandId));
   }

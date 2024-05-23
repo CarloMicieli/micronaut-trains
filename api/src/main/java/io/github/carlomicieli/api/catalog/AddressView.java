@@ -21,21 +21,18 @@
 package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.Address;
-import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.serde.config.naming.SnakeCaseStrategy;
 import io.soabase.recordbuilder.core.RecordBuilder;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.jetbrains.annotations.CheckReturnValue;
+import org.jetbrains.annotations.NotNull;
 
 @Serdeable(naming = SnakeCaseStrategy.class)
-@Introspected
 @RecordBuilder
 public record AddressView(
-    @NotNull String country,
-    @NotNull String city,
-    @NotBlank String streetAddress,
+    String country,
+    String city,
+    String streetAddress,
     String extendedAddress,
     String region,
     String postalCode) {

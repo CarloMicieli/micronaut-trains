@@ -23,6 +23,7 @@ package io.github.carlomicieli.catalog;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Address;
 import io.github.carlomicieli.TestConstants;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -73,8 +74,9 @@ class RailwayCommandHandlerTest {
   @MethodSource("createRailwayArguments")
   void it_should_create_a_new_railway(
       String name, String abbreviation, String country, String status) {
+    Address address = new Address(CountryCode.IT, "Rome", "Via Roma", null, "RM", "00100");
     RailwayCommand.CreateRailway createRailway =
-        new RailwayCommand.CreateRailway(name, abbreviation, country, status);
+        new RailwayCommand.CreateRailway(name, abbreviation, country, status, address);
     RailwayId id = railwayCommandHandler.handle(createRailway);
     assertThat(id).isNotNull().isEqualTo(RailwayId.fromName("Ferrovie dello stato"));
 

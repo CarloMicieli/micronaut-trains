@@ -23,6 +23,7 @@ package io.github.carlomicieli.api.catalog;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.jetbrains.annotations.NotNull;
@@ -33,4 +34,5 @@ import org.jetbrains.annotations.NotNull;
 public record BrandRequest(
     @NotBlank @NotNull String name,
     @Pattern(regexp = "BRASS_MODELS|INDUSTRIAL", message = "Invalid brand kind") String kind,
-    String status) {}
+    String status,
+    @Valid AddressRequest address) {}
