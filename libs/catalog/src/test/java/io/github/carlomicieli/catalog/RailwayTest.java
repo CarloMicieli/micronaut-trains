@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.AddressBuilder;
 import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.slug.Slug;
 import java.time.ZonedDateTime;
@@ -47,6 +48,14 @@ class RailwayTest {
                     .slug(Slug.of("FS"))
                     .abbreviation("fs")
                     .country(CountryCode.IT)
+                    .address(
+                        AddressBuilder.builder()
+                            .city("Milan")
+                            .country(CountryCode.IT)
+                            .streetAddress("Via Roma, 1")
+                            .postalCode("20100")
+                            .region("MI")
+                            .build())
                     .metadata(Metadata.createdAt(NOW))
                     .build())
         .doesNotThrowAnyException();

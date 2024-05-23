@@ -21,43 +21,40 @@
 package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.Address;
-import io.github.carlomicieli.catalog.Railway;
-import io.github.carlomicieli.catalog.RailwayStatus;
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
+import io.micronaut.serde.config.naming.SnakeCaseStrategy;
 import io.soabase.recordbuilder.core.RecordBuilder;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.jetbrains.annotations.CheckReturnValue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-@Serdeable
+@Serdeable(naming = SnakeCaseStrategy.class)
+@Introspected
 @RecordBuilder
-public record RailwayView(
-    @NotNull String id,
-    @NotNull String name,
-    @NotNull String slug,
-    @NotNull String abbreviation,
+public record AddressView(
     @NotNull String country,
-    @Nullable String status,
-    @Nullable AddressView address,
-    @NotNull MetadataView metadata) {
+    @NotNull String city,
+    @NotBlank String streetAddress,
+    String extendedAddress,
+    String region,
+    String postalCode) {
+
+  /**
+   * Creates a new {@link AddressView} instance from the given {@link Address} object.
+   *
+   * @param address the {@link Address} object
+   * @return a new {@link AddressView} instance
+   */
   @CheckReturnValue
-  public static @NotNull RailwayView fromRailway(@NotNull final Railway railway) {
-    return RailwayViewBuilder.builder()
-        .id(railway.id().value())
-        .name(railway.name())
-        .slug(railway.slug().value())
-        .abbreviation(railway.abbreviation())
-        .country(railway.country().getAlpha2())
-        .status(toRailwayStatus(railway.status()))
-        .metadata(MetadataView.fromMetadata(railway.metadata()))
+  public static @NotNull AddressView fromAddress(@NotNull final Address address) {
+    return AddressViewBuilder.builder()
+        .country(address.country().getAlpha2())
+        .city(address.city())
+        .streetAddress(address.streetAddress())
+        .extendedAddress(address.extendedAddress())
+        .region(address.region())
+        .postalCode(address.postalCode())
         .build();
-  }
-
-  private static @Nullable String toRailwayStatus(@Nullable final RailwayStatus status) {
-    return status != null ? status.name() : null;
-  }
-
-  public static @Nullable AddressView toAddress(@Nullable final Address address) {
-    return address != null ? AddressView.fromAddress(address) : null;
   }
 }

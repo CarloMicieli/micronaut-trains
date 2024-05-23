@@ -1,3 +1,6 @@
 plugins { id("buildlogic.java-library-conventions") }
 
-dependencies { implementation("com.github.slugify:slugify:3.0.6") }
+dependencies {
+  implementation(libs.slugify)
+  api(libs.nv.i18n)
+}

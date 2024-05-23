@@ -69,6 +69,7 @@ class BrandControllerTest {
         "brand-" + id,
         "INDUSTRIAL",
         null,
+        null,
         metadataView());
   }
 
@@ -79,6 +80,7 @@ class BrandControllerTest {
         "brand-" + id,
         "INDUSTRIAL",
         "ACTIVE",
+        null,
         metadataView());
   }
 

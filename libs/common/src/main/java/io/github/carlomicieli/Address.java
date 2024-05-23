@@ -18,41 +18,35 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.catalog;
+package io.github.carlomicieli;
 
-import static java.util.Objects.requireNonNull;
-
-import io.github.carlomicieli.Address;
-import io.github.carlomicieli.Metadata;
-import io.github.carlomicieli.slug.Slug;
+import com.neovisionaries.i18n.CountryCode;
 import io.soabase.recordbuilder.core.RecordBuilder;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * A brand represents a manufacturer or a company that produces model railways.
+ * It represents an address of a location
  *
- * @param id the brand id
- * @param name the brand name
- * @param slug the brand slug
- * @param kind the brand kind
- * @param status the brand status
- * @param address the brand address
- * @param metadata the brand metadata
+ * @param country the ISO country code (ISO 3166-1 alpha-2)
+ * @param city the city/town
+ * @param streetAddress the street address
+ * @param extendedAddress the (optional) extended information for the address
+ * @param region the (optional) region code; for example, the state or province
+ * @param postalCode the (optional) postal code (ZIP code)
  */
 @RecordBuilder
-public record Brand(
-    @NotNull BrandId id,
-    @NotNull String name,
-    @NotNull Slug slug,
-    @Nullable BrandKind kind,
-    @Nullable BrandStatus status,
-    @Nullable Address address,
-    @NotNull Metadata metadata) {
-  public Brand {
-    requireNonNull(id, "Brand id cannot be null");
-    requireNonNull(name, "Brand name cannot be null");
-    requireNonNull(slug, "Brand slug cannot be null");
-    requireNonNull(metadata, "Metadata cannot be null");
+public record Address(
+    @NotNull CountryCode country,
+    @NotNull String city,
+    @NotNull String streetAddress,
+    String extendedAddress,
+    String region,
+    String postalCode) {
+
+  public Address {
+    Objects.requireNonNull(streetAddress, "Street address cannot be null");
+    Objects.requireNonNull(city, "City cannot be null");
+    Objects.requireNonNull(country, "Country cannot be null");
   }
 }

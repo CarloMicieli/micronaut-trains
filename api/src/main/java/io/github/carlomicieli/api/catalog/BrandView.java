@@ -20,10 +20,12 @@
  */
 package io.github.carlomicieli.api.catalog;
 
+import io.github.carlomicieli.Address;
 import io.github.carlomicieli.catalog.Brand;
 import io.github.carlomicieli.catalog.BrandKind;
 import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
+import java.util.Objects;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +38,7 @@ public record BrandView(
     @NotNull String slug,
     @Nullable String kind,
     @Nullable String status,
+    @Nullable AddressView addressView,
     @NotNull MetadataView metadata) {
   public static @NotNull BrandView fromBrand(@NotNull final Brand brand) {
     var kind = Optional.ofNullable(brand.kind()).orElse(BrandKind.INDUSTRIAL).name();
@@ -46,7 +49,16 @@ public record BrandView(
         .slug(brand.slug().toString())
         .status(status)
         .kind(kind)
+        .addressView(toAddress(brand.address()))
         .metadata(MetadataView.fromMetadata(brand.metadata()))
         .build();
+  }
+
+  private static AddressView toAddress(final Address address) {
+    if (Objects.isNull(address)) {
+      return null;
+    } else {
+      return AddressView.fromAddress(address);
+    }
   }
 }
