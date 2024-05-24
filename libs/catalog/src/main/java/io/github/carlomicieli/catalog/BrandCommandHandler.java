@@ -61,6 +61,7 @@ public class BrandCommandHandler {
                 .address(createBrand.address())
                 .organizationEntityType(
                     organizationEntityTypeFromString(createBrand.organizationEntityType()))
+                .contactInfo(createBrand.contactInfo())
                 .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         return (R) brandRepository.save(brand);

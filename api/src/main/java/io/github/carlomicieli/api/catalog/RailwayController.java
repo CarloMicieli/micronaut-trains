@@ -21,6 +21,7 @@
 package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.Address;
+import io.github.carlomicieli.ContactInfo;
 import io.github.carlomicieli.catalog.RailwayCommand;
 import io.github.carlomicieli.catalog.RailwayCommandHandler;
 import io.github.carlomicieli.catalog.RailwayId;
@@ -80,6 +81,10 @@ public class RailwayController {
     LOG.info("POST {} {}", ApiCatalog.API_RAILWAYS, railwayRequest);
     Address address =
         Optional.ofNullable(railwayRequest.address()).map(AddressRequest::toAddress).orElse(null);
+    ContactInfo contactInfo =
+        Optional.ofNullable(railwayRequest.contactInfo())
+            .map(ContactInfoRequest::toContactInfo)
+            .orElse(null);
     var command =
         new RailwayCommand.CreateRailway(
             railwayRequest.name(),
@@ -87,7 +92,8 @@ public class RailwayController {
             railwayRequest.country(),
             railwayRequest.status(),
             address,
-            railwayRequest.organizationEntityType());
+            railwayRequest.organizationEntityType(),
+            contactInfo);
     RailwayId railwayId = commandHandler.handle(command);
     return HttpResponse.created(URI.create(ApiCatalog.API_RAILWAYS + "/" + railwayId));
   }

@@ -37,4 +37,5 @@ public record BrandRequest(
     @Pattern(regexp = "BRASS_MODELS|INDUSTRIAL", message = "Invalid brand kind") String kind,
     String status,
     @Valid AddressRequest address,
-    String organizationEntityType) {}
+    String organizationEntityType,
+    ContactInfoRequest contactInfo) {}

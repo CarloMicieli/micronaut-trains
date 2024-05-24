@@ -24,9 +24,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.Address;
+import io.github.carlomicieli.ContactInfo;
 import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.TestConstants;
+import java.net.URI;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
@@ -77,9 +79,11 @@ class RailwayCommandHandlerTest {
   void it_should_create_a_new_railway(
       String name, String abbreviation, String country, String status) {
     Address address = new Address(CountryCode.IT, "Rome", "Via Roma", null, "RM", "00100");
+    ContactInfo contactInfo =
+        new ContactInfo("mail@mail.com", "+3900000000", URI.create("http://www.example.com"));
     RailwayCommand.CreateRailway createRailway =
         new RailwayCommand.CreateRailway(
-            name, abbreviation, country, status, address, "LIMITED_COMPANY");
+            name, abbreviation, country, status, address, "LIMITED_COMPANY", contactInfo);
     RailwayId id = railwayCommandHandler.handle(createRailway);
     assertThat(id).isNotNull().isEqualTo(RailwayId.fromName("Ferrovie dello stato"));
 
@@ -94,6 +98,7 @@ class RailwayCommandHandlerTest {
     assertThat(railway.get().metadata()).isEqualTo(Metadata.createdAt(TestConstants.DATE_TIME_NOW));
     assertThat(railway.get().organizationEntityType())
         .isEqualTo(OrganizationEntityType.LIMITED_COMPANY);
+    assertThat(railway.get().contactInfo()).isEqualTo(contactInfo);
   }
 
   private static Stream<Arguments> createRailwayArguments() {

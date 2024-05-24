@@ -21,6 +21,7 @@
 package io.github.carlomicieli.catalog;
 
 import io.github.carlomicieli.Address;
+import io.github.carlomicieli.ContactInfo;
 import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +37,7 @@ public sealed interface RailwayCommand<R> {
    * @param status the activity status of the railway company
    * @param address the address of the railway company
    * @param organizationEntityType the organization entity type
+   * @param contactInfo the contact information
    */
   record CreateRailway(
       @NotNull String name,
@@ -43,7 +45,8 @@ public sealed interface RailwayCommand<R> {
       @NotNull String country,
       @Nullable String status,
       @Nullable Address address,
-      @Nullable String organizationEntityType)
+      @Nullable String organizationEntityType,
+      @Nullable ContactInfo contactInfo)
       implements RailwayCommand<RailwayId> {}
 
   /**

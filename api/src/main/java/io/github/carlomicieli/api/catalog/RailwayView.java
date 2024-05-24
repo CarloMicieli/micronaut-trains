@@ -40,11 +40,16 @@ public record RailwayView(
     @Nullable String status,
     @Nullable AddressView address,
     @Nullable String organizationEntityType,
+    @Nullable ContactInfoView contactInfo,
     @NotNull MetadataView metadata) {
   @CheckReturnValue
   public static @NotNull RailwayView fromRailway(@NotNull final Railway railway) {
     var organizationEntityType =
         railway.organizationEntityType() != null ? railway.organizationEntityType().name() : null;
+    var contactInfo =
+        railway.contactInfo() != null
+            ? ContactInfoView.fromContactInfo(railway.contactInfo())
+            : null;
     return RailwayViewBuilder.builder()
         .id(railway.id().value())
         .name(railway.name())
@@ -54,6 +59,7 @@ public record RailwayView(
         .status(toRailwayStatus(railway.status()))
         .organizationEntityType(organizationEntityType)
         .address(toAddress(railway.address()))
+        .contactInfo(contactInfo)
         .metadata(MetadataView.fromMetadata(railway.metadata()))
         .build();
   }

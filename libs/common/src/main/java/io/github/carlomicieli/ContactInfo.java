@@ -18,22 +18,17 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli;
 
-import io.micronaut.core.annotation.Introspected;
-import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+import java.net.URI;
 
-@Introspected
-@Serdeable
+/**
+ * the contact information for an organization
+ *
+ * @param email the mail address
+ * @param phone the phone number
+ * @param websiteUrl the website url
+ */
 @RecordBuilder
-public record RailwayRequest(
-    @NotBlank String name,
-    @NotBlank String abbreviation,
-    @NotBlank String country,
-    String status,
-    @Valid AddressRequest address,
-    String organizationEntityType,
-    ContactInfoRequest contactInfo) {}
+public record ContactInfo(String email, String phone, URI websiteUrl) {}

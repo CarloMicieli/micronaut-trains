@@ -57,6 +57,7 @@ class BrandTest {
                         .region("MI")
                         .build(),
                     OrganizationEntityType.LIMITED_COMPANY,
+                    null,
                     Metadata.createdAt(NOW)))
         .doesNotThrowAnyException();
   }
@@ -71,6 +72,7 @@ class BrandTest {
                     Slug.of("brand-1"),
                     BrandKind.INDUSTRIAL,
                     BrandStatus.ACTIVE,
+                    null,
                     null,
                     null,
                     Metadata.createdAt(NOW)))
@@ -90,6 +92,7 @@ class BrandTest {
                     BrandStatus.ACTIVE,
                     null,
                     null,
+                    null,
                     Metadata.createdAt(NOW)))
         .isInstanceOf(NullPointerException.class)
         .hasMessage("Brand name cannot be null");
@@ -105,6 +108,7 @@ class BrandTest {
                     null,
                     BrandKind.INDUSTRIAL,
                     BrandStatus.ACTIVE,
+                    null,
                     null,
                     null,
                     Metadata.createdAt(NOW)))

@@ -21,6 +21,7 @@
 package io.github.carlomicieli.catalog;
 
 import io.github.carlomicieli.Address;
+import io.github.carlomicieli.ContactInfo;
 import java.util.List;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -35,13 +36,15 @@ public sealed interface BrandCommand<R> {
    * @param status the brand status
    * @param address the brand address
    * @param organizationEntityType the organization entity type
+   * @param contactInfo the contact information
    */
   record CreateBrand(
       @NotNull String name,
       @Nullable String kind,
       @Nullable String status,
       @Nullable Address address,
-      @Nullable String organizationEntityType)
+      @Nullable String organizationEntityType,
+      @Nullable ContactInfo contactInfo)
       implements BrandCommand<BrandId> {}
 
   /**

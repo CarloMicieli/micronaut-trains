@@ -23,14 +23,19 @@ package io.github.carlomicieli.api.catalog;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Address;
 import io.github.carlomicieli.AddressBuilder;
+import io.github.carlomicieli.ContactInfo;
+import io.github.carlomicieli.ContactInfoBuilder;
 import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.catalog.Brand;
+import io.github.carlomicieli.catalog.BrandBuilder;
 import io.github.carlomicieli.catalog.BrandId;
 import io.github.carlomicieli.catalog.BrandKind;
 import io.github.carlomicieli.catalog.BrandStatus;
 import io.github.carlomicieli.slug.Slug;
+import java.net.URI;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -44,34 +49,49 @@ class BrandViewTest {
 
   @Test
   void it_should_convert_brands_to_brand_views() {
+    Address address =
+        AddressBuilder.builder()
+            .streetAddress("Via Roma, 1")
+            .city("Roma")
+            .postalCode("00100")
+            .country(CountryCode.IT)
+            .build();
+    ContactInfo contactInfo =
+        ContactInfoBuilder.builder()
+            .email("mail@mail.com")
+            .phone("+39 06 12345678")
+            .websiteUrl(URI.create("http://www.example.com"))
+            .build();
     Brand brand =
-        new Brand(
-            BrandId.fromName("Brand 1"),
-            "Brand 1",
-            Slug.of("Brand 1"),
-            BrandKind.INDUSTRIAL,
-            BrandStatus.ACTIVE,
-            AddressBuilder.builder()
-                .city("Milan")
-                .country(CountryCode.IT)
-                .streetAddress("Via Roma, 1")
-                .postalCode("20100")
-                .region("MI")
-                .build(),
-            OrganizationEntityType.LIMITED_COMPANY,
-            Metadata.createdAt(NOW));
+        BrandBuilder.builder()
+            .id(BrandId.fromName("Brand 1"))
+            .name("Brand 1")
+            .slug(Slug.of("Brand 1"))
+            .kind(BrandKind.INDUSTRIAL)
+            .status(BrandStatus.ACTIVE)
+            .address(address)
+            .organizationEntityType(OrganizationEntityType.LIMITED_COMPANY)
+            .contactInfo(contactInfo)
+            .metadata(Metadata.createdAt(NOW))
+            .build();
+
     BrandView brandView = BrandView.fromBrand(brand);
     assertThat(brandView.id()).isEqualTo("trn:brand:brand-1");
     assertThat(brandView.name()).isEqualTo("Brand 1");
     assertThat(brandView.slug()).isEqualTo("brand-1");
     assertThat(brandView.kind()).isEqualTo("INDUSTRIAL");
     assertThat(brandView.status()).isEqualTo("ACTIVE");
-    assertThat(brandView.addressView()).isNotNull();
-    assertThat(brandView.addressView().city()).isEqualTo("Milan");
-    assertThat(brandView.addressView().country()).isEqualTo("IT");
-    assertThat(brandView.addressView().streetAddress()).isEqualTo("Via Roma, 1");
-    assertThat(brandView.addressView().postalCode()).isEqualTo("20100");
-    assertThat(brandView.addressView().region()).isEqualTo("MI");
+    assertThat(brandView.address()).isNotNull();
+    assertThat(brandView.address().streetAddress()).isEqualTo(address.streetAddress());
+    assertThat(brandView.address().city()).isEqualTo(address.city());
+    assertThat(brandView.address().postalCode()).isEqualTo(address.postalCode());
+    assertThat(brandView.address().country()).isEqualTo(address.country().getAlpha2());
+    assertThat(brandView.address().region()).isEqualTo(address.region());
+    assertThat(brandView.address().extendedAddress()).isEqualTo(address.extendedAddress());
+    assertThat(brandView.contactInfo()).isNotNull();
+    assertThat(brandView.contactInfo().email()).isEqualTo(contactInfo.email());
+    assertThat(brandView.contactInfo().phone()).isEqualTo(contactInfo.phone());
+    assertThat(brandView.contactInfo().websiteUrl()).isEqualTo(contactInfo.websiteUrl());
     assertThat(brandView.metadata()).isNotNull();
     assertThat(brandView.metadata().createdAt()).isEqualTo(NOW);
     assertThat(brandView.metadata().lastModifiedAt()).isEqualTo(NOW);
@@ -85,6 +105,7 @@ class BrandViewTest {
             BrandId.fromName("Brand 1"),
             "Brand 1",
             Slug.of("Brand 1"),
+            null,
             null,
             null,
             null,

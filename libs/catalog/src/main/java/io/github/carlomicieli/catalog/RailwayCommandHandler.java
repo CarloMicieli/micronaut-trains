@@ -64,6 +64,7 @@ public final class RailwayCommandHandler {
                 .address(createRailway.address())
                 .organizationEntityType(
                     organizationEntityTypeFromString(createRailway.organizationEntityType()))
+                .contactInfo(createRailway.contactInfo())
                 .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         yield (R) railwayRepository.save(railway);

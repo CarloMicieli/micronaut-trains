@@ -23,6 +23,7 @@ package io.github.carlomicieli.catalog;
 import static java.util.Objects.requireNonNull;
 
 import io.github.carlomicieli.Address;
+import io.github.carlomicieli.ContactInfo;
 import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.slug.Slug;
@@ -40,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
  * @param status the brand status
  * @param address the brand address
  * @param organizationEntityType the organization entity type
+ * @param contactInfo the contact information
  * @param metadata the brand metadata
  */
 @RecordBuilder
@@ -51,6 +53,7 @@ public record Brand(
     @Nullable BrandStatus status,
     @Nullable Address address,
     @Nullable OrganizationEntityType organizationEntityType,
+    @Nullable ContactInfo contactInfo,
     @NotNull Metadata metadata) {
   public Brand {
     requireNonNull(id, "Brand id cannot be null");

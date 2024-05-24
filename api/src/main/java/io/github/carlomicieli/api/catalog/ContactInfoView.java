@@ -20,20 +20,29 @@
  */
 package io.github.carlomicieli.api.catalog;
 
-import io.micronaut.core.annotation.Introspected;
+import io.github.carlomicieli.ContactInfo;
 import io.micronaut.serde.annotation.Serdeable;
+import io.micronaut.serde.config.naming.SnakeCaseStrategy;
 import io.soabase.recordbuilder.core.RecordBuilder;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+import java.net.URI;
+import org.jetbrains.annotations.CheckReturnValue;
+import org.jetbrains.annotations.NotNull;
 
-@Introspected
-@Serdeable
 @RecordBuilder
-public record RailwayRequest(
-    @NotBlank String name,
-    @NotBlank String abbreviation,
-    @NotBlank String country,
-    String status,
-    @Valid AddressRequest address,
-    String organizationEntityType,
-    ContactInfoRequest contactInfo) {}
+@Serdeable(naming = SnakeCaseStrategy.class)
+public record ContactInfoView(String email, String phone, URI websiteUrl) {
+  /**
+   * Creates a new instance of {@link ContactInfo} from a {@link ContactInfoView} instance.
+   *
+   * @param contactInfo the contact info
+   * @return a new instance of {@link ContactInfoView}
+   */
+  @CheckReturnValue
+  public static @NotNull ContactInfoView fromContactInfo(@NotNull final ContactInfo contactInfo) {
+    return ContactInfoViewBuilder.builder()
+        .email(contactInfo.email())
+        .phone(contactInfo.phone())
+        .websiteUrl(contactInfo.websiteUrl())
+        .build();
+  }
+}

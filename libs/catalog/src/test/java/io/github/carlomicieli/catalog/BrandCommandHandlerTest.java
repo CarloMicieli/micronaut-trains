@@ -24,10 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.Address;
+import io.github.carlomicieli.ContactInfo;
 import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.TestConstants;
 import io.github.carlomicieli.slug.Slug;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -46,9 +48,11 @@ class BrandCommandHandlerTest {
   @Test
   void it_should_create_a_new_brand() {
     Address address = new Address(CountryCode.IT, "Rome", "Via Roma", null, "RM", "00100");
+    ContactInfo contactInfo =
+        new ContactInfo("mail@mail.com", "+391234567890", URI.create("http://www.example.com"));
     BrandCommand.CreateBrand createBrand =
         new BrandCommand.CreateBrand(
-            "New Brand", "INDUSTRIAL", "ACTIVE", address, "LIMITED_COMPANY");
+            "New Brand", "INDUSTRIAL", "ACTIVE", address, "LIMITED_COMPANY", contactInfo);
     BrandId brandId = commandHandler.handle(createBrand);
     assertThat(brandId).isNotNull().isEqualTo(new BrandId("trn:brand:new-brand"));
 
@@ -63,6 +67,7 @@ class BrandCommandHandlerTest {
         .isEqualTo(Metadata.createdAt(TestConstants.DATE_TIME_NOW));
     assertThat(newBrand.get().organizationEntityType())
         .isEqualTo(OrganizationEntityType.LIMITED_COMPANY);
+    assertThat(newBrand.get().contactInfo()).isEqualTo(contactInfo);
   }
 
   @Test

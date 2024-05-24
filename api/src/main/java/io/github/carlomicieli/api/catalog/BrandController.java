@@ -21,6 +21,7 @@
 package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.Address;
+import io.github.carlomicieli.ContactInfo;
 import io.github.carlomicieli.catalog.BrandCommand;
 import io.github.carlomicieli.catalog.BrandCommandHandler;
 import io.github.carlomicieli.catalog.BrandId;
@@ -78,6 +79,10 @@ public class BrandController {
     LOG.info("POST {} {}", ApiCatalog.API_BRANDS, brandRequest);
     Address address =
         Optional.ofNullable(brandRequest.address()).map(AddressRequest::toAddress).orElse(null);
+    ContactInfo contactInfo =
+        Optional.ofNullable(brandRequest.contactInfo())
+            .map(ContactInfoRequest::toContactInfo)
+            .orElse(null);
     BrandId brandId =
         commandHandler.handle(
             new BrandCommand.CreateBrand(
@@ -85,7 +90,8 @@ public class BrandController {
                 brandRequest.kind(),
                 brandRequest.status(),
                 address,
-                brandRequest.organizationEntityType()));
+                brandRequest.organizationEntityType(),
+                contactInfo));
 
     return HttpResponse.created(URI.create(ApiCatalog.API_BRANDS + "/" + brandId));
   }

@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.Address;
+import io.github.carlomicieli.ContactInfo;
 import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.slug.Slug;
@@ -41,6 +42,7 @@ import org.jetbrains.annotations.Nullable;
  * @param status the activity status of the railway company
  * @param address the address of the railway company
  * @param organizationEntityType the organization entity type
+ * @param contactInfo the contact information
  * @param metadata the metadata information
  */
 @RecordBuilder
@@ -53,6 +55,7 @@ public record Railway(
     @Nullable RailwayStatus status,
     @Nullable Address address,
     @Nullable OrganizationEntityType organizationEntityType,
+    @Nullable ContactInfo contactInfo,
     @NotNull Metadata metadata) {
   public Railway {
     Objects.requireNonNull(id, "The railway id cannot be null");
