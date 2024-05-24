@@ -20,5 +20,13 @@ Content-Type: application/json
   "name": "FS",
   "abbreviation": "FS",
   "country": "IT",
-  "status": "active"
+  "status": "ACTIVE",
+  "address": {
+    "street_address": "123 Main St",
+    "extended_address": "Suite 100",
+    "city": "Springfield",
+    "region": "IL",
+    "postal_code": "62701",
+    "country": "US"
+  }
 }

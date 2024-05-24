@@ -18,6 +18,15 @@ POST http://{{host}}:{{port}}/api/brands
 Content-Type: application/json
 
 {
-    "name": "ACME",
-    "kind": "INDUSTRIAL"
+  "name": "ACME",
+  "kind": "INDUSTRIAL",
+  "status": "ACTIVE",
+  "address": {
+    "street_address": "123 Main St",
+    "extended_address": "Suite 100",
+    "city": "Springfield",
+    "region": "IL",
+    "postal_code": "62701",
+    "country": "US"
+  }
 }
