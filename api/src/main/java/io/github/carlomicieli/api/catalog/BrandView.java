@@ -39,10 +39,13 @@ public record BrandView(
     @Nullable String kind,
     @Nullable String status,
     @Nullable AddressView addressView,
+    @Nullable String organizationEntityType,
     @NotNull MetadataView metadata) {
   public static @NotNull BrandView fromBrand(@NotNull final Brand brand) {
     var kind = Optional.ofNullable(brand.kind()).orElse(BrandKind.INDUSTRIAL).name();
     var status = Optional.ofNullable(brand.status()).map(Enum::name).orElse(null);
+    var organizationEntityType =
+        Optional.ofNullable(brand.organizationEntityType()).map(Enum::name).orElse(null);
     return BrandViewBuilder.builder()
         .id(brand.id().value())
         .name(brand.name())
@@ -50,6 +53,7 @@ public record BrandView(
         .status(status)
         .kind(kind)
         .addressView(toAddress(brand.address()))
+        .organizationEntityType(organizationEntityType)
         .metadata(MetadataView.fromMetadata(brand.metadata()))
         .build();
   }

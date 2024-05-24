@@ -39,9 +39,12 @@ public record RailwayView(
     @NotNull String country,
     @Nullable String status,
     @Nullable AddressView address,
+    @Nullable String organizationEntityType,
     @NotNull MetadataView metadata) {
   @CheckReturnValue
   public static @NotNull RailwayView fromRailway(@NotNull final Railway railway) {
+    var organizationEntityType =
+        railway.organizationEntityType() != null ? railway.organizationEntityType().name() : null;
     return RailwayViewBuilder.builder()
         .id(railway.id().value())
         .name(railway.name())
@@ -49,6 +52,8 @@ public record RailwayView(
         .abbreviation(railway.abbreviation())
         .country(railway.country().getAlpha2())
         .status(toRailwayStatus(railway.status()))
+        .organizationEntityType(organizationEntityType)
+        .address(toAddress(railway.address()))
         .metadata(MetadataView.fromMetadata(railway.metadata()))
         .build();
   }
@@ -57,7 +62,7 @@ public record RailwayView(
     return status != null ? status.name() : null;
   }
 
-  public static @Nullable AddressView toAddress(@Nullable final Address address) {
+  private static @Nullable AddressView toAddress(@Nullable final Address address) {
     return address != null ? AddressView.fromAddress(address) : null;
   }
 }

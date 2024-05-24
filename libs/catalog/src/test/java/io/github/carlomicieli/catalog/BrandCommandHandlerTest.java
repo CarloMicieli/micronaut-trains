@@ -22,7 +22,10 @@ package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.neovisionaries.i18n.CountryCode;
+import io.github.carlomicieli.Address;
 import io.github.carlomicieli.Metadata;
+import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.TestConstants;
 import io.github.carlomicieli.slug.Slug;
 import java.util.List;
@@ -42,8 +45,10 @@ class BrandCommandHandlerTest {
 
   @Test
   void it_should_create_a_new_brand() {
+    Address address = new Address(CountryCode.IT, "Rome", "Via Roma", null, "RM", "00100");
     BrandCommand.CreateBrand createBrand =
-        new BrandCommand.CreateBrand("New Brand", "INDUSTRIAL", "ACTIVE", null);
+        new BrandCommand.CreateBrand(
+            "New Brand", "INDUSTRIAL", "ACTIVE", address, "LIMITED_COMPANY");
     BrandId brandId = commandHandler.handle(createBrand);
     assertThat(brandId).isNotNull().isEqualTo(new BrandId("trn:brand:new-brand"));
 
@@ -53,6 +58,11 @@ class BrandCommandHandlerTest {
     assertThat(newBrand.get().slug()).isEqualTo(Slug.of("new-brand"));
     assertThat(newBrand.get().kind()).isEqualTo(BrandKind.INDUSTRIAL);
     assertThat(newBrand.get().status()).isEqualTo(BrandStatus.ACTIVE);
+    assertThat(newBrand.get().address()).isEqualTo(address);
+    assertThat(newBrand.get().metadata())
+        .isEqualTo(Metadata.createdAt(TestConstants.DATE_TIME_NOW));
+    assertThat(newBrand.get().organizationEntityType())
+        .isEqualTo(OrganizationEntityType.LIMITED_COMPANY);
   }
 
   @Test

@@ -18,21 +18,20 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.api.catalog;
+package io.github.carlomicieli;
 
-import io.micronaut.core.annotation.Introspected;
-import io.micronaut.serde.annotation.Serdeable;
-import io.soabase.recordbuilder.core.RecordBuilder;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-
-@Introspected
-@Serdeable
-@RecordBuilder
-public record RailwayRequest(
-    @NotBlank String name,
-    @NotBlank String abbreviation,
-    @NotBlank String country,
-    String status,
-    @Valid AddressRequest address,
-    String organizationEntityType) {}
+/** the many types of business entities defined in the legal systems of various countries */
+public enum OrganizationEntityType {
+  CIVIL_LAW_PARTNERSHIP,
+  ENTREPRENEURIAL_COMPANY,
+  GLOBAL_PARTNERSHIP,
+  LIMITED_COMPANY,
+  LIMITED_PARTNERSHIP,
+  LIMITED_PARTNERSHIP_LIMITED_COMPANY,
+  OTHER,
+  PUBLIC_INSTITUTION,
+  PUBLIC_LIMITED_COMPANY,
+  REGISTERED_SOLE_TRADER,
+  SOLE_TRADER,
+  STATE_OWNED_ENTERPRISE;
+}

@@ -35,13 +35,15 @@ public sealed interface RailwayCommand<R> {
    * @param country the country where the railway company operates
    * @param status the activity status of the railway company
    * @param address the address of the railway company
+   * @param organizationEntityType the organization entity type
    */
   record CreateRailway(
       @NotNull String name,
       @NotNull String abbreviation,
       @NotNull String country,
       @Nullable String status,
-      @Nullable Address address)
+      @Nullable Address address,
+      @Nullable String organizationEntityType)
       implements RailwayCommand<RailwayId> {}
 
   /**

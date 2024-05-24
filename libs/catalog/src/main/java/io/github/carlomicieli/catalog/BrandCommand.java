@@ -34,12 +34,14 @@ public sealed interface BrandCommand<R> {
    * @param kind the brand kind
    * @param status the brand status
    * @param address the brand address
+   * @param organizationEntityType the organization entity type
    */
   record CreateBrand(
       @NotNull String name,
       @Nullable String kind,
       @Nullable String status,
-      @Nullable Address address)
+      @Nullable Address address,
+      @Nullable String organizationEntityType)
       implements BrandCommand<BrandId> {}
 
   /**

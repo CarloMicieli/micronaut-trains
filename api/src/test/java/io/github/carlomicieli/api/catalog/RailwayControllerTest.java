@@ -72,6 +72,7 @@ class RailwayControllerTest {
         countryCode.getAlpha2(),
         null,
         null,
+        null,
         metadataView());
   }
 
@@ -97,7 +98,8 @@ class RailwayControllerTest {
   @Test
   void it_should_create_a_new_railway(final RailwayClient client) {
     var request =
-        new RailwayRequest("Trenitalia", "FS", CountryCode.IT.getAlpha2(), "ACTIVE", null);
+        new RailwayRequest(
+            "Trenitalia", "FS", CountryCode.IT.getAlpha2(), "ACTIVE", null, "LIMITED_COMPANY");
     var response = client.createRailway(request);
     assertThat(response).isNotNull();
     assertThat(response.status().getCode()).isEqualTo(HttpStatus.CREATED.getCode());

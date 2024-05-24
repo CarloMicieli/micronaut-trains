@@ -23,6 +23,7 @@ package io.github.carlomicieli.catalog;
 import static java.util.Objects.requireNonNull;
 
 import io.github.carlomicieli.Metadata;
+import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.time.Clock;
@@ -58,6 +59,8 @@ public class BrandCommandHandler {
                 .kind(kindFromString(createBrand.kind()))
                 .status(statusFromString(createBrand.status()))
                 .address(createBrand.address())
+                .organizationEntityType(
+                    organizationEntityTypeFromString(createBrand.organizationEntityType()))
                 .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         return (R) brandRepository.save(brand);
@@ -91,6 +94,17 @@ public class BrandCommandHandler {
     }
 
     LOG.warn("Unknown brand kind: '{}'", kind);
+    return null;
+  }
+
+  private OrganizationEntityType organizationEntityTypeFromString(final String entityType) {
+    for (var value : OrganizationEntityType.values()) {
+      if (value.name().equalsIgnoreCase(entityType)) {
+        return value;
+      }
+    }
+
+    LOG.warn("Unknown organization entity type: '{}'", entityType);
     return null;
   }
 }

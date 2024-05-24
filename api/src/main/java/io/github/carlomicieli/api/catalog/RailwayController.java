@@ -76,13 +76,18 @@ public class RailwayController {
   @Post
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  HttpResponse<?> createRailway(@Valid @Body final RailwayRequest request) {
-    LOG.info("POST {} {}", ApiCatalog.API_RAILWAYS, request);
+  HttpResponse<?> createRailway(@Valid @Body final RailwayRequest railwayRequest) {
+    LOG.info("POST {} {}", ApiCatalog.API_RAILWAYS, railwayRequest);
     Address address =
-        Optional.ofNullable(request.address()).map(AddressRequest::toAddress).orElse(null);
+        Optional.ofNullable(railwayRequest.address()).map(AddressRequest::toAddress).orElse(null);
     var command =
         new RailwayCommand.CreateRailway(
-            request.name(), request.abbreviation(), request.country(), request.status(), address);
+            railwayRequest.name(),
+            railwayRequest.abbreviation(),
+            railwayRequest.country(),
+            railwayRequest.status(),
+            address,
+            railwayRequest.organizationEntityType());
     RailwayId railwayId = commandHandler.handle(command);
     return HttpResponse.created(URI.create(ApiCatalog.API_RAILWAYS + "/" + railwayId));
   }

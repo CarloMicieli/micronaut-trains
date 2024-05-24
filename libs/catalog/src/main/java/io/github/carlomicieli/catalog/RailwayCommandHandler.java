@@ -22,6 +22,7 @@ package io.github.carlomicieli.catalog;
 
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.Metadata;
+import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.slug.Slug;
 import jakarta.inject.Singleton;
 import java.time.Clock;
@@ -61,6 +62,8 @@ public final class RailwayCommandHandler {
                 .country(CountryCode.getByCodeIgnoreCase(createRailway.country()))
                 .status(statusFromString(createRailway.status()))
                 .address(createRailway.address())
+                .organizationEntityType(
+                    organizationEntityTypeFromString(createRailway.organizationEntityType()))
                 .metadata(Metadata.createdAt(ZonedDateTime.now(clock)))
                 .build();
         yield (R) railwayRepository.save(railway);
@@ -80,6 +83,17 @@ public final class RailwayCommandHandler {
     }
 
     LOG.warn("Unknown railway status: '{}'", status);
+    return null;
+  }
+
+  private OrganizationEntityType organizationEntityTypeFromString(@Nullable String entityType) {
+    for (var value : OrganizationEntityType.values()) {
+      if (value.name().equalsIgnoreCase(entityType)) {
+        return value;
+      }
+    }
+
+    LOG.warn("Unknown organization entity type: '{}'", entityType);
     return null;
   }
 }

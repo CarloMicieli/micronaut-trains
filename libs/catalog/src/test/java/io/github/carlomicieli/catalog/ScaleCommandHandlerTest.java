@@ -22,7 +22,10 @@ package io.github.carlomicieli.catalog;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.github.carlomicieli.Metadata;
 import io.github.carlomicieli.TestConstants;
+import io.github.carlomicieli.slug.Slug;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -42,6 +45,15 @@ class ScaleCommandHandlerTest {
     ScaleCommand.CreateScale createScale = new ScaleCommand.CreateScale("H0e", 87f, "NARROW");
     ScaleId scaleId = scaleCommandHandler.handle(createScale);
     assertThat(scaleId).isEqualTo(ScaleId.fromName("H0e"));
+
+    Optional<Scale> scale = scaleRepository.findById(scaleId);
+    assertThat(scale).isPresent();
+    assertThat(scale.get().id()).isEqualTo(ScaleId.fromName("H0e"));
+    assertThat(scale.get().name()).isEqualTo("H0e");
+    assertThat(scale.get().slug()).isEqualTo(Slug.of("H0e"));
+    assertThat(scale.get().ratio()).isEqualTo(BigDecimal.valueOf(87f));
+    assertThat(scale.get().trackGauge()).isEqualTo(TrackGauge.NARROW);
+    assertThat(scale.get().metadata()).isEqualTo(Metadata.createdAt(TestConstants.DATE_TIME_NOW));
   }
 
   @Test

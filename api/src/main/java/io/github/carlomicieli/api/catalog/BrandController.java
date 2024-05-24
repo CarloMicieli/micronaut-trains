@@ -81,7 +81,11 @@ public class BrandController {
     BrandId brandId =
         commandHandler.handle(
             new BrandCommand.CreateBrand(
-                brandRequest.name(), brandRequest.kind(), brandRequest.status(), address));
+                brandRequest.name(),
+                brandRequest.kind(),
+                brandRequest.status(),
+                address,
+                brandRequest.organizationEntityType()));
 
     return HttpResponse.created(URI.create(ApiCatalog.API_BRANDS + "/" + brandId));
   }

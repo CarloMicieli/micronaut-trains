@@ -24,6 +24,7 @@ import static java.util.Objects.requireNonNull;
 
 import io.github.carlomicieli.Address;
 import io.github.carlomicieli.Metadata;
+import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ import org.jetbrains.annotations.Nullable;
  * @param kind the brand kind
  * @param status the brand status
  * @param address the brand address
+ * @param organizationEntityType the organization entity type
  * @param metadata the brand metadata
  */
 @RecordBuilder
@@ -48,6 +50,7 @@ public record Brand(
     @Nullable BrandKind kind,
     @Nullable BrandStatus status,
     @Nullable Address address,
+    @Nullable OrganizationEntityType organizationEntityType,
     @NotNull Metadata metadata) {
   public Brand {
     requireNonNull(id, "Brand id cannot be null");

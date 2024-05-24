@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.AddressBuilder;
 import io.github.carlomicieli.Metadata;
+import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.slug.Slug;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -55,6 +56,7 @@ class BrandTest {
                         .postalCode("20100")
                         .region("MI")
                         .build(),
+                    OrganizationEntityType.LIMITED_COMPANY,
                     Metadata.createdAt(NOW)))
         .doesNotThrowAnyException();
   }
@@ -69,6 +71,7 @@ class BrandTest {
                     Slug.of("brand-1"),
                     BrandKind.INDUSTRIAL,
                     BrandStatus.ACTIVE,
+                    null,
                     null,
                     Metadata.createdAt(NOW)))
         .isInstanceOf(NullPointerException.class)
@@ -86,6 +89,7 @@ class BrandTest {
                     BrandKind.INDUSTRIAL,
                     BrandStatus.ACTIVE,
                     null,
+                    null,
                     Metadata.createdAt(NOW)))
         .isInstanceOf(NullPointerException.class)
         .hasMessage("Brand name cannot be null");
@@ -101,6 +105,7 @@ class BrandTest {
                     null,
                     BrandKind.INDUSTRIAL,
                     BrandStatus.ACTIVE,
+                    null,
                     null,
                     Metadata.createdAt(NOW)))
         .isInstanceOf(NullPointerException.class)

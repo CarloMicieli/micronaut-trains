@@ -25,6 +25,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.AddressBuilder;
 import io.github.carlomicieli.Metadata;
+import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.catalog.Brand;
 import io.github.carlomicieli.catalog.BrandId;
 import io.github.carlomicieli.catalog.BrandKind;
@@ -57,6 +58,7 @@ class BrandViewTest {
                 .postalCode("20100")
                 .region("MI")
                 .build(),
+            OrganizationEntityType.LIMITED_COMPANY,
             Metadata.createdAt(NOW));
     BrandView brandView = BrandView.fromBrand(brand);
     assertThat(brandView.id()).isEqualTo("trn:brand:brand-1");
@@ -83,6 +85,7 @@ class BrandViewTest {
             BrandId.fromName("Brand 1"),
             "Brand 1",
             Slug.of("Brand 1"),
+            null,
             null,
             null,
             null,

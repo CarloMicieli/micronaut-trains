@@ -23,6 +23,7 @@ package io.github.carlomicieli.catalog;
 import com.neovisionaries.i18n.CountryCode;
 import io.github.carlomicieli.Address;
 import io.github.carlomicieli.Metadata;
+import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.slug.Slug;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import java.util.Objects;
@@ -39,6 +40,7 @@ import org.jetbrains.annotations.Nullable;
  * @param country the country where the railway company operates
  * @param status the activity status of the railway company
  * @param address the address of the railway company
+ * @param organizationEntityType the organization entity type
  * @param metadata the metadata information
  */
 @RecordBuilder
@@ -50,6 +52,7 @@ public record Railway(
     @NotNull CountryCode country,
     @Nullable RailwayStatus status,
     @Nullable Address address,
+    @Nullable OrganizationEntityType organizationEntityType,
     @NotNull Metadata metadata) {
   public Railway {
     Objects.requireNonNull(id, "The railway id cannot be null");
