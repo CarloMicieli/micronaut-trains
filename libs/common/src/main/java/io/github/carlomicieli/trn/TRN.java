@@ -20,11 +20,13 @@
  */
 package io.github.carlomicieli.trn;
 
+import io.github.carlomicieli.slug.Slug;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +50,27 @@ public record TRN(String namespaceIdentifier, String namespaceSpecificString) {
   private static final Pattern NAMESPACE_IDENTIFIER_PATTERN = Pattern.compile("[a-zA-Z0-9_\\-]+");
   private static final Pattern NAMESPACE_SPECIFIC_STRING_PATTERN =
       Pattern.compile("[a-zA-Z0-9_\\-]+");
+
+  /**
+   * Creates a new TRN value.
+   *
+   * @param namespaceIdentifier the namespace identifier
+   * @param namespaceSpecificString1 the namespace-specific string
+   * @param namespaceSpecificString2 the namespace-specific string
+   */
+  public TRN(
+      @NotNull String namespaceIdentifier,
+      @NotNull String namespaceSpecificString1,
+      @NotNull String namespaceSpecificString2) {
+    this(
+        namespaceIdentifier,
+        buildNamespaceSpecificString(namespaceSpecificString1, namespaceSpecificString2));
+  }
+
+  private static @NotNull String buildNamespaceSpecificString(
+      @NotNull String s1, @NotNull String s2) {
+    return Stream.of(s1, s2).map(Slug::slugify).reduce((a, b) -> a + ":" + b).orElseThrow();
+  }
 
   public List<String> namespaceSpecificStrings() {
     return List.of(namespaceSpecificString.split(":"));

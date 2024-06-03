@@ -49,4 +49,10 @@ class SlugTest {
     Slug slug = new Slug("hello World");
     assertThat(slug).hasToString("hello-world");
   }
+
+  @Test
+  void it_should_slugify_a_string() {
+    String slug = Slug.slugify("hello World");
+    assertThat(slug).isEqualTo("hello-world");
+  }
 }

@@ -18,29 +18,39 @@
  *    specific language governing permissions and limitations
  *    under the License.
  */
-package io.github.carlomicieli.slug;
+package io.github.carlomicieli.catalog;
 
-import com.github.slugify.Slugify;
+import io.github.carlomicieli.trn.TRN;
+import java.util.Objects;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
-/** It converts a string to a "slug". */
-public record Slug(@NotNull String value) {
-  private static final Slugify SLUGIFY =
-      Slugify.builder().lowerCase(true).customReplacement("ä", "ae").build();
+/** A <strong>Catalog item ID</strong> is a unique identifier for a catalog item. */
+public record CatalogItemId(@NotNull String value) {
+  private static final String NAMESPACE = "catalog-item";
 
-  public Slug {
-    value = SLUGIFY.slugify(value);
+  public CatalogItemId {
+    Objects.requireNonNull(value, "The catalog item ID value cannot be null");
+    TRN trn = TRN.requireValid(value, NAMESPACE, "Invalid catalog item ID value: " + value);
+    value = trn.toString();
   }
 
-  @CheckReturnValue
-  public static @NotNull Slug of(@NotNull final String value) {
-    return new Slug(value);
+  private CatalogItemId(@NotNull final TRN trn) {
+    this(trn.toString());
   }
 
+  /**
+   * Creates a new {@code CatalogItemId} from the given brand name and item number.
+   *
+   * @param name the brand name
+   * @param itemNumber the item number
+   * @return a new {@code CatalogItemId} instance
+   */
   @CheckReturnValue
-  public static @NotNull String slugify(@NotNull final String value) {
-    return SLUGIFY.slugify(value);
+  public static @NotNull CatalogItemId from(
+      @NotNull final String name, @NotNull final String itemNumber) {
+    TRN trn = new TRN(NAMESPACE, name, itemNumber);
+    return new CatalogItemId(trn);
   }
 
   @Override
