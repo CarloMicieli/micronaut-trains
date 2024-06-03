@@ -25,6 +25,7 @@ import io.github.carlomicieli.ContactInfo;
 import io.github.carlomicieli.catalog.RailwayCommand;
 import io.github.carlomicieli.catalog.RailwayCommandHandler;
 import io.github.carlomicieli.catalog.RailwayId;
+import io.github.carlomicieli.catalog.RailwayPeriodOfActivity;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -85,12 +86,16 @@ public class RailwayController {
         Optional.ofNullable(railwayRequest.contactInfo())
             .map(ContactInfoRequest::toContactInfo)
             .orElse(null);
+    RailwayPeriodOfActivity periodOfActivity =
+        Optional.ofNullable(railwayRequest.periodOfActivity())
+            .map(RailwayPeriodOfActivityRequest::toRailwayPeriodOfActivity)
+            .orElse(null);
     var command =
         new RailwayCommand.CreateRailway(
             railwayRequest.name(),
             railwayRequest.abbreviation(),
             railwayRequest.country(),
-            railwayRequest.status(),
+            periodOfActivity,
             address,
             railwayRequest.organizationEntityType(),
             contactInfo);

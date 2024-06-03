@@ -39,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
  * @param slug the slug of the railway company
  * @param abbreviation the abbreviation of the railway company
  * @param country the country where the railway company operates
- * @param status the activity status of the railway company
+ * @param periodOfActivity the railway period of activity
  * @param address the address of the railway company
  * @param organizationEntityType the organization entity type
  * @param contactInfo the contact information
@@ -52,7 +52,7 @@ public record Railway(
     @NotNull Slug slug,
     @NotNull String abbreviation,
     @NotNull CountryCode country,
-    @Nullable RailwayStatus status,
+    @Nullable RailwayPeriodOfActivity periodOfActivity,
     @Nullable Address address,
     @Nullable OrganizationEntityType organizationEntityType,
     @Nullable ContactInfo contactInfo,

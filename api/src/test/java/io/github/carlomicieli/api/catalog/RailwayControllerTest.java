@@ -34,6 +34,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -98,12 +99,17 @@ class RailwayControllerTest {
 
   @Test
   void it_should_create_a_new_railway(final RailwayClient client) {
+    var periodOfActivityRequest =
+        RailwayPeriodOfActivityRequestBuilder.builder()
+            .status("active")
+            .operatingSince(LocalDate.of(1905, 7, 1))
+            .build();
     var request =
         new RailwayRequest(
             "Trenitalia",
             "FS",
             CountryCode.IT.getAlpha2(),
-            "ACTIVE",
+            periodOfActivityRequest,
             null,
             "LIMITED_COMPANY",
             null);

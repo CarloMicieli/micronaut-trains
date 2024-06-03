@@ -60,7 +60,7 @@ public final class RailwayCommandHandler {
                 .slug(Slug.of(createRailway.name()))
                 .abbreviation(createRailway.abbreviation())
                 .country(CountryCode.getByCodeIgnoreCase(createRailway.country()))
-                .status(statusFromString(createRailway.status()))
+                .periodOfActivity(createRailway.periodOfActivity())
                 .address(createRailway.address())
                 .organizationEntityType(
                     organizationEntityTypeFromString(createRailway.organizationEntityType()))
@@ -74,17 +74,6 @@ public final class RailwayCommandHandler {
           (R) railwayRepository.findById(findRailwayById.id());
       case RailwayCommand.FindAllRailways ignored -> (R) railwayRepository.findAll();
     };
-  }
-
-  private RailwayStatus statusFromString(@Nullable String status) {
-    for (var value : RailwayStatus.values()) {
-      if (value.name().equalsIgnoreCase(status)) {
-        return value;
-      }
-    }
-
-    LOG.warn("Unknown railway status: '{}'", status);
-    return null;
   }
 
   private OrganizationEntityType organizationEntityTypeFromString(@Nullable String entityType) {

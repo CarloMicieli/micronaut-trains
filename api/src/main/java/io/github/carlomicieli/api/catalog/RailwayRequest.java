@@ -33,7 +33,7 @@ public record RailwayRequest(
     @NotBlank String name,
     @NotBlank String abbreviation,
     @NotBlank String country,
-    String status,
+    RailwayPeriodOfActivityRequest periodOfActivity,
     @Valid AddressRequest address,
     String organizationEntityType,
     ContactInfoRequest contactInfo) {}

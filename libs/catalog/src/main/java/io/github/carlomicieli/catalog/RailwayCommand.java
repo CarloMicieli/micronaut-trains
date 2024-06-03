@@ -34,7 +34,7 @@ public sealed interface RailwayCommand<R> {
    * @param name the name of the railway company
    * @param abbreviation the abbreviation of the railway company
    * @param country the country where the railway company operates
-   * @param status the activity status of the railway company
+   * @param periodOfActivity the railway period of activity
    * @param address the address of the railway company
    * @param organizationEntityType the organization entity type
    * @param contactInfo the contact information
@@ -43,7 +43,7 @@ public sealed interface RailwayCommand<R> {
       @NotNull String name,
       @NotNull String abbreviation,
       @NotNull String country,
-      @Nullable String status,
+      @Nullable RailwayPeriodOfActivity periodOfActivity,
       @Nullable Address address,
       @Nullable String organizationEntityType,
       @Nullable ContactInfo contactInfo)

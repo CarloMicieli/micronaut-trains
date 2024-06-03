@@ -32,9 +32,11 @@ import io.github.carlomicieli.OrganizationEntityType;
 import io.github.carlomicieli.catalog.Railway;
 import io.github.carlomicieli.catalog.RailwayBuilder;
 import io.github.carlomicieli.catalog.RailwayId;
+import io.github.carlomicieli.catalog.RailwayPeriodOfActivity;
 import io.github.carlomicieli.catalog.RailwayStatus;
 import io.github.carlomicieli.slug.Slug;
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -48,6 +50,7 @@ class RailwayViewTest {
 
   @Test
   void it_should_create_a_RailwayView_from_a_Railway() {
+    var periodOfActivity = RailwayPeriodOfActivity.activeRailway(LocalDate.of(1905, 1, 1));
     Address address =
         AddressBuilder.builder()
             .streetAddress("Via Roma, 1")
@@ -69,19 +72,24 @@ class RailwayViewTest {
             .abbreviation("fs")
             .country(CountryCode.IT)
             .organizationEntityType(OrganizationEntityType.LIMITED_COMPANY)
-            .status(RailwayStatus.ACTIVE)
+            .periodOfActivity(periodOfActivity)
             .address(address)
             .contactInfo(contactInfo)
             .metadata(Metadata.createdAt(NOW))
             .build();
+
     RailwayView view = RailwayView.fromRailway(railway);
+
     assertThat(view).isNotNull();
     assertThat(view.id()).isEqualTo("trn:railway:fs");
     assertThat(view.name()).isEqualTo("FS");
     assertThat(view.slug()).isEqualTo("fs");
     assertThat(view.abbreviation()).isEqualTo("fs");
     assertThat(view.country()).isEqualTo(CountryCode.IT.getAlpha2());
-    assertThat(view.status()).isEqualTo(RailwayStatus.ACTIVE.name());
+    assertThat(view.periodOfActivity()).isNotNull();
+    assertThat(view.periodOfActivity().status()).isEqualTo(RailwayStatus.ACTIVE.name());
+    assertThat(view.periodOfActivity().operatingSince()).isEqualTo(LocalDate.of(1905, 1, 1));
+    assertThat(view.periodOfActivity().operatingUntil()).isNull();
     assertThat(view.organizationEntityType())
         .isEqualTo(OrganizationEntityType.LIMITED_COMPANY.name());
     assertThat(view.address()).isNotNull();

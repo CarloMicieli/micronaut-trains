@@ -22,9 +22,9 @@ package io.github.carlomicieli.api.catalog;
 
 import io.github.carlomicieli.Address;
 import io.github.carlomicieli.catalog.Railway;
-import io.github.carlomicieli.catalog.RailwayStatus;
 import io.micronaut.serde.annotation.Serdeable;
 import io.soabase.recordbuilder.core.RecordBuilder;
+import java.util.Optional;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,7 @@ public record RailwayView(
     @NotNull String slug,
     @NotNull String abbreviation,
     @NotNull String country,
-    @Nullable String status,
+    @Nullable RailwayPeriodOfActivityView periodOfActivity,
     @Nullable AddressView address,
     @Nullable String organizationEntityType,
     @Nullable ContactInfoView contactInfo,
@@ -50,22 +50,22 @@ public record RailwayView(
         railway.contactInfo() != null
             ? ContactInfoView.fromContactInfo(railway.contactInfo())
             : null;
+    var periodOfActivity =
+        Optional.ofNullable(railway.periodOfActivity())
+            .map(RailwayPeriodOfActivityView::fromRailwayPeriodOfActivity)
+            .orElse(null);
     return RailwayViewBuilder.builder()
         .id(railway.id().value())
         .name(railway.name())
         .slug(railway.slug().value())
         .abbreviation(railway.abbreviation())
         .country(railway.country().getAlpha2())
-        .status(toRailwayStatus(railway.status()))
+        .periodOfActivity(periodOfActivity)
         .organizationEntityType(organizationEntityType)
         .address(toAddress(railway.address()))
         .contactInfo(contactInfo)
         .metadata(MetadataView.fromMetadata(railway.metadata()))
         .build();
-  }
-
-  private static @Nullable String toRailwayStatus(@Nullable final RailwayStatus status) {
-    return status != null ? status.name() : null;
   }
 
   private static @Nullable AddressView toAddress(@Nullable final Address address) {

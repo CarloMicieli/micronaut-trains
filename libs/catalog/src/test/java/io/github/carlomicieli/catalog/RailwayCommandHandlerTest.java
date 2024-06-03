@@ -76,14 +76,15 @@ class RailwayCommandHandlerTest {
 
   @ParameterizedTest
   @MethodSource("createRailwayArguments")
-  void it_should_create_a_new_railway(
-      String name, String abbreviation, String country, String status) {
+  void it_should_create_a_new_railway(String name, String abbreviation, String country) {
     Address address = new Address(CountryCode.IT, "Rome", "Via Roma", null, "RM", "00100");
     ContactInfo contactInfo =
         new ContactInfo("mail@mail.com", "+3900000000", URI.create("http://www.example.com"));
+    RailwayPeriodOfActivity periodOfActivity =
+        RailwayPeriodOfActivity.activeRailway(TestConstants.DATE_TIME_NOW.toLocalDate());
     RailwayCommand.CreateRailway createRailway =
         new RailwayCommand.CreateRailway(
-            name, abbreviation, country, status, address, "LIMITED_COMPANY", contactInfo);
+            name, abbreviation, country, periodOfActivity, address, "LIMITED_COMPANY", contactInfo);
     RailwayId id = railwayCommandHandler.handle(createRailway);
     assertThat(id).isNotNull().isEqualTo(RailwayId.fromName("Ferrovie dello stato"));
 
@@ -93,7 +94,10 @@ class RailwayCommandHandlerTest {
     assertThat(railway.get().name()).isEqualTo(name);
     assertThat(railway.get().abbreviation()).isEqualTo(abbreviation);
     assertThat(railway.get().country()).isEqualTo(CountryCode.IT);
-    assertThat(railway.get().status()).isEqualTo(RailwayStatus.ACTIVE);
+    assertThat(railway.get().periodOfActivity()).isNotNull();
+    assertThat(railway.get().periodOfActivity().status()).isEqualTo(RailwayStatus.ACTIVE);
+    assertThat(railway.get().periodOfActivity().operatingSince())
+        .isEqualTo(TestConstants.DATE_TIME_NOW.toLocalDate());
     assertThat(railway.get().address()).isEqualTo(address);
     assertThat(railway.get().metadata()).isEqualTo(Metadata.createdAt(TestConstants.DATE_TIME_NOW));
     assertThat(railway.get().organizationEntityType())
@@ -103,7 +107,7 @@ class RailwayCommandHandlerTest {
 
   private static Stream<Arguments> createRailwayArguments() {
     return Stream.of(
-        Arguments.of("Ferrovie dello stato", "FS", "IT", "ACTIVE"),
-        Arguments.of("Ferrovie dello stato", "FS", "it", "active"));
+        Arguments.of("Ferrovie dello stato", "FS", "IT"),
+        Arguments.of("Ferrovie dello stato", "FS", "it"));
   }
 }
